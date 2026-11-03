@@ -211,7 +211,16 @@ class SPP(nn.Module):
 class SPPF(nn.Module):
     """Spatial Pyramid Pooling - Fast (SPPF) layer for YOLOv5 by Glenn Jocher."""
 
-    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False):
+    def __init__(
+        self,
+        c1: int,
+        c2: int,
+        k: int = 5,
+        n: int = 3,
+        shortcut: bool = False,
+        act: bool = False,
+        shortcut_scale_init: float | None = None,
+    ):
         """Initialize the SPPF layer with given input/output channels and kernel size.
 
         Args:
@@ -220,24 +229,37 @@ class SPPF(nn.Module):
             k (int): Kernel size.
             n (int): Number of pooling iterations.
             shortcut (bool): Whether to use shortcut connection.
+            act (bool): Whether to enable the first 1x1 convolution activation.
+            shortcut_scale_init (float | None): Optional initial per-channel residual gain. None preserves the original
+                unscaled shortcut behavior.
 
         Notes:
             With the default k=5 and n=3, this module is equivalent to SPP(k=(5, 9, 13)).
         """
         super().__init__()
         c_ = c1 // 2  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1, act=False)
+        self.cv1 = Conv(c1, c_, 1, 1, act=act)
         self.cv2 = Conv(c_ * (n + 1), c2, 1, 1)
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.n = n
         self.add = shortcut and c1 == c2
+        # [VisDrone ablation] Opt-in channel-wise residual gain; None leaves every existing SPPF configuration unchanged.
+        self.shortcut_scale = (
+            nn.Parameter(torch.full((1, c1, 1, 1), shortcut_scale_init))
+            if self.add and shortcut_scale_init is not None
+            else None
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Apply sequential pooling operations to input and return concatenated feature maps."""
         y = [self.cv1(x)]
         y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
         y = self.cv2(torch.cat(y, 1))
-        return y + x if getattr(self, "add", False) else y
+        if getattr(self, "add", False):
+            # Apply per-channel gains only in the opt-in VisDrone ablation; preserve legacy SPPF behavior otherwise.
+            scale = getattr(self, "shortcut_scale", None)
+            return y + scale * x if scale is not None else y + x
+        return y
 
 
 class C1(nn.Module):
