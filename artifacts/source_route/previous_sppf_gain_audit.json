@@ -1,0 +1,20 @@
+[
+  {
+    "checkpoint": "/root/home/2112406148/ultralytics-visdrone-yolo11n-sppf-residual/runs/visdrone/yolo11n_visdrone_sppf_gated_b20_120e_now_20261103_140551/weights/best.pt",
+    "count": 256,
+    "mean": 0.010998762212693691,
+    "std": 0.12367289513349533,
+    "min": -0.39111328125,
+    "max": 0.47216796875,
+    "mean_abs": 0.09338725358247757
+  },
+  {
+    "checkpoint": "/root/home/2112406148/ultralytics-visdrone-yolo11n-sppf-residual/runs/visdrone/yolo11n_visdrone_sppf_gated_b30_100e_now_20261103_174208/weights/best.pt",
+    "count": 256,
+    "mean": 0.01634351722896099,
+    "std": 0.10864130407571793,
+    "min": -0.2841796875,
+    "max": 0.484619140625,
+    "mean_abs": 0.08356846868991852
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "baseline": {
+    "parameters": 2607070,
+    "profiler_GFLOPs_640": 6.44989788,
+    "output": [
+      1,
+      14,
+      8400
+    ],
+    "benchmark": {
+      "fp32_b1_ms": [
+        12.848755419254303,
+        12.241971045732498,
+        11.921686828136444
+      ],
+      "median_ms": 12.241971045732498,
+      "forward_peak_allocated_MiB": 72.01904296875,
+      "forward_extra_peak_MiB": 25.125
+    }
+  },
+  "separate": {
+    "parameters": 2598878,
+    "profiler_GFLOPs_640": 6.34504028,
+    "output": [
+      1,
+      14,
+      8400
+    ],
+    "benchmark": {
+      "fp32_b1_ms": [
+        15.496167838573456,
+        15.399466902017593,
+        15.894298255443573
+      ],
+      "median_ms": 15.496167838573456,
+      "forward_peak_allocated_MiB": 71.98779296875,
+      "forward_extra_peak_MiB": 25.125
+    }
+  },
+  "detail": {
+    "parameters": 2598878,
+    "profiler_GFLOPs_640": 6.34524508,
+    "output": [
+      1,
+      14,
+      8400
+    ],
+    "benchmark": {
+      "fp32_b1_ms": [
+        15.07819801568985,
+        15.330773815512657,
+        15.089781060814857
+      ],
+      "median_ms": 15.089781060814857,
+      "forward_peak_allocated_MiB": 71.98779296875,
+      "forward_extra_peak_MiB": 25.125
+    },
+    "backward": {
+      "loss_items": {
+        "box_loss": 3.3202548027038574,
+        "cls_loss": 5.323404788970947,
+        "dfl_loss": 1.7364888191223145
+      },
+      "all_trainable_gradients_finite": true,
+      "training_batch2_peak_allocated_MiB": 508.89599609375
+    }
+  },
+  "checks": {
+    "default_C2f_equivalence": true,
+    "protected_detail_bypass_invariant_to_context": true,
+    "dense_to_grouped_diagonal_transfer": true,
+    "variant_to_variant_reload": true,
+    "forward_split": true,
+    "conv_bn_fuse": true,
+    "rectangular_and_larger_inputs": true
+  },
+  "environment": {
+    "ultralytics": "8.4.198",
+    "import": "/root/home/2112406148/ultralytics-visdrone-yolo11n-source-route/ultralytics/__init__.py",
+    "python": "3.10.20 | packaged by conda-forge | (main, Mar  5 2026, 16:42:22) [GCC 14.3.0]",
+    "torch": "2.5.1+cu121",
+    "cuda_runtime": "12.1",
+    "device": "cuda:0",
+    "cpu_threads": 2,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timing_scope": "FP32 B1 640; 20 warmup; 3x50; forward+decode; excludes preprocess/NMS; shared GPU"
+  }
+}

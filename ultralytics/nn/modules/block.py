@@ -1078,6 +1078,7 @@ class C3k2(C2f):
         attn: bool = False,
         g: int = 1,
         shortcut: bool = True,
+        source_route: str | None = None,
     ):
         """Initialize C3k2 module.
 
@@ -1090,8 +1091,18 @@ class C3k2(C2f):
             attn (bool): Whether to use attention blocks.
             g (int): Groups for convolutions.
             shortcut (bool): Whether to use shortcut connections.
+            source_route (str | None): VisDrone ablation for equal-width [upsampled, lateral] inputs: "detail" protects
+                the lateral bypass and mixes both sources before the bottleneck; "separate" omits that mixing.
         """
         super().__init__(c1, c2, n, shortcut, g, e)
+        # [VisDrone source-route ablation] Only opt-in, equal-width Neck inputs use source-specific projections.
+        if source_route not in {None, "separate", "detail"}:
+            raise ValueError("source_route must be None, 'separate', or 'detail'")
+        self.source_route = source_route
+        if source_route is not None:
+            if c1 % 2:
+                raise ValueError("source_route requires two equal-width input sources")
+            self.cv1 = Conv(c1, 2 * self.c, 1, 1, g=2)
         self.m = nn.ModuleList(
             nn.Sequential(
                 Bottleneck(self.c, self.c, shortcut, g),
@@ -1103,6 +1114,21 @@ class C3k2(C2f):
             else Bottleneck(self.c, self.c, shortcut, g)
             for _ in range(n)
         )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Fuse source-specific detail and context, or use the unchanged C2f route when disabled."""
+        if getattr(self, "source_route", None) is None:  # Also accepts original, pickled YOLO11 checkpoints.
+            return super().forward(x)
+        # [VisDrone source-route ablation] cv1 group order follows Concat([upsampled, lateral]); no new feature level.
+        context, detail = self.cv1(x).chunk(2, 1)
+        y = [detail, context + detail if self.source_route == "detail" else context]
+        y.extend(m(y[-1]) for m in self.m)
+        return self.cv2(torch.cat(y, 1))
+
+    def forward_split(self, x: torch.Tensor) -> torch.Tensor:
+        """Keep split-based inference consistent with the opt-in source route."""
+        # Exporters may bind forward = forward_split, so dispatch to the class method rather than self.forward.
+        return super().forward_split(x) if getattr(self, "source_route", None) is None else C3k2.forward(self, x)
 
 
 class C3k(C3):

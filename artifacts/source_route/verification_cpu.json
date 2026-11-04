@@ -1,0 +1,82 @@
+{
+  "baseline": {
+    "parameters": 2607070,
+    "profiler_GFLOPs_640": 6.44989788,
+    "output": [
+      1,
+      14,
+      8400
+    ],
+    "benchmark": {
+      "fp32_b1_ms": [
+        153.83064180612564,
+        151.66879653930664,
+        152.50452980399132
+      ],
+      "median_ms": 152.50452980399132
+    }
+  },
+  "separate": {
+    "parameters": 2598878,
+    "profiler_GFLOPs_640": 6.34504028,
+    "output": [
+      1,
+      14,
+      8400
+    ],
+    "benchmark": {
+      "fp32_b1_ms": [
+        136.6141502559185,
+        135.78434191644192,
+        135.97883969545364
+      ],
+      "median_ms": 135.97883969545364
+    }
+  },
+  "detail": {
+    "parameters": 2598878,
+    "profiler_GFLOPs_640": 6.34524508,
+    "output": [
+      1,
+      14,
+      8400
+    ],
+    "benchmark": {
+      "fp32_b1_ms": [
+        137.64334917068481,
+        136.86788819730282,
+        136.7367009818554
+      ],
+      "median_ms": 136.86788819730282
+    },
+    "backward": {
+      "loss_items": {
+        "box_loss": 3.320220947265625,
+        "cls_loss": 5.324693202972412,
+        "dfl_loss": 1.736139178276062
+      },
+      "all_trainable_gradients_finite": true
+    }
+  },
+  "checks": {
+    "default_C2f_equivalence": true,
+    "protected_detail_bypass_invariant_to_context": true,
+    "dense_to_grouped_diagonal_transfer": true,
+    "variant_to_variant_reload": true,
+    "forward_split": true,
+    "conv_bn_fuse": true,
+    "rectangular_and_larger_inputs": true,
+    "native_torchscript_export_reload": "/root/home/2112406148/ultralytics-visdrone-yolo11n-source-route/artifacts/source_route/source-route.torchscript"
+  },
+  "environment": {
+    "ultralytics": "8.4.198",
+    "import": "/root/home/2112406148/ultralytics-visdrone-yolo11n-source-route/ultralytics/__init__.py",
+    "python": "3.10.20 | packaged by conda-forge | (main, Mar  5 2026, 16:42:22) [GCC 14.3.0]",
+    "torch": "2.5.1+cu121",
+    "cuda_runtime": "12.1",
+    "device": "cpu",
+    "cpu_threads": 8,
+    "gpu": null,
+    "timing_scope": "FP32 B1 640; 20 warmup; 3x50; forward+decode; excludes preprocess/NMS; shared GPU"
+  }
+}

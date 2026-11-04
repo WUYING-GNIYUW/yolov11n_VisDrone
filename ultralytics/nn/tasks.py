@@ -331,6 +331,8 @@ class BaseModel(torch.nn.Module):
         for a single-channel model. When every tensor transfers, a YAML-built model with placeholder class names takes
         the source model's names.
 
+        Opt-in C3k2 source projections take diagonal channel blocks from dense pretrained weights.
+
         Args:
             weights (dict | torch.nn.Module): The pre-trained weights to be loaded.
             verbose (bool, optional): Whether to log the transfer progress.
@@ -360,6 +362,16 @@ class BaseModel(torch.nn.Module):
 
         # Remap classification head rows by class-name when nc differs (e.g. Obj365 -> COCO fine-tune)
         cls_remapped = self._remap_cls_by_names(csd, model, verbose=verbose)
+
+        # [VisDrone source-route ablation] Warm-start grouped P3 projections from the dense source's diagonal blocks.
+        # Resume/variant checkpoints already have grouped shapes and pass through unchanged. BN tensors keep their keys.
+        for name, module in self.named_modules():
+            if isinstance(module, C3k2) and getattr(module, "source_route", None) is not None:
+                key = f"{name}.cv1.conv.weight"
+                src = csd.get(key)
+                if src is not None and src.shape == (2 * module.c, module.cv1.conv.in_channels, 1, 1):
+                    half = src.shape[1] // 2
+                    csd[key] = torch.cat((src[: module.c, :half], src[module.c :, half:]), 0)
 
         updated_csd = intersect_dicts(csd, self.state_dict())  # intersect
         self.load_state_dict(updated_csd, strict=False)  # load

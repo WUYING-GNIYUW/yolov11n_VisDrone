@@ -1,0 +1,730 @@
+    QueryDet: Cascaded Sparse Query for Accelerating High-Resolution Small
+                              Object Detection
+
+                 Chenhongyi Yang*                                        Zehao Huang                          Naiyan Wang
+               University of Edinburgh                                    TuSimple                             TuSimple
+             chenhongyi.yang@ed.ac.uk                         zehaohuang18@gmail.com                        winsty@gmail.com
+
+
+
+                            Abstract
+
+   While general object detection with deep learning has
+achieved great success in the past few years, the perfor-                               Detection               Detection                Detection
+mance and efficiency of detecting small objects are far
+from satisfactory. The most common and effective way to
+                                                                                                                              Query
+promote small object detection is to use high-resolution
+images or feature maps. However, both approaches in-
+duce costly computation since the computational cost grows
+squarely as the size of images and features increases. To                                           Query       Sparse
+                                                                                                                                         Sparse
+                                                                                                                                         Computation
+                                                                                                                Computation
+get the best of two worlds, we propose QueryDet that uses a
+novel query mechanism to accelerate the inference speed
+of feature-pyramid based object detectors. The pipeline
+                                                                                    Large                    Medium                   Small
+composes two steps: it first predicts the coarse locations
+of small objects on low-resolution features and then com-
+putes the accurate detection results using high-resolution                   Figure 1. QueryDet achieves highly effective small object detec-
+features sparsely guided by those coarse positions. In this                  tion in high-resolution features. The locations (query keys) where
+                                                                             small objects might exist are first predicted in the low-resolution
+way, we can not only harvest the benefit of high-resolution
+                                                                             features, and a sparse feature map (query values) is constructed
+feature maps but also avoid useless computation for the                      using high-resolution features in those locations. Finally, a sparse
+background area. On the popular COCO dataset, the pro-                       detection head is used to output the detected boxes. This paradigm
+posed method improves the detection mAP by 1.0 and mAP-                      is applied in a cascaded manner, enabling fast and accurate small
+small by 2.0, and the high-resolution inference speed is im-                 object detection.
+proved to 3.0× on average. On VisDrone dataset, which
+contains more small objects, we create a new state-of-the-                   object detectors, as an example, it achieves 44.1 and 51.2
+art while gaining a 2.3× high-resolution acceleration on                     mAP on objects with medium and large sizes but only ob-
+average. Code is available at https://github.com/                            tains 24.1 mAP on small objects on COCO [28] test-dev
+ChenhongyiYang/QueryDet-PyTorch.                                             set. Such degradation is mainly caused by three factors: 1)
+                                                                             the features that highlight the small objects are extinguished
+                                                                             because of the down-sampling operations in the backbone
+1. Introduction                                                              of Convolutional Neural Networks (CNN); hence the fea-
+                                                                             tures of small objects are often contaminated by noise in
+    With the recent advances of deep learning [15, 53], vi-
+                                                                             the background; 2) the receptive field on low-resolution fea-
+sual object detection has achieved massive improvements
+                                                                             tures may not match the size of small objects as pointed in
+in both performance and speed [3, 12, 26, 27, 29, 37, 39, 49].
+                                                                             [25]; 3) localizing small objects is more difficult than large
+It has become the foundation for widespread applications,
+                                                                             objects because a small perturbation of the bounding box
+such as autonomous driving and remote sensing. However,
+                                                                             may cause a significant disturbance in the Intersection over
+detecting small objects is still a challenging problem. There
+                                                                             Union (IoU) metric.
+is a large performance gap between small and normal scale
+                                                                                Small object detection can be improved by scaling the
+objects. Taking RetinaNet [27], one of the state-of-the-art
+                                                                             size of input images or reducing the down-sampling rate
+  * Work done when working as a full-time research intern at TuSimple.       of CNN to maintain high-resolution features, as they in-
+
+
+
+                                                                          13668
+crease the effective resolution in the resulted feature map.                Cascade Sparse Query (CSQ) mechanism is designed.
+However, merely increasing the resolution of feature maps                   It can reduce the computation costs of all feature pyra-
+can incur considerable computation costs. Several works [1,                 mid based object detectors. Our method can improve
+26, 29] proposed to build a feature pyramid by reusing the                  the detection performance for small objects by effec-
+multi-scale feature maps from different layers of a CNN                     tively utilizing high-resolution features while keeping
+to address this issue. Objects with various scales are han-                 fast inference speed.
+dled on different levels: large objects tend to be detected
+on high-level features, while small objects are usually de-               • On COCO, QueryDet improves the RetinaNet baseline
+tected on low levels. The feature pyramid paradigm saves                    by 1.1 AP and 2.0 APS by utilizing high-resolution
+the computation cost of maintaining high-resolution fea-                    features, and the high-resolution detection speed is im-
+ture maps from shallow to deep in the backbone. Never-                      proved by 3.0× on average when CSQ is adopted.
+theless, the computation complexity of detection heads on                   On VisDrone, we advance the state-of-the-art results
+low-level features is still enormous. For example, adding                   in terms of the detection mAP and enhance the high-
+an extra pyramid level P2 into RetinaNet will bring about                   resolution detectopm speed by 2.3× on average.
+300% more computation (FLOPs) and memory cost in the
+detection head; hence severely lowering down the inference           2. Related Works
+speed from 13.6 FPS to 4.85 FPS on NVIDIA 2080Ti GPU.
+                                                                     Object Detection. Deep Learning based object detection
+    In this paper, we propose a simple and effective method,
+                                                                     can be mainly divided into two streams: the two-stage
+QueryDet, to save the detection head’s computation while
+                                                                     detectors [2, 11, 12, 26, 39] and the one-stage detec-
+promoting the performance of small objects. The motiva-
+                                                                     tors [17, 29, 35–37, 58] pioneered by YOLO. Generally
+tion comes from two key observations: 1) the computation
+                                                                     speaking, two-stage methods tend to be more accurate
+on low-level features is highly redundant. In most cases,
+                                                                     than one-stage methods because they use the RoIAlign
+the spatial distribution of small objects is very sparse: they
+                                                                     operation [14] to align an object’s features explicitly.
+occupy only a few portions of the high-resolution feature
+                                                                     However, the performance gap between these two streams
+maps; hence a large amount of computation is wasted. 2)
+                                                                     is narrowed recently. RetinaNet [27] is the first one-stage
+The feature pyramids are highly structured. Though we
+                                                                     anchor-based detector that matches the performance of
+cannot accurately detect the small objects in low-resolution
+                                                                     two-stage detectors. It uses feature pyramid network
+feature maps, we can still infer their existence and rough
+                                                                     (FPN) [26] for multi-scale detections and proposes Fo-
+locations with high confidence.
+                                                                     calLoss to handle the foreground-background imbalance
+    A natural idea to utilize these two observations is that we
+                                                                     problem in dense training. Recently, one-stage anchor-free
+can only apply the detection head to small objects’ spatial
+                                                                     detectors [7, 7, 21, 23, 45, 56] have attracted academic
+locations. This strategy requires locating the rough location
+                                                                     attentions because of their simplicity. In this paper, we im-
+of small objects at a low cost and sparse computation on the
+                                                                     plement our QueryDet based on RetinaNet and FCOS [45]
+desired feature map. In this work, we present QueryDet that
+                                                                     to show its effectiveness and generalization ability.
+is based on a novel query mechanism Cascade Sparse Query
+(CSQ), as illustrated in Fig. 1. We recursively predict the
+                                                                     Small Object Recognition. Small object recognition,
+rough locations of small objects (queries) on lower resolu-
+                                                                     like detection and segmentation, is a challenging com-
+tion feature maps and use them to guide the computations in
+                                                                     puter vision task because of low-resolution features. To
+higher resolution feature maps. With the help of sparse con-
+                                                                     tackle this problem, a large amount of works have been
+volution [13, 55], we significantly reduce the computation
+                                                                     proposed. These methods can be mainly categorized
+cost of detection heads on low-level features while keep-
+                                                                     into four types: 1) increasing the resolution of input
+ing the detection accuracy for small objects. Note that our
+                                                                     features [1, 10, 22, 24, 26, 29, 41, 48]; 2) oversampling and
+approach is designed to save the computation spatially, so
+                                                                     strong data augmentation [20, 29, 60]; 3) incorporating
+it is compatible with other accelerating methods like light-
+                                                                     context information [4, 6, 57], and 4) scale-aware train-
+weighted backbones [44], model pruning [16], model quan-
+                                                                     ing [25, 26, 42, 43].
+tization [51], and knowledge distillation [5].
+    We evaluate our QueryDet on the COCO detection
+benchmark [28] and a challenging dataset, VisDrone [59],             Spatial Redundancy. Several methods have used sparse
+that contains a large amount of small objects. We show our           computation to utilize the spatial redundancy of CNNs
+method can significantly accelerate inference while improv-          in different ways to save computation costs. Perforated-
+ing the detection performance. In summary, we make two               CNN [9] generates masks with different deterministic sam-
+main contributions:                                                  pling methods. Dynamic Convolution [47] uses a small
+                                                                     gating network to predict pixel masks, and [54] proposes
+   • We propose QueryDet, in which a simple and effective            a stochastic sampling and interpolation network. Both of
+
+
+
+                                                                  13669
+             RetinaNet              RetinaNet+HR                        QueryNet
+                               Backbone                      Backbone       P2                   3.1. Revisiting RetinaNet
+ Backbone                     FPN                            FPN
+                                                                                                     RetinaNet has two parts: a backbone network with FPN
+                         P3   LR                            LR
+                                                                                                 that outputs multi-scale feature maps and two detection
+                                                   P2                              P2_saved
+                               P3                       P3_saved                                 heads for classification and regression. When the size of
+       FPN
+                                                                   P3
+              LR                                                                                 input image is H × W , the sizes of FPN features are
+             37.46 AP                 38.53 AP                          38.36 AP                                    ′     ′
+             13.6 FPS                  4.8 FPS                          14.0 FPS                 P = {Pl ∈ RH ×W ×C }. Here l indicates the pyramid
+                                                                                                 level and (H ′ , W ′ ) is usually equals to (⌊ H
+                                                                                                                                                2l
+                                                                                                                                                   ⌋, ⌊ W
+                                                                                                                                                        2l
+                                                                                                                                                           ⌋) in a
+Figure 2. The FLOPs distribution of different module when using                                  typical FPN implementation. The detection heads consist
+ResNet-50 backbone. In RetinaNet, the computational cost on the                                  of four 3 × 3 convolution layers, followed by an extra 3 × 3
+high-resolution P3 accounts for 43% of the total cost; when the
+                                                                                                 convolution layer for final prediction. For parameter ef-
+higher-resolution P2 is added, they together account for 74% of
+the total cost. Our QueryDet can effectively reduce the computa-
+                                                                                                 ficiency, different feature levels share the same detection
+tion on those features by 99%, leading to a fast inference speed                                 heads (parameters). However, the computation costs are
+and keeping a high detection accuracy. Note LR stands for the                                    highly imbalanced across different layers: the FLOPs of de-
+low-resolution P4 to P7 .                                                                        tection heads from P7 to P3 increases in quadratic order by
+                                                                                                 the scaling of feature resolutions. As shown in Figure 2, the
+                                                                                                 P3 head occupies nearly half FLOPs while the cost of low-
+                                                                                                 resolution features P4 to P7 only accounts for 15%. Thus, if
+them adopt Gumbel-Softmax [18] and a sparsity loss for the
+                                                                                                 we want to extend the FPN to P2 for better small object per-
+training of sparse masks. On the other hand, the Spatially
+                                                                                                 formance, the cost is unaffordable: high-resolution P2 and
+Adaptive Computation Time (SACT) [8] predicts a halting
+                                                                                                 P3 will occupy 75% of the overall cost. In the following,
+score for each spatial position that is supervised by a pro-
+                                                                                                 we describe how our QueryDet reduce the computation on
+posed ponder cost and the task-specific loss function. SB-
+                                                                                                 high-resolution features and promote the inference speed of
+Net [38] adopts an offline road map or a mask to filter out
+                                                                                                 RetinaNet, even with an extra high-resolution P2 .
+ignored region. Unlike these methods, our QueryDet fo-
+cuses on objects’ scale variation and simply adopts the pro-                                     3.2. Accelerating Inference by Sparse Query
+vided ground-truth bounding box for supervision. Another
+stream of works adopts a two-stage framework: glance and                                             In the design of modern FPN based detectors, small
+focus for adaptive inference. [50] selects small regions from                                    objects tend to be detected from high-resolution low-level
+the original input image by reinforcement learning and pro-                                      feature maps. However, as the small objects are usu-
+cesses these regions with a dynamic decision process. [46]                                       ally sparsely populated in space, the dense computation
+adopts a similar idea on object detection task. One similar                                      paradigm on high-resolution feature maps is highly ineffi-
+work to our QueryDet is AutoFocus [33]. AutoFocus first                                          cient. Inspired by this observation, we propose a coarse-to-
+predicts and crop region of interest in coarse scales, then                                      fine approach to reduce the computation cost of low-level
+scaled to a larger resolution for final predictions. Compared                                    pyramids: First, the rough locations of small objects are
+with AutoFocus, our QueryDet is more efficient since the                                         predicted on coarse feature maps, and then the correspond-
+“focus” operation is conducted on feature pyramids other                                         ing locations on fine feature maps are intensively computed.
+than image pyramids, which reduces the redundant compu-                                          This process can be viewed as a query process: the rough
+tation in the backbone.                                                                          locations are query keys, and the high-resolution features
+                                                                                                 used to detect small objects are query values; thus we call
+                                                                                                 our approach QueryDet. The whole pipeline of our method
+                                                                                                 is presented in Figure 3.
+3. Methods                                                                                           To predict the coarse locations of small objects, we add
+                                                                                                 a query head that is parallel to the classification and regres-
+   In this section, we describe our QueryDet for accurate                                        sion heads. The query head receives feature map Pl with
+                                                                                                                                                      ′   ′
+and fast small object detection. We illustrate our approach                                      stride 2l as input, and output a heatmap Vl ∈ RH ×W with
+                                                                                                    i,j
+based on RetinaNet [27], a popular anchor-based dense de-                                        Vl indicating the probability of that the grid (i, j) con-
+tector. Note that our approach is not limited to RetinaNet,                                      tains a small object. During training, we define small ob-
+as it can be applied to any one-stage detectors and the re-                                      jects on each level as objects whose scale is smaller than
+gion proposal network (RPN) in two-stage detectors with                                          a pre-defined threshold sl . Here we set sl to the minimum
+FPN. We will first revisit RetinaNet and analyze the com-                                        anchor scale on Pl for simplicity, and for anchor-free detec-
+putational cost distribution of different components. Then                                       tors it is set to the minimum regression range on Pl . For a
+we will introduce how we use the proposed Cascade Sparse                                         small object o, we encode the target map for Query Head by
+Query to save computation costs during inference. Finally,                                       computing distance between its center location (xo , yo ) and
+the training details will be presented.                                                          every location on the feature map, and set locations whose
+
+
+
+                                                                                              13670
+     P7, 1/128                                                               Head
+                                                                                                                                                                                                                                                Classification
+                                                                                                                                                                                                                                                  HxWxC
+
+     P6, 1/64                                                                Head
+                                                                                                                                                                                                spconv x4
+                                                                                                                                                            Query keys
+
+
+     P5, 1/32                                                                Head
+                                                                                                                                                                                                                                                Regression
+                                                                                                                                                                                                                                                 HxWx4
+                                                                                                                                          Query                                                spconv x4
+     P4, 1/16                                                                Head
+
+
+     P3, 1/8                                                                                                                                                                                                                               Small object query
+                                                                             Head                                                                                Query value                                                                   HxWx1
+ High-resolution                                                                                      Input feature                                                feature
+                                                                                                                                                                                               spconv x4
+      P2, 1/4
+                                                                             Head
+ Higher-resolution
+
+   Features               Backbone                Feature Pyramid                                                 Sparse Heads (classification + regression + query)
+
+
+Figure 3. The whole pipeline of the proposed QueryDet. The image is fed into the backbone and Feature Pyramid Network (FPN) to
+produce a series of feature maps of different resolutions. Beginning from the query start layer (P5 in this image), each layer receives a set
+of key positions from previous layer and a query operation is applied to generate the sparse value feature map. Then the sparse detection
+head and the sparse query head predict the detected boxes of the corresponding scales and key positions for the next layer.
+
+distance is smaller than sl to 1, otherwise 0. Then the Query                            centers {(xol , ylo )}:
+Head is trained using FocalLoss [27]. During inference, we
+choose the locations whose predicted scores are larger than                                                  D_l[x][y] &= \underset {o}{\min }\{\sqrt {(x-x_l^o)^2+(y-y_l^o)^2}\},                                                                               (2)
+a threshold σ as queries. Then qlo will be mapped to its four
+nearest neighbors on Pl−1 as key positions {kl−1 o
+                                                    }:                                   Then the ground truth query map Vl∗ is defined as
+
+         \{k_{l-1}^o\} = \{(2x_l^o+i,2y_l^o+j), \forall i,j\in \{0,1\} \}.      (1)                                        V_l^*[x][y] = \begin {cases} 1 & \text {if~$D_l[x][y] < s_l$}\\ 0 & \text {if~$D_l[x][y] \geq s_l$} \end {cases}.                     (3)
+      o
+All {kl−1 } on Pl−1 are collected to form the key position
+set {kl−1 }. Then the three heads will only process those                                   For each level Pl , the loss function is defined as follow-
+                                                                                         ing:
+positions to detect objects and compute next level’s queries.
+Specifically, we extract features from Pl−1 using {kl−1 } as                                \begin {aligned} \mathcal {L}_{l}(U_l, R_l, V_l) = \mathcal {L}_{FL}(U_l, U_l^{*}) + \mathcal {L}_{r}(R_l, R_{l}^*) + \mathcal {L}_{FL}({V_l}, V_{l}^*) \end {aligned}  (4)
+                                       v
+indices to construct a sparse tensor Pl−1  that we call value                             where Ul , Rl , Vl are the classification output, regressor out-
+features. Then the sparse convolution (spconv) [13] kernels                              put and the query score output, and Ul∗ , Rl∗ , and Vl∗ are their
+are built using weights of the 4-conv dense heads to com-                                corresponding ground-truth maps; LF L is the focal loss and
+pute results on layer l − 1.                                                             Lr is the bounding box regression loss, which is smooth l1
+    To maximize the inference speed, we apply the queries in                             loss [11] in the original RetinaNet. The overall loss is:
+a cascade manner. In particular, the queries for Pl−2 would
+only be generated from {kl−1 }. We name this paradigm as                                                                                            \mathcal {L}_{all}= \sum _{l}{\beta _l * \mathcal {L}_l}.                                                    (5)
+Cascade Sparse Query (CSQ) as illustrated in Figure 1.
+The benefit of our CSQ is that we can avoid generating                                   Here we re-balance the loss of each layer by βl . The rea-
+the queries {ql } from a single Pl , which leads to exponen-                             son is that as we add the higher-resolution features like
+tially increasing size of corresponding key position kl dur-                             P2 , the distribution of the training samples has significantly
+ing query mapping as l decreases.                                                        changed. The total number of training samples on P2 is
+                                                                                         even larger than the total number of training sample cross
+3.3. Training                                                                            P3 to P7 . If we don’t reduce the weight of it, the train-
+    We keep the training of classification and regression                                ing will be dominated by small objects. Thus, we need to
+heads as same as in the original RetinaNet [27]. For the                                 re-balance the loss of different layers to make the model
+query head, we train it using FocalLoss [27] with the gener-                             simultaneously learn from all layers.
+ated binary target map: Let the ground-truth bounding box
+                                                                                         3.4. Relationships with Related Work
+of a small object o on Pl be bol = (xol , ylo , wlo , hol ). We
+first compute the minimum distance map Dl between each                                      Note that though our method bears some similarities
+feature position (x, y) on Pl and all the small ground-truth                             with two-stage object detectors using RPN, they differ in
+
+
+
+                                                                                      13671
+                                                                         Method         CSQ       AP       AP50      AP75    APS     APM     APL      FPS
+the following aspects: 1), we only compute classification               RetinaNet        -       37.46     56.90     39.94   22.64   41.48   48.04   13.60
+results in the coarse prediction, while RPN computes both             RetinaNet (3x)     -       38.76     58.27     41.24   22.89   42.53   50.02   13.83
+classification and regression. 2), RPN is computed on all               QueryDet         ×       38.53     59.11     41.12   24.64   41.97   49.53   4.85
+                                                                        QueryDet         ✓       38.36     58.78     40.99   24.33   41.97   49.53   14.88
+levels of full feature maps while the computation of our              QueryDet (3x)      ×       39.47     59.93     42.11   25.24   42.37   51.12   4.89
+QueryDet is sparse and selective. 3), two-stage methods               QueryDet (3x)      ✓       39.34     59.69     41.98   24.91   42.38   51.12   15.94
+
+rely on operations like RoIAlign [14] or RoIPooling [11] to
+align the features with the first stage proposal. Nevertheless,      Table 1. Comparison of accuracy (AP) and speed (FPS) of our
+they are not used in our approach since we do not have box           QueryDet and the baseline RetinaNet on COCO mini-val set.
+output in the coarse prediction. It is worth noting that our
+proposed method is compatible with the FPN based RPN,                  Method     CSQ     AP       AP50      AP75     AR1    AR10    AR100   AR500    FPS
+so QueryDet can be incorporated into two-stage detectors              RetinaNet    -     26.21     44.90     27.10    0.52   5.35    34.63   37.21    2.63
+                                                                      QueryDet     ×     28.35     48.21     28.78    0.51   5.96    36.48   39.42    1.16
+to accelerate proposal generation.                                    QueryDet     ✓     28.32     48.14     28.75    0.51   5.96    36.45   39.35    2.75
+   Another closely related work is PointRend [19], which
+computes high-resolution segmentation maps using very
+                                                                     Table 2. Comparison of detection accuracy (AP) and speed (FPS)
+few adaptive selected points. The main differences between
+                                                                     of our QueryDet and the baseline RetinaNet on VisDrone valida-
+our QueryDet and PointRend are: 1) how the queries are
+                                                                     tion set.
+generated and 2) how sparse computation is applied. For
+the first difference, PointRend selects the most uncertain re-
+                                                                     not add BN layers in the detection heads. Mixed precision
+gions based on the predicted score at each location, while
+                                                                     training [32] is used in all experiments to save GPU mem-
+we directly add an auxiliary loss as supervision. Our experi-
+                                                                     ory. The query threshold σ is set to 0.15 and we start query
+ments show this simple method can generate high recall pre-
+                                                                     from P4 . Without specified description, our method is con-
+dictions and improve the final performance. As for the sec-
+                                                                     structed on RetinaNet with ResNet-50 backbone.
+ond, PointRend uses a multi-layer perceptron for per-pixel
+classification. It only requires the features from a single lo-      4.2. Effectiveness of Our Approach
+cation in high-resolution feature maps, thus can be easily
+batched for high efficiency. On the other hand, as object de-            In Table 1, we compare the mean average precision
+tection requires more context information for accurate pre-          (mAP) and average frame per second (FPS) between our
+diction, we use sparse convolution with 3 × 3 kernels.               methods and the baseline RetinaNet on COCO. The base-
+                                                                     line runs at 13.6 FPS, and gets 37.46 overall AP and 22.64
+4. Experiments                                                       APS for small objects, which is slightly higher than the
+                                                                     results in the original paper [27]. With the help of high-
+    We conduct quantitative experiments on two object de-            resolution features, our approach achieves 38.53 AP and
+tection datasets: COCO [28] and VisDrone [59]. COCO                  24.64 APS , improving the AP and APS by 1.1 and 2.0.
+is the most widely used dataset for general object detection;        The results reveal the importance of using high-resolution
+VisDrone is a dataset specialized to drone-shot image detec-         features when detecting small objects. However, incorpo-
+tion, in which small objects dominate the scale distribution.        rating such a high-resolution feature map significantly de-
+                                                                     crease the inference speed to 4.85 FPS. When adopting our
+4.1. Implementation Details
+                                                                     Cascade Sparse Query (CSQ), the inference speed is en-
+    We implement our approach based on PyTorch [34] and              hanced to 14.88 FPS, becoming even faster than the base-
+the Detectron2 toolkit [52]. All models are trained on 8             line RetinaNet that does not use the higher-resolution P2 ,
+NVIDIA 2080Ti GPUs. For COCO, we follow the com-                     while the performance loss is negligible. Additionally, Fig-
+mon training practices: We adopt the standard 1× sched-              ure 2 shows how our CSQ save the computational cost.
+ule and the default data augmentation in Detectron2. Batch           Compared with the RetinaNet with higher-resolution P2 , in
+size is set to 16 with the initial learning rate of 0.01. The        which P3 and P2 account for 74% of the total FLOPs, our
+weights βl used to re-balance the loss between different lay-        CSQ successfully reduce those costs to around 1%. The rea-
+ers are set to linearly growing from 1 to 3 across P2 to P7 .        son is that in QueryDetall computations on high-resolution
+For VisDrone, following [30], we equally split one image             P3 and P2 are carried out on locations around the sparsely
+into four non-overlapping patches and process them inde-             distributed small objects. These results sufficiently demon-
+pendently during training. We train the network for 50k              strate the effectiveness of our method. We also show the
+iterations with an initial learning rate of 0.01, and decay the      results of 3× training schedule in Table 1. The stronger
+learning rate by 10 at 30k and 40k iteration. The re-balance         baseline does not weaken our improvement but brings more
+weights βl are set to linearly growing from 1 to 2.6. For            significant acceleration. We owe it to the stronger Query
+both datasets, we freeze all the batch normalization (BN)            Head as the small object estimation becomes more accurate.
+layers in the backbone network during training and we did                In VisDrone, as illustrated in Table 2, the discoveries are
+
+
+
+                                                                  13672
+                                                              HR       RB                              QH               CSQ           AP           AP50       AP75     APS      APM      APL       FPS
+                                                                                                                                     37.46         56.90      39.94    22.64    41.48    48.04    13.60
+                                                              ✓                                                                      36.10         56.39      38.17    21.94    39.91    45.25     4.83
+                                                                       ✓                                                             37.66         57.57      40.37    22.03    41.86    49.10    13.60
+                                                              ✓        ✓                                                             38.11         58.48      40.85    23.06    41.53    49.36     4.83
+                                                              ✓        ✓                                   ✓                         38.53         59.11      41.12    24.64    41.97    49.53     4.85
+                                                              ✓        ✓                                   ✓            ✓            38.36         58.78      40.99    24.33    41.97    49.53    14.88
+
+
+Table 3. Ablation studies on COCO mini-val set. HR stands for using of high-resolution features; RB stands for the loss re-balance
+between FPN layers; QH stands for whether to add QueryHead that provides extra objectiveness supervision.
+
+                                            COCO AP-FPS                                                                  COCO AR-FPS                           matically drops by 1.34. As we discussed in Section 3.3,
+                                                                                                      58
+                         38                                                                                                                                    this problem is caused by the distribution shift in the train-
+Average Precision (AP)
+
+
+
+
+                                                                                                      56
+                                                                                Average Recall (AR)
+
+
+
+
+                         37                                                                                                                                    ing samples after adding P2 . Then we re-balance the loss
+                                      QD-s640                                                         54           QD-s640
+                         36           QD-s800                                                                      QD-s800                                     of those layers. The result is improved to 38.11, mostly ad-
+                                      QD-s960                                                         52           QD-s960
+                         35
+                                      RN-640                                                                       RN-640                                      dressing this problem. Interestingly, the re-balancing strat-
+                         34           RN-800                                                          50           RN-800
+                                      RN-960                                                          48           RN-960                                      egy only gives us a minor AP enhancement (0.2) when
+                         33
+                                  5        10       15            20       25                                  5         10       15        20         25      adopting on the original baseline, suggesting that the loss
+                                             Speed (FPS)                                                                   Speed (FPS)
+                                        VisDrone2018 AP-FPS                                                          VisDrone2018 AR-FPS                       re-balance is more critical in the high-resolution scenario.
+                                                                                                      40
+                         28
+                                                                                                      38
+                                                                                                                                                               Then we add our Query Head into the network, through
+Average Precision (AP)
+
+
+
+
+                                                                                Average Recall (AR)
+
+
+
+
+                         26                                                                           36                                                       which we get a further performance gain of 0.42 AP and
+                                      QD-1600                                                                      QD-1600
+                         24           QD-2000                                                         34           QD-2000                                     1.58 APS , pushing the total AP and APS to 38.53 and 24.64,
+                                      QD-2400                                                         32           QD-2400
+                                      RN-1600                                                                      RN-1600                                     verifying the effectiveness of the extra objectiveness super-
+                         22           RN-2000                                                         30           RN-2000
+                                      RN-2400                                                         28           RN-2400                                     vision. Finally, with CSQ, the detection speed is largely
+                         20
+                              1        2        3       4       5      6                                   1        2        3       4     5       6           improved to 14.88 FPS from 4.85 FPS, and the 0.17 loss in
+                                                Speed (FPS)                                                                  Speed (FPS)
+                                                                                                                                                               detection AP is negligible.
+Figure 4. The speed and accuracy (AP and AR) trade-off with                                                                                                    4.4. Discussions
+input images with different sizes on COCO and VisDrone. The
+trade-off is controlled by the the query threshold σ. The leftmost                                                                                             Influence of the Query Threshold. Here we investigate
+marker (the ▲ marker) of each curve stands for the result when                                                                                                 the accuracy-speed trade-off in our Cascade Sparse Query.
+Cascade Sparse Query is not applied. QD stands for QueryDet and                                                                                                We measure the detection accuracy (AP) and detection
+RN stands for RetinaNet.                                                                                                                                       speed (FPS) under different query thresholds σ whose role
+                                                                                                                                                               is to determine if a grid (low-resolution feature location)
+              Start Layer                    AP               AP50     AP75                                APS          APM         APL           FPS          in the input image contains small objects. Intuitively,
+              No Query                      38.53             59.11    41.12                               24.64        41.97       49.53        4.86
+                                                                                                                                                               increasing this threshold will decrease the recall of small
+                  P6                        37.91             57.98    40.51                               23.18        42.02       49.53        13.42
+                  P5                        38.22             58.55    40.86                               23.65        42.00       49.53        13.92         objects but accelerate the inference since fewer locations
+                  P4                        38.36             58.78    40.99                               24.33        41.97       49.53        14.88         are considered. The accuracy-speed trade-off with different
+                  P3                        38.45             58.94    41.07                               24.50        41.93       49.52        11.51         input sizes are presented in Figure 4. We increase σ by 0.05
+                                                                                                                                                               sequentially for adjacent data markers in one curve, and
+Table 4. Investigation of the best starting layer of our CSQ on
+                                                                                                                                                               the leftmost marker denotes the performance when CSQ is
+MS-COCO mini-val set.                                                                                                                                          not applied. We observe that even a very low threshold
+                                                                                                                                                               (0.05) can bring us a massive speed improvement. This
+                                                                                                                                                               observation validates the effectiveness of our approach.
+similar, but the results are even more significant. We im-
+                                                                                                                                                               Another observation is about the gap between the AP upper
+prove the overall AP by 2.1 and AP50 by 3.2 on this small
+                                                                                                                                                               bound and lower bound of different input resolutions. This
+objects oriented dataset. The inference speed is improved
+                                                                                                                                                               gap is small for large size images, but huge for small size
+to 2.3× from 1.16 FPS from 2.75 FPS.
+                                                                                                                                                               images, which indicates that for higher-resolution input
+                                                                                                                                                               our CSQ can guarantee a good AP lower bound even if the
+4.3. Ablation Studies
+                                                                                                                                                               query threshold is set to high.
+   We conduct ablation studies on COCO mini-val set to
+analyze how each component affects the detection accuracy                                                                                                      Which layer to start query? In our Cascade Sparse Query,
+and speed in Table 3. Our retrained RetinaNet achieves                                                                                                         we need to decide the starting layer, above which we run
+37.46 AP. When we add the high-resolution P2 , the AP dra-                                                                                                     conventional convolutions to get the detection results for
+
+
+
+                                                                                                                                                            13673
+ Query Method        AP        AP50      AP75       APS        APM          APL        FPS         CSQ     AP     AP50    AP75     APs    APm      APl     FPS
+  No Query          38.53      59.11     41.12      24.64      41.97        49.53     4.86          ×     38.47   59.44   41.73   22.98   41.90   49.55   17.57
+      CQ            38.31      58.73     40.98      24.25      41.98        49.53     10.49         ✓     38.20   58.88   41.50   22.23   41.91   49.55   19.03
+     CCQ            38.32      58.75     40.98      24.26      41.98        49.53     8.73
+  CSQ (ours)        38.36      58.78     40.99      24.33      41.97        49.53     14.88
+
+                                                                                                  Table 9. Performance and speed of using our CSQ in Faster R-
+Table 5. Comparison of different query methods on COCO mini-                                      CNN on COCO mini-val set.
+val set. We compare our CSQ and Crop Query (CQ) and Complete
+Convolution Query (CCQ).
+                                                                                                  two alternative query operations for comparison. The first
+  Context         AP        AP50        AP75      APS         APM       APL            FPS        Crop Query (CQ), in which the corresponding regions
+ No Query        38.53      59.11       41.12     24.64       41.97     49.53          4.86       indicated by queries are cropped from the high-resolution
+   1x1           38.25      58.60       40.87     23.88       41.97     49.53         14.09
+   3x3           38.30      58.66       40.94     24.14       41.97     49.53         14.06
+                                                                                                  features for subsequent computations. Note this type of
+   5x5           38.36      58.72       40.98     24.18       41.97     49.53         14.00       query is similar to the AutoFocus [33] approach. Another
+   7x7           38.37      58.73       40.98     24.30       41.97     49.53         13.77       one is Complete Convolution Query (CCQ) where we use
+   9x9           38.37      58.73       40.98     24.30       41.97     49.53         13.42       regular convolutions to compute the full feature map for
+  11x11          38.38     58.755       40.99     24.33       41.97     49.53         13.11
+                                                                                                  each layer, but only extract results from queried positions
+                                                                                                  for post-processing. For CQ, we crop a 11 × 11 patch from
+Table 6. Comparison of detection AP and speed when using differ-                                  the feature map, which is chosen to fit the receptive field
+ent amount of context information on MS-COCO mini-val set. The                                    of the five 3 × 3 consecutive convolutions in the detection
+context is defined as a patch with various size around the queried                                heads. We present the results in Table 5. Generally
+position.                                                                                         speaking, all three methods can successfully accelerate
+                                                                                                  the inference with negligible AP loss. Among them, our
+   Backbone      Model   CSQ     AP      AP50      AP75     APS      APM      APL       FPS
+                  RN      -     26.72    43.17     28.17    15.27    29.28    34.51    17.75
+                                                                                                  CSQ can achieve the fastest inference speed.
+ MobileNet V2     QD      ×     29.16    46.20     30.95    16.14    31.26    38.66     5.31
+                  QD      ✓     28.94    45.79     30.71    15.74    31.26    38.66    21.66
+                  RN      -     23.04    38.32     23.75    12.01    25.50    35.16    17.45      How much context do we need? To apply our CSQ,
+ ShuffleNet V2    QD      ×     26.07    42.34     27.30    13.20    28.03    36.23     5.26
+                  QD      ✓     25.85    41.96     27.08    12.81    28.05    36.23    20.02      we need to construct a sparse feature map where only the
+                                                                                                  positions of small objects are activated. We also need to
+                                                                                                  activate the context area around the small objects to avoid
+Table 7. Results on different backbone networks. RN and QD                                        decreasing accuracy. However, in practice, we found that
+stand for RetinaNet and QueryDet, respectively.                                                   too much context cannot improve the detection AP but
+                                                                                                  only slow down the detection speed; on the other hand,
+                     CSQ      AP       AP50      AP75       APs     APm       APl       FPS
+      FCOS            -      38.37     57.63     41.03     22.34    41.95    48.96     17.06      too little context would severely decrease the detection
+ QueryDet (FCOS)      ×      40.05     58.69     43.46     25.52    43.43    50.69      7.92      AP. In this section, we explore how much context do we
+ QueryDet (FCOS)      ✓      39.49     57.97     42.82     24.81    43.45    50.69     14.40
+                                                                                                  need to balance the speed-accuracy trade-off. Here, the
+Table 8. Performance and speed of our QueryDet (FCOS) and its                                     context is defined as a patch with various sizes around the
+baseline model on COCO mini-val set.                                                              queried position, where our sparse detection head would
+                                                                                                  also process the features within the patch. The result is
+large objects. The reason we do not start our CSQ from                                            reported in Table 6. From it we conclude that a 5x5 patch
+the lowest resolution layer are in two folds: 1) The normal                                       can brings us enough context to detect a small object.
+convolution operation is very fast for the low-resolution                                         Although more context brings a small AP improvement,
+features, thus the time saved by CSQ cannot compensate                                            the accelerating effect of our CSQ is negatively affected,
+the time needed to construct the sparse feature map; 2) It                                        while fewer context cannot grantee a high detection AP.
+is hard to distinguish small objects on feature maps with
+very low resolution. The results are presented in Table 4.                                        Results on Light-weight Backbones. As we claim in Sec-
+We find that the layer that gets the highest inference speed                                      tion 1, our method can be incorporated with light-weighted
+is P4 , which validates that querying from very high-level                                        backbones to gain more speed improvement. Also, as our
+layers such as P5 and P6 would cause loss of speed. We                                            CSQ aims to accelerate the computation in the detection
+observe that the AP loss gradually increases as the starting                                      head, so the overall acceleration is more obvious when
+layer becomes higher, suggesting the difficulty for the                                           using such backbones, because the inference time for
+network to find small objects in very low-resolution layers.                                      backbone network becomes less. We report the results with
+                                                                                                  different light-weight backbones in Table 7.Specifically, the
+What is the best way to use queries? We demonstrate the                                           speed is on average improved to 4.1× for high-resolution
+high efficiency of our Cascade Sparse Query. We propose                                           detection with MobileNet V2 [40] and 3.8× with Shuf-
+
+
+
+                                                                                               13674
+            (a) COCO detection          (b) COCO query heatmap           (c) VisDrone detection   (d) VisDrone query heatmap
+Figure 5. Visualization of the detection results and the query heatmap for small objects of our QueryDet on MS-COCO and VisDrone2018
+datasets. We remove class labels for VisDrone2018 to better distinguish the small bounding boxes.
+
+
+fleNet V2 [31], which validates that our approach is ready           Note that in two-stage detecotrs our CSQ can not only save
+to deploy on edge devices for real-time applications such            time for the dense computaion on in RPN, it can reduced
+as autonomous driving vehicles for effective small object            the number of RoIs that are fed into the second stage.
+detections.
+                                                                     4.5. Visualization and Failure Cases
+Results on Anchor-Free Detectors. QueryDet can be                       In Figure 5, we visualize the detection results and the
+applied to any FPN based detector to accelerate high-                query heatmaps for small objects on COCO and VisDrone.
+resolution detection. Thus, we apply QueryDet on FCOS, a             From the heatmaps, it can be seen that our query head can
+state-of-the-art anchor-free detector, and report the COCO           successfully find the coarse positions of the small objects,
+results in Table 8. It can be concluded that QueryDet im-            enabling our CSQ to detect them effectively. Additionally,
+proves APs with the help of high-resolution features,                through incorporating high-resolution features, our method
+and when Cascade Sparse Query (CSQ) is adopted, the                  can detect small objects very accurately.
+high-resolution speed is improved by 1.8× on average,                   We also show two typical failure cases of our approach:
+validating the universality of the proposed approach.                1) Even if the corase position of small objects is correctly
+                                                                     extracted by the query head, the detection head may fails to
+Effectiveness on Two-stage Detectors Our CSQ can also                localize them (the second image of VisDrone); 2) Positions
+be applied to FPN based two-stage detectors to reduce com-           of large objects is falsely activated, causing the detection
+putaion cost in the high-resolution layers in RPN. To ver-           head to process useless positions and hence slowing down
+ify this claim, we apply CSQ to the Faster R-CNN detec-              the speed (the first image of COCO).
+tor [39]. In our implementation, the inputs to RPN are
+from P2 to P6 and we start query from P4 . We modify                 5. Conclusion
+the RPN structure to let it have 3 conv layers instead of 1
+layer in the normal implementation, which is followed by                We propose QueryDet that uses a novel query mech-
+3 branches for objectiveness classification, bounding box            anism Cascade Sparse Query (CSQ) to accelerate the in-
+regression and query key computation. The former two                 ference of feature pyramid-based dense object detectors.
+branches are trained following common practice [39], and             QueryDet enables object detectors the ability to detect small
+the query branch is trained by Focal Loss with γ = 1.2 and           objects at low cost and easily deploy, making it practical to
+α = 0.25. During inference, we set the query threadhold              deploy them on real-time applications such as autonomous
+to 0.15. As shown in Table 9, our Faster R-CNN achieves              driving. For future work, we plan to extend QueryDet to
+38.47 overall AP and 22.98 APS with 17.57 FPS. When                  the more challenging 3D object detection task that takes
+CSQ is utilized, the inference speed is improved to 19.03            LiDAR point clouds as input, where the 3D space is gen-
+FPS with a minor loss in APs . The results verify the effec-         erally sparser than 2D image, and computational resources
+tiveness of our approach in accelerating two stage detectors.        are more intense for the costly 3D convolution operations.
+
+
+
+                                                                 13675
+References                                                              [20] Mate Kisantal, Zbigniew Wojna, Jakub Murawski, Jacek
+                                                                             Naruniec, and Kyunghyun Cho. Augmentation for small ob-
+ [1] Zhaowei Cai, Quanfu Fan, Rogerio S Feris, and Nuno Vas-                 ject detection. arXiv preprint arXiv:1902.07296, 2019. 2
+     concelos. A unified multi-scale deep convolutional neural
+                                                                        [21] Tao Kong, Fuchun Sun, Huaping Liu, Yuning Jiang, Lei Li,
+     network for fast object detection. In ECCV. Springer, 2016.
+                                                                             and Jianbo Shi. FoveaBox: Beyound anchor-based object de-
+     2
+                                                                             tection. IEEE Transactions on Image Processing, 29, 2020.
+ [2] Zhaowei Cai and Nuno Vasconcelos. Cascade r-cnn: Delving
+                                                                             2
+     into high quality object detection. In CVPR, 2018. 2
+                                                                        [22] Tao Kong, Anbang Yao, Yurong Chen, and Fuchun Sun.
+ [3] Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas
+                                                                             Hypernet: Towards accurate region proposal generation and
+     Usunier, Alexander Kirillov, and Sergey Zagoruyko. End-to-
+                                                                             joint object detection. In CVPR, 2016. 2
+     End Object Detection with Transformers. ECCV, 2020. 1
+ [4] Chenyi Chen, Ming-Yu Liu, Oncel Tuzel, and Jianxiong               [23] Hei Law and Jia Deng. CornerNet: Detecting objects as
+     Xiao. R-CNN for small object detection. In ACCV. Springer,              paired keypoints. In ECCV, 2018. 2
+     2016. 2                                                            [24] Jianan Li, Xiaodan Liang, Yunchao Wei, Tingfa Xu, Jiashi
+ [5] Guobin Chen, Wongun Choi, Xiang Yu, Tony Han, and Man-                  Feng, and Shuicheng Yan. Perceptual generative adversarial
+     mohan Chandraker. Learning efficient object detection mod-              networks for small object detection. In CVPR, 2017. 2
+     els with knowledge distillation. In NeurIPS, 2017. 2               [25] Yanghao Li, Yuntao Chen, Naiyan Wang, and Zhaoxiang
+ [6] Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos,                  Zhang. Scale-aware trident networks for object detection.
+     Kevin Murphy, and Alan L Yuille. Deeplab: Semantic image                In ICCV, 2019. 1, 2
+     segmentation with deep convolutional nets, atrous convolu-         [26] Tsung-Yi Lin, Piotr Dollár, Ross Girshick, Kaiming He,
+     tion, and fully connected crfs. IEEE transactions on pattern            Bharath Hariharan, and Serge Belongie. Feature pyramid
+     analysis and machine intelligence, 40(4), 2017. 2                       networks for object detection. In CVPR, 2017. 1, 2
+ [7] Kaiwen Duan, Song Bai, Lingxi Xie, Honggang Qi, Qing-              [27] Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He, and
+     ming Huang, and Qi Tian. Centernet: Keypoint triplets for               Piotr Dollár. Focal loss for dense object detection. In ICCV,
+     object detection. In ICCV, 2019. 2                                      2017. 1, 2, 3, 4, 5
+ [8] Michael Figurnov, Maxwell D Collins, Yukun Zhu, Li                 [28] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays,
+     Zhang, Jonathan Huang, Dmitry Vetrov, and Ruslan                        Pietro Perona, Deva Ramanan, Piotr Dollár, and C Lawrence
+     Salakhutdinov. Spatially adaptive computation time for                  Zitnick. Microsoft coco: Common objects in context. In
+     residual networks. In CVPR, 2017. 3                                     ECCV. Springer, 2014. 1, 2, 5
+ [9] Mikhail Figurnov, Aizhan Ibraimova, Dmitry P Vetrov, and           [29] Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian
+     Pushmeet Kohli. Perforatedcnns: Acceleration through elim-              Szegedy, Scott Reed, Cheng-Yang Fu, and Alexander C
+     ination of redundant convolutions. In NeurIPS, 2016. 2                  Berg. Ssd: Single shot multibox detector. In ECCV.
+[10] Cheng-Yang Fu, Wei Liu, Ananth Ranga, Ambrish Tyagi,                    Springer, 2016. 1, 2
+     and Alexander C Berg. DSSD: Deconvolutional single shot            [30] Ziming Liu, Guangyu Gao, Lin Sun, and Zhiyuan Fang.
+     detector. arXiv preprint arXiv:1701.06659, 2017. 2                      HRDNet: High-resolution Detection Network for Small Ob-
+[11] Ross Girshick. Fast r-cnn. In ICCV, 2015. 2, 4, 5                       jects. arXiv preprint arXiv:2006.07607, 2020. 5
+[12] Ross Girshick, Jeff Donahue, Trevor Darrell, and Jitendra
+                                                                        [31] Ningning Ma, Xiangyu Zhang, Hai-Tao Zheng, and Jian Sun.
+     Malik. Rich feature hierarchies for accurate object detection
+                                                                             ShuffleNet V2: Practical Guidelines for Efficient CNN Ar-
+     and semantic segmentation. In CVPR, 2014. 1, 2
+                                                                             chitecture Design. In ECCV, 2018. 8
+[13] Benjamin Graham and Laurens van der Maaten. Sub-
+                                                                        [32] Paulius Micikevicius, Sharan Narang, Jonah Alben, Gregory
+     manifold sparse convolutional networks. arXiv preprint
+                                                                             Diamos, Erich Elsen, David Garcia, Boris Ginsburg, Michael
+     arXiv:1706.01307, 2017. 2, 4
+                                                                             Houston, Oleksii Kuchaiev, Ganesh Venkatesh, et al. Mixed
+[14] Kaiming He, Georgia Gkioxari, Piotr Dollár, and Ross Gir-
+                                                                             precision training. ICLR, 2018. 5
+     shick. Mask r-cnn. In ICCV, 2017. 2, 5
+[15] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.             [33] Mahyar Najibi, Bharat Singh, and Larry S Davis. Autofocus:
+     Deep residual learning for image recognition. In CVPR,                  Efficient multi-scale inference. In ICCV, 2019. 3, 7
+     2016. 1                                                            [34] Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer,
+[16] Yihui He, Xiangyu Zhang, and Jian Sun. Channel pruning                  James Bradbury, Gregory Chanan, Trevor Killeen, Zeming
+     for accelerating very deep neural networks. In ICCV, 2017.              Lin, Natalia Gimelshein, Luca Antiga, et al. Pytorch: An
+     2                                                                       imperative style, high-performance deep learning library. In
+[17] Lichao Huang, Yi Yang, Yafeng Deng, and Yinan Yu. Dense-                NeurIPS, 2019. 5
+     Box: Unifying landmark localization with end to end object         [35] Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali
+     detection. arXiv preprint arXiv:1509.04874, 2015. 2                     Farhadi. You only look once: Unified, real-time object de-
+[18] Eric Jang, Shixiang Gu, and Ben Poole. Categorical repa-                tection. In CVPR, 2016. 2
+     rameterization with gumbel-softmax. ICLR, 2017. 3                  [36] Joseph Redmon and Ali Farhadi. YOLO9000: better, faster,
+[19] Alexander Kirillov, Yuxin Wu, Kaiming He, and Ross Gir-                 stronger. In CVPR, 2017. 2
+     shick. Pointrend: Image segmentation as rendering. In              [37] Joseph Redmon and Ali Farhadi. Yolov3: An incremental
+     CVPR, 2020. 5                                                           improvement. arXiv preprint arXiv:1804.02767, 2018. 1, 2
+
+
+
+
+                                                                     13676
+[38] Mengye Ren, Andrei Pokrovsky, Bin Yang, and Raquel Ur-              [57] Fisher Yu and Vladlen Koltun.            Multi-scale context
+     tasun. SBNet: Sparse Blocks Network for Fast Inference. In               aggregation by dilated convolutions.          arXiv preprint
+     CVPR, June 2018. 3                                                       arXiv:1511.07122, 2015. 2
+[39] Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun.              [58] Shifeng Zhang, Cheng Chi, Yongqiang Yao, Zhen Lei, and
+     Faster r-cnn: Towards real-time object detection with region             Stan Z Li. Bridging the gap between anchor-based and
+     proposal networks. In NeurIPS, 2015. 1, 2, 8                             anchor-free detection via adaptive training sample selection.
+[40] Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zh-                    In CVPR, 2020. 2
+     moginov, and Liang-Chieh Chen. Mobilenetv2: Inverted                [59] Pengfei Zhu, Longyin Wen, Dawei Du, Xiao Bian, Haibin
+     Residuals and Linear Bottlenecks. In CVPR, 2018. 7                       Ling, Qinghua Hu, Qinqin Nie, Hao Cheng, Chenfeng Liu,
+[41] Abhinav Shrivastava, Rahul Sukthankar, Jitendra Malik, and               Xiaoyu Liu, et al. Visdrone-det2018: The vision meets drone
+     Abhinav Gupta. Beyond skip connections: Top-down modu-                   object detection in image challenge results. In ECCV, 2018.
+     lation for object detection. arXiv preprint arXiv:1612.06851,            2, 5
+     2016. 2                                                             [60] Barret Zoph, Ekin D Cubuk, Golnaz Ghiasi, Tsung-Yi Lin,
+[42] Bharat Singh and Larry S Davis. An analysis of scale invari-             Jonathon Shlens, and Quoc V Le. Learning data aug-
+     ance in object detection snip. In CVPR, 2018. 2                          mentation strategies for object detection. arXiv preprint
+[43] Bharat Singh, Mahyar Najibi, and Larry S Davis. Sniper:                  arXiv:1906.11172, 2019. 2
+     Efficient multi-scale training. In NeurIPS, 2018. 2
+[44] Mingxing Tan, Ruoming Pang, and Quoc V Le. EfficientDet:
+     Scalable and efficient object detection. In CVPR, 2020. 2
+[45] Zhi Tian, Chunhua Shen, Hao Chen, and Tong He. Fcos:
+     Fully convolutional one-stage object detection. In ICCV,
+     2019. 2
+[46] Burak Uzkent, Christopher Yeh, and Stefano Ermon. Effi-
+     cient object detection in large images using deep reinforce-
+     ment learning. In WACV, 2020. 3
+[47] Thomas Verelst and Tinne Tuytelaars. Dynamic Convolu-
+     tions: Exploiting Spatial Sparsity for Faster Inference. In
+     CVPR, June 2020. 2
+[48] Jingdong Wang, Ke Sun, Tianheng Cheng, Borui Jiang,
+     Chaorui Deng, Yang Zhao, Dong Liu, Yadong Mu, Mingkui
+     Tan, Xinggang Wang, et al. Deep high-resolution represen-
+     tation learning for visual recognition. IEEE transactions on
+     pattern analysis and machine intelligence, 2020. 2
+[49] Xinjiang Wang, Shilong Zhang, Zhuoran Yu, Litong Feng,
+     and Wayne Zhang. Scale-equalizing Pyramid Convolution
+     for Object Detection. In CVPR, 2020. 1
+[50] Yulin Wang, Kangchen Lv, Rui Huang, Shiji Song, Le Yang,
+     and Gao Huang. Glance and Focus: a Dynamic Approach
+     to Reducing Spatial Redundancy in Image Classification.
+     NeurIPS, 2020. 3
+[51] Yi Wei, Xinyu Pan, Hongwei Qin, Wanli Ouyang, and Junjie
+     Yan. Quantization mimic: Towards very tiny cnn for object
+     detection. In ECCV, 2018. 2
+[52] Yuxin Wu, Alexander Kirillov, Francisco Massa, Wan-Yen
+     Lo, and Ross Girshick. Detectron2. https://github.
+     com/facebookresearch/detectron2, 2019. 5
+[53] Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, and
+     Kaiming He. Aggregated Residual Transformations for Deep
+     Neural Networks. In CVPR, 2017. 1
+[54] Zhenda Xie, Zheng Zhang, Xizhou Zhu, Gao Huang, and
+     Stephen Lin. Spatially Adaptive Inference with Stochastic
+     Feature Sampling and Interpolation. ECCV, 2020. 2
+[55] Yan Yan, Yuxing Mao, and Bo Li. Second: Sparsely embed-
+     ded convolutional detection. Sensors, 18(10), 2018. 2
+[56] Ze Yang, Shaohui Liu, Han Hu, Liwei Wang, and Stephen
+     Lin. Reppoints: Point set representation for object detection.
+     In ICCV, 2019. 2
+
+
+
+
+                                                                      13677
+

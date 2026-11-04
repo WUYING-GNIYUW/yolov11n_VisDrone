@@ -1,0 +1,13 @@
+{
+  "world_size": 2,
+  "batch_per_rank": 2,
+  "different_augmentation_per_rank": true,
+  "finite_detection_loss": true,
+  "grouped_gradient_equal_across_ranks": true,
+  "optimizer_step": true,
+  "loss_items_rank0": {
+    "box_loss": 3.3202548027038574,
+    "cls_loss": 5.323404788970947,
+    "dfl_loss": 1.7364888191223145
+  }
+}

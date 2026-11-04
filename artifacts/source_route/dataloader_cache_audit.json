@@ -1,0 +1,31 @@
+{
+  "train": {
+    "results": [
+      6471,
+      0,
+      0,
+      0,
+      6471
+    ],
+    "images": 6471,
+    "boxes_after_loader_dedup": 343200,
+    "messages": [
+      "\u001b[34m\u001b[1mtrain: \u001b[0m/root/home/2112406148/datasets/VisDrone/images/train/0000137_02220_d_0000163.jpg: 1 duplicate labels removed",
+      "\u001b[34m\u001b[1mtrain: \u001b[0m/root/home/2112406148/datasets/VisDrone/images/train/0000140_00118_d_0000002.jpg: 1 duplicate labels removed",
+      "\u001b[34m\u001b[1mtrain: \u001b[0m/root/home/2112406148/datasets/VisDrone/images/train/9999945_00000_d_0000114.jpg: 1 duplicate labels removed",
+      "\u001b[34m\u001b[1mtrain: \u001b[0m/root/home/2112406148/datasets/VisDrone/images/train/9999987_00000_d_0000049.jpg: 1 duplicate labels removed"
+    ]
+  },
+  "val": {
+    "results": [
+      548,
+      0,
+      0,
+      0,
+      548
+    ],
+    "images": 548,
+    "boxes_after_loader_dedup": 38759,
+    "messages": []
+  }
+}

@@ -1,0 +1,4385 @@
+[
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          31
+        ]
+      ],
+      "date-time": "2026-10-31T14:56:38Z",
+      "timestamp": 1793458598570,
+      "version": "4.5.0"
+    },
+    "reference-count": 32,
+    "publisher": "MDPI AG",
+    "issue": "8",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              4,
+              17
+            ]
+          ],
+          "date-time": "2025-04-17T00:00:00Z",
+          "timestamp": 1744848000000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "funder": [
+      {
+        "name": "The Basic Research Project of Higher Education Institutions of Liaoning Province",
+        "award": [
+          "LJKZ0358"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "LJKZ0358"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "The Basic Research Project of Higher Education Institutions of Liaoning Province",
+        "award": [
+          "LJKQZ2021152"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "LJKQZ2021152"
+            ]
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "Sensors"
+    ],
+    "abstract": "<jats:p>In unmanned aerial vehicle (UAV) aerial imagery scenarios, challenges such as small target size, compact distribution, and mutual occlusion often result in missed detections and false alarms. To address these challenges, this paper introduces YOLO-MARS, a small target recognition model that incorporates a multi-level attention residual mechanism. Firstly, an ERAC module is designed to enhance the ability to capture small targets by expanding the feature perception range, incorporating channel attention weight allocation strategies to strengthen the extraction capability for small targets and introducing a residual connection mechanism to improve gradient propagation stability. Secondly, a PD-ASPP structure is proposed, utilizing parallel paths for differentiated feature extraction and incorporating depthwise separable convolutions to reduce computational redundancy, thereby enabling the effective identification of targets at various scales under complex backgrounds. Thirdly, a multi-scale SGCS-FPN fusion architecture is proposed, adding a shallow feature guidance branch to establish cross-level semantic associations, thereby effectively addressing the issue of small target loss in deep networks. Finally, a dynamic WIoU evaluation function is implemented, constructing adaptive penalty terms based on the spatial distribution characteristics of predicted and ground-truth bounding boxes, thereby optimizing the boundary localization accuracy of densely packed small targets from the UAV viewpoint. Experiments conducted on the VisDrone2019 dataset demonstrate that the YOLO-MARS method achieves 40.9% and 23.4% in the mAP50 and mAP50:95 metrics, respectively, representing improvements of 8.1% and 4.3% in detection accuracy compared to the benchmark model YOLOv8n, thus demonstrating its advantages in UAV aerial target detection.</jats:p>",
+    "DOI": "10.3390/s25082534",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2025,
+          4,
+          17
+        ]
+      ],
+      "date-time": "2025-04-17T20:05:56Z",
+      "timestamp": 1744920356000
+    },
+    "page": "2534",
+    "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+    "source": "Crossref",
+    "is-referenced-by-count": 28,
+    "title": [
+      "YOLO-MARS: An Enhanced YOLOv8n for Small Object Detection in UAV Aerial Imagery"
+    ],
+    "prefix": "10.3390",
+    "volume": "25",
+    "author": [
+      {
+        "given": "Guofeng",
+        "family": "Zhang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "School of Electronic and Information Engineering, Liaoning Technical University, Huludao 125105, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yanfei",
+        "family": "Peng",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of Electronic and Information Engineering, Liaoning Technical University, Huludao 125105, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jincheng",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of Electronic and Information Engineering, Liaoning Technical University, Huludao 125105, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "1968",
+    "published-online": {
+      "date-parts": [
+        [
+          2025,
+          4,
+          17
+        ]
+      ]
+    },
+    "reference": [
+      {
+        "key": "ref_1",
+        "doi-asserted-by": "crossref",
+        "first-page": "48572",
+        "DOI": "10.1109/ACCESS.2019.2909530",
+        "article-title": "Unmanned Aerial Vehicles (UAVs): A Survey on Civil Applications and Key Research Challenges",
+        "volume": "7",
+        "author": "Shakhatreh",
+        "year": "2019",
+        "journal-title": "IEEE Access"
+      },
+      {
+        "key": "ref_2",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R.B., Donahue, J., Darrell, T., and Malik, J. (2014, January 23–28). Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation. Proceedings of the 2014 IEEE Conference on Computer Vision and Pattern Recognition, Columbus, OH, USA.",
+        "DOI": "10.1109/CVPR.2014.81"
+      },
+      {
+        "key": "ref_3",
+        "doi-asserted-by": "crossref",
+        "first-page": "1137",
+        "DOI": "10.1109/TPAMI.2016.2577031",
+        "article-title": "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks",
+        "volume": "39",
+        "author": "Ren",
+        "year": "2017",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_4",
+        "doi-asserted-by": "crossref",
+        "unstructured": "He, K., Gkioxari, G., Dollár, P., and Girshick, R. (2017, January 22–29). Mask R-CNN. Proceedings of the IEEE International Conference on Computer Vision, Venice, Italy.",
+        "DOI": "10.1109/ICCV.2017.322"
+      },
+      {
+        "key": "ref_5",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Redmon, J., and Farhadi, A. (2017, January 21–26). YOLO9000: Better, Faster, Stronger. Proceedings of the 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Honolulu, HI, USA.",
+        "DOI": "10.1109/CVPR.2017.690"
+      },
+      {
+        "key": "ref_6",
+        "unstructured": "Bochkovskiy, A., Wang, C.-Y., and Liao, H.-Y.M. (2020). YOLOv4: Optimal Speed and Accuracy of Object Detection. arXiv."
+      },
+      {
+        "key": "ref_7",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.-Y., and Berg, A.C. (2016, January 11–14). SSD: Single Shot MultiBox Detector. Proceedings of the Computer Vision–ECCV 2016: 14th European Conference, Amsterdam, The Netherlands.",
+        "DOI": "10.1007/978-3-319-46448-0_2"
+      },
+      {
+        "key": "ref_8",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lin, T.-Y., Goyal, P., Girshick, R.B., He, K., and Dollár, P. (2017, January 22–29). Focal Loss for Dense Object Detection. Proceedings of the 2017 IEEE International Conference on Computer Vision (ICCV), Venice, Italy.",
+        "DOI": "10.1109/ICCV.2017.324"
+      },
+      {
+        "key": "ref_9",
+        "doi-asserted-by": "crossref",
+        "first-page": "8002005",
+        "DOI": "10.1109/LGRS.2020.3026587",
+        "article-title": "Remote Sensing Image Classification Based on a Cross-Attention Mechanism and Graph Convolution",
+        "volume": "19",
+        "author": "Cai",
+        "year": "2022",
+        "journal-title": "IEEE Geosci. Remote Sens. Lett."
+      },
+      {
+        "key": "ref_10",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhao, Z.-A., Wang, S., Chen, M.-X., Mao, Y.-J., Chan, A.C.-H., Lai, D.K.-H., Wong, D.W.-C., and Cheung, J.C.-W. (2025). Enhancing Human Detection in Occlusion-Heavy Disaster Scenarios: A Visibility-Enhanced DINO (VE-DINO) Model with Reassembled Occlusion Dataset. Smart Cities, 8.",
+        "DOI": "10.3390/smartcities8010012"
+      },
+      {
+        "key": "ref_11",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhu, X., Lyu, S., Wang, X., and Zhao, Q. (2021, January 11–17). TPH-YOLOv5: Improved YOLOv5 Based on Transformer Prediction Head for Object Detection on Drone-captured Scenarios. Proceedings of the 2021 IEEE/CVF International Conference on Computer Vision Workshops (ICCVW), Montreal, BC, Canada.",
+        "DOI": "10.1109/ICCVW54120.2021.00312"
+      },
+      {
+        "key": "ref_12",
+        "doi-asserted-by": "crossref",
+        "first-page": "1758",
+        "DOI": "10.1109/TCSVT.2019.2905881",
+        "article-title": "Small Object Detection in Unmanned Aerial Vehicle Images Using Feature Fusion and Scaling-Based Single Shot Detector With Spatial Context Analysis",
+        "volume": "30",
+        "author": "Liang",
+        "year": "2020",
+        "journal-title": "IEEE Trans. Circuits Syst. Video Technol."
+      },
+      {
+        "key": "ref_13",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Guo, C., Fan, B., Zhang, Q., Xiang, S., and Pan, C. (2020, January 13–19). AugFPN: Improving Multi-Scale Feature Learning for Object Detection. Proceedings of the 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA.",
+        "DOI": "10.1109/CVPR42600.2020.01261"
+      },
+      {
+        "key": "ref_14",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Fang, Q.F., Han, D., and Wang, Z. (2021). Cross-Modality Fusion Transformer for Multispectral Object Detection. arXiv.",
+        "DOI": "10.2139/ssrn.4227745"
+      },
+      {
+        "key": "ref_15",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, Q., Liu, R., Zheng, B., Wang, H., and Fu, Y. (2024, January 16–22). Infrared Small Target Detection with Scale and Location Sensitivity. Proceedings of the 2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA.",
+        "DOI": "10.1109/CVPR52733.2024.01656"
+      },
+      {
+        "key": "ref_16",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yang, F., Fan, H., Chu, P., Blasch, E., and Ling, H. (November, January 27). Clustered Object Detection in Aerial Images. Proceedings of the 2019 IEEE/CVF International Conference on Computer Vision (ICCV), Seoul, Republic of Korea.",
+        "DOI": "10.1109/ICCV.2019.00840"
+      },
+      {
+        "key": "ref_17",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Du, B., Huang, Y., Chen, J., and Huang, D. (2023, January 17–24). Adaptive Sparse Convolutional Networks with Global Context Enhancement for Faster Object Detection on Drone Images. Proceedings of the 2023 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Vancouver, BC, Canada.",
+        "DOI": "10.1109/CVPR52729.2023.01291"
+      },
+      {
+        "key": "ref_18",
+        "first-page": "5629314",
+        "article-title": "Small Object Detection in Remote Sensing Images Based on Redundant Feature Removal and Progressive Regression",
+        "volume": "62",
+        "author": "Yang",
+        "year": "2024",
+        "journal-title": "IEEE Trans. Geosci. Remote Sens."
+      },
+      {
+        "key": "ref_19",
+        "first-page": "5615115",
+        "article-title": "Significant Feature Elimination and Sample Assessment for Remote Sensing Small Objects’ Detection",
+        "volume": "62",
+        "author": "Ma",
+        "year": "2024",
+        "journal-title": "IEEE Trans. Geosci. Remote Sens."
+      },
+      {
+        "key": "ref_20",
+        "doi-asserted-by": "crossref",
+        "first-page": "292",
+        "DOI": "10.1016/j.neucom.2021.03.016",
+        "article-title": "A Dual Neural Network for Object Detection in UAV Images",
+        "volume": "443",
+        "author": "Tian",
+        "year": "2021",
+        "journal-title": "Neurocomputing"
+      },
+      {
+        "key": "ref_21",
+        "doi-asserted-by": "crossref",
+        "first-page": "240",
+        "DOI": "10.1007/s11263-019-01235-8",
+        "article-title": "Single Image Dehazing via Multi-Scale Convolutional Neural Networks with Holistic Edges",
+        "volume": "128",
+        "author": "Ren",
+        "year": "2020",
+        "journal-title": "Int. J. Comput. Vis."
+      },
+      {
+        "key": "ref_22",
+        "doi-asserted-by": "crossref",
+        "first-page": "1643",
+        "DOI": "10.1109/TCSVT.2022.3214430",
+        "article-title": "Multi-Purpose Oriented Single Nighttime Image Haze Removal Based on Unified Variational Retinex Model",
+        "volume": "33",
+        "author": "Liu",
+        "year": "2022",
+        "journal-title": "IEEE Trans. Circuits Syst. Video Technol."
+      },
+      {
+        "key": "ref_23",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, S., Qi, L., Qin, H., Shi, J., and Jia, J. (2018, January 18–23). Path Aggregation Network for Instance Segmentation. Proceedings of the 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, USA.",
+        "DOI": "10.1109/CVPR.2018.00913"
+      },
+      {
+        "key": "ref_24",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lin, T.-Y., Dollár, P., Girshick, R.B., He, K., Hariharan, B., and Belongie, S.J. (2017, January 21–26). Feature Pyramid Networks for Object Detection. Proceedings of the 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Honolulu, HI, USA.",
+        "DOI": "10.1109/CVPR.2017.106"
+      },
+      {
+        "key": "ref_25",
+        "doi-asserted-by": "crossref",
+        "first-page": "7389",
+        "DOI": "10.1109/TIP.2020.3002345",
+        "article-title": "FoveaBox: Beyond Anchor-Based Object Detection",
+        "volume": "29",
+        "author": "Kong",
+        "year": "2020",
+        "journal-title": "IEEE Trans. Image Process."
+      },
+      {
+        "key": "ref_26",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Hu, J., Shen, L., Albanie, S., Sun, G., and Wu, E. (2018, January 18–23). Squeeze-and-Excitation Networks. Proceedings of the 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, USA.",
+        "DOI": "10.1109/CVPR.2018.00745"
+      },
+      {
+        "key": "ref_27",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.-Y., Yeh, I.-H., and Liao, H. (2024). YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information. arXiv.",
+        "DOI": "10.1007/978-3-031-72751-1_1"
+      },
+      {
+        "key": "ref_28",
+        "unstructured": "Tong, Z., Chen, Y., Xu, Z., and Yu, R. (2023). Wise-IoU: Bounding Box Regression Loss with Dynamic Focusing Mechanism. arXiv."
+      },
+      {
+        "key": "ref_29",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhu, P.F., Wen, L., Du, D., Bian, X., Ling, H., Hu, Q., Nie, Q., Cheng, H., Liu, C., and Liu, X. (November, January 27). VisDrone-DET2019: The Vision Meets Drone Object Detection in Image Challenge Results. Proceedings of the 2019 IEEE/CVF International Conference on Computer Vision Workshop (ICCVW), Seoul, Republic of Korea.",
+        "DOI": "10.1109/ICCVW.2019.00031"
+      },
+      {
+        "key": "ref_30",
+        "doi-asserted-by": "crossref",
+        "first-page": "121366",
+        "DOI": "10.1016/j.ins.2024.121366",
+        "article-title": "LUD-YOLO: A Novel Lightweight Object Detection Network for Unmanned Aerial Vehicle",
+        "volume": "686",
+        "author": "Fan",
+        "year": "2025",
+        "journal-title": "Inf. Sci."
+      },
+      {
+        "key": "ref_31",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wei, C., and Wang, W. (2025). RFAG-YOLO: A Receptive Field Attention-Guided YOLO Network for Small-Object Detection in UAV Images. Sensors, 25.",
+        "DOI": "10.3390/s25072193"
+      },
+      {
+        "key": "ref_32",
+        "doi-asserted-by": "crossref",
+        "first-page": "227",
+        "DOI": "10.1038/s41597-023-02066-6",
+        "article-title": "HIT-UAV: A High-Altitude Infrared Thermal Dataset for Unmanned Aerial Vehicle-Based Object Detection",
+        "volume": "10",
+        "author": "Suo",
+        "year": "2023",
+        "journal-title": "Sci. Data"
+      }
+    ],
+    "container-title": [
+      "Sensors"
+    ],
+    "original-title": [],
+    "language": "en",
+    "link": [
+      {
+        "URL": "https://www.mdpi.com/1424-8220/25/8/2534/pdf",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2025,
+          10,
+          9
+        ]
+      ],
+      "date-time": "2025-10-09T17:16:26Z",
+      "timestamp": 1760030186000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://www.mdpi.com/1424-8220/25/8/2534"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2025,
+          4,
+          17
+        ]
+      ]
+    },
+    "references-count": 32,
+    "journal-issue": {
+      "issue": "8",
+      "published-online": {
+        "date-parts": [
+          [
+            2025,
+            4
+          ]
+        ]
+      }
+    },
+    "alternative-id": [
+      "s25082534"
+    ],
+    "URL": "https://doi.org/10.3390/s25082534",
+    "relation": {},
+    "ISSN": [
+      "1424-8220"
+    ],
+    "issn-type": [
+      {
+        "value": "1424-8220",
+        "type": "electronic"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          4,
+          17
+        ]
+      ]
+    }
+  },
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          30
+        ]
+      ],
+      "date-time": "2026-10-30T16:29:06Z",
+      "timestamp": 1793377746303,
+      "version": "4.5.0"
+    },
+    "reference-count": 48,
+    "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2024,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2024-01-01T00:00:00Z",
+          "timestamp": 1704067200000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2024,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2024-01-01T00:00:00Z",
+          "timestamp": 1704067200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-029"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2024,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2024-01-01T00:00:00Z",
+          "timestamp": 1704067200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-037"
+      }
+    ],
+    "funder": [
+      {
+        "DOI": "10.13039/501100005230",
+        "name": "Natural Science Foundation of Chongqing, China",
+        "doi-asserted-by": "publisher",
+        "award": [
+          "cstc2021jcyj-msxmX1130"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "cstc2021jcyj-msxmX1130"
+            ]
+          }
+        ],
+        "id": [
+          {
+            "id": "10.13039/501100005230",
+            "id-type": "DOI",
+            "asserted-by": "publisher"
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "IEEE Trans. Geosci. Remote Sensing"
+    ],
+    "published-print": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "DOI": "10.1109/tgrs.2024.3457155",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2024,
+          9,
+          10
+        ]
+      ],
+      "date-time": "2024-09-10T15:10:09Z",
+      "timestamp": 1725981009000
+    },
+    "page": "1-11",
+    "source": "Crossref",
+    "is-referenced-by-count": 86,
+    "title": [
+      "A Lightweight Fusion Strategy With Enhanced Interlayer Feature Correlation for Small Object Detection"
+    ],
+    "prefix": "10.1109",
+    "volume": "62",
+    "author": [
+      {
+        "ORCID": "https://orcid.org/0009-0000-8484-7601",
+        "authenticated-orcid": false,
+        "given": "Yao",
+        "family": "Xiao",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Beijing Institute of Technology, Beijing, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-5452-2662",
+        "authenticated-orcid": false,
+        "given": "Tingfa",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Beijing Institute of Technology, Beijing, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0009-0007-3402-224X",
+        "authenticated-orcid": false,
+        "given": "Xin",
+        "family": "Yu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Beijing Institute of Technology, Beijing, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-7259-9823",
+        "authenticated-orcid": false,
+        "given": "Yuqiang",
+        "family": "Fang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "National Key Laboratory of Space Target Awareness, Space Engineering University, Beijing, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-6936-9485",
+        "authenticated-orcid": false,
+        "given": "Jianan",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Beijing Institute of Technology, Beijing, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "263",
+    "reference": [
+      {
+        "key": "ref1",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/tgrs.2022.3194732"
+      },
+      {
+        "key": "ref2",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/tgrs.2024.3363057"
+      },
+      {
+        "key": "ref3",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.3390/rs15020418"
+      },
+      {
+        "key": "ref4",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/TPAMI.2023.3335338"
+      },
+      {
+        "key": "ref5",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR52729.2023.00496"
+      },
+      {
+        "key": "ref6",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR.2017.106"
+      },
+      {
+        "key": "ref7",
+        "first-page": "1",
+        "article-title": "Visdrone-det2018: The vision meets drone object detection in image challenge results",
+        "volume-title": "Proc. Eur. Conf. Comput. Vis. (ECCV) Workshoph",
+        "author": "Zhu"
+      },
+      {
+        "key": "ref8",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1007/978-3-030-01249-6_23"
+      },
+      {
+        "key": "ref9",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1007/978-3-319-10602-1_48"
+      },
+      {
+        "key": "ref10",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/TMM.2017.2759508"
+      },
+      {
+        "key": "ref11",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCV.2017.322"
+      },
+      {
+        "key": "ref12",
+        "first-page": "1",
+        "article-title": "Faster R-CNN: Towards realtime object detection with region proposal networks",
+        "volume-title": "Proc. Adv. Neural Inf. Process. Syst.",
+        "volume": "28",
+        "author": "Ren"
+      },
+      {
+        "key": "ref13",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1007/978-3-319-46448-0_2"
+      },
+      {
+        "key": "ref14",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR52729.2023.00721"
+      },
+      {
+        "key": "ref15",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCV.2017.324"
+      },
+      {
+        "key": "ref16",
+        "first-page": "21002",
+        "article-title": "Generalized focal loss: Learning qualified and distributed bounding boxes for dense object detection",
+        "volume-title": "Proc. Annu. Conf. Neural Inf. Process. Syst. (NIPS)",
+        "author": "Li"
+      },
+      {
+        "key": "ref17",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR.2017.211"
+      },
+      {
+        "key": "ref18",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/tgrs.2024.3377999"
+      },
+      {
+        "key": "ref19",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/TPAMI.2023.3345880"
+      },
+      {
+        "key": "ref20",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCV51070.2023.00380"
+      },
+      {
+        "key": "ref21",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/TPAMI.2020.2983686"
+      },
+      {
+        "key": "ref22",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR52688.2022.01330"
+      },
+      {
+        "key": "ref23",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR52729.2023.01291"
+      },
+      {
+        "key": "ref24",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR.2018.00913"
+      },
+      {
+        "key": "ref25",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR.2019.00720"
+      },
+      {
+        "key": "ref26",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR42600.2020.01079"
+      },
+      {
+        "key": "ref27",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR46437.2021.01509"
+      },
+      {
+        "key": "ref28",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/cvpr.2018.00474"
+      },
+      {
+        "key": "ref29",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1007/978-3-030-01264-9_8"
+      },
+      {
+        "key": "ref30",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCVW.2019.00011"
+      },
+      {
+        "key": "ref31",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCV.2019.00840"
+      },
+      {
+        "key": "ref32",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCVW.2019.00020"
+      },
+      {
+        "key": "ref33",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPRW50498.2020.00103"
+      },
+      {
+        "key": "ref34",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/tits.2024.3386928"
+      },
+      {
+        "key": "ref35",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.5555/3045118.3045167"
+      },
+      {
+        "key": "ref36",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR.2018.00442"
+      },
+      {
+        "key": "ref37",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCV.2019.00972"
+      },
+      {
+        "key": "ref38",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR.2019.00093"
+      },
+      {
+        "key": "ref39",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/TIP.2020.3045636"
+      },
+      {
+        "key": "ref40",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/ICCVW.2019.00007"
+      },
+      {
+        "key": "ref41",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.48550/arXiv.1906.07155"
+      },
+      {
+        "key": "ref42",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.48550/ARXIV.1807.06521"
+      },
+      {
+        "key": "ref43",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1007/978-3-030-01261-8_1"
+      },
+      {
+        "key": "ref44",
+        "article-title": "Differentiable learningto- normalize via switchable normalization",
+        "author": "Luo",
+        "year": "2018",
+        "journal-title": "arXiv:1806.10779"
+      },
+      {
+        "key": "ref45",
+        "article-title": "Instance normalization: The missing ingredient for fast stylization",
+        "author": "Ulyanov",
+        "year": "2016",
+        "journal-title": "arXiv:1607.08022"
+      },
+      {
+        "key": "ref46",
+        "article-title": "Rigid-motion scattering for texture classification",
+        "author": "Sifre",
+        "year": "2014",
+        "journal-title": "arXiv:1403.1687"
+      },
+      {
+        "key": "ref47",
+        "first-page": "1",
+        "article-title": "Imagenet classification with deep convolutional neural networks",
+        "volume-title": "Proc. Adv. Neural Inf. Process. Syst.",
+        "volume": "25",
+        "author": "Krizhevsky"
+      },
+      {
+        "key": "ref48",
+        "doi-asserted-by": "publisher",
+        "DOI": "10.1109/CVPR52729.2023.01157"
+      }
+    ],
+    "container-title": [
+      "IEEE Transactions on Geoscience and Remote Sensing"
+    ],
+    "original-title": [],
+    "link": [
+      {
+        "URL": "http://xplorestaging.ieee.org/ielx8/36/10354519/10671587.pdf?arnumber=10671587",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2024,
+          9,
+          27
+        ]
+      ],
+      "date-time": "2024-09-27T00:38:06Z",
+      "timestamp": 1727397486000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://ieeexplore.ieee.org/document/10671587/"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "references-count": 48,
+    "URL": "https://doi.org/10.1109/tgrs.2024.3457155",
+    "relation": {
+      "has-review": [
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v1/decision1",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v2/review3",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v2/review2",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v2/response1",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v1/review3",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v2/decision1",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v1/review2",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v1/review1",
+          "asserted-by": "object"
+        },
+        {
+          "id-type": "doi",
+          "id": "10.1109/TGRS.2024.3457155/v2/review1",
+          "asserted-by": "object"
+        }
+      ]
+    },
+    "ISSN": [
+      "0196-2892",
+      "1558-0644"
+    ],
+    "issn-type": [
+      {
+        "value": "0196-2892",
+        "type": "print"
+      },
+      {
+        "value": "1558-0644",
+        "type": "electronic"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    }
+  },
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          31
+        ]
+      ],
+      "date-time": "2026-10-31T21:42:30Z",
+      "timestamp": 1793482950325,
+      "version": "4.5.0"
+    },
+    "reference-count": 40,
+    "publisher": "Elsevier BV",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "tdm",
+        "delay-in-days": 0,
+        "URL": "https://www.elsevier.com/tdm/userlicense/1.0/"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "tdm",
+        "delay-in-days": 0,
+        "URL": "https://www.elsevier.com/legal/tdmrep-license"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-017"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-037"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-012"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-029"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              11,
+              1
+            ]
+          ],
+          "date-time": "2025-11-01T00:00:00Z",
+          "timestamp": 1761955200000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-004"
+      }
+    ],
+    "funder": [
+      {
+        "DOI": "10.13039/501100001809",
+        "name": "National Natural Science Foundation of China",
+        "doi-asserted-by": "publisher",
+        "id": [
+          {
+            "id": "10.13039/501100001809",
+            "id-type": "DOI",
+            "asserted-by": "publisher"
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [
+        "elsevier.com",
+        "sciencedirect.com"
+      ],
+      "crossmark-restriction": true
+    },
+    "short-container-title": [
+      "Digital Signal Processing"
+    ],
+    "published-print": {
+      "date-parts": [
+        [
+          2025,
+          11
+        ]
+      ]
+    },
+    "DOI": "10.1016/j.dsp.2025.105411",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2025,
+          6,
+          19
+        ]
+      ],
+      "date-time": "2025-06-19T23:09:30Z",
+      "timestamp": 1750374570000
+    },
+    "page": "105411",
+    "update-policy": "https://doi.org/10.1016/elsevier_cm_policy",
+    "source": "Crossref",
+    "is-referenced-by-count": 40,
+    "special_numbering": "C",
+    "title": [
+      "AED-YOLO11: A small object detection model based on YOLO11"
+    ],
+    "prefix": "10.1016",
+    "volume": "166",
+    "author": [
+      {
+        "ORCID": "https://orcid.org/0009-0006-1678-0365",
+        "authenticated-orcid": false,
+        "given": "Xuejian",
+        "family": "Gong",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiong",
+        "family": "Yu",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Huayi",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xinsheng",
+        "family": "Dong",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "78",
+    "reference": [
+      {
+        "issue": "1",
+        "key": "10.1016/j.dsp.2025.105411_br0010",
+        "doi-asserted-by": "crossref",
+        "first-page": "9255",
+        "DOI": "10.1038/s41598-025-92344-7",
+        "article-title": "A multi-scale small object detection algorithm SMA-YOLO for UAV remote sensing images",
+        "volume": "15",
+        "author": "Zhou",
+        "year": "2025",
+        "journal-title": "Sci. Rep."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0020",
+        "series-title": "2022 7th International Conference on Image, Vision and Computing (ICIVC)",
+        "first-page": "195",
+        "article-title": "UAVTinyDet: tiny object detection in UAV scenes",
+        "author": "Zhu",
+        "year": "2022"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0030",
+        "doi-asserted-by": "crossref",
+        "DOI": "10.1016/j.dsp.2024.104390",
+        "article-title": "Detection algorithm for dense small objects in high altitude image",
+        "volume": "146",
+        "author": "Wu",
+        "year": "2024",
+        "journal-title": "Digit. Signal Process.",
+        "ISSN": "https://id.crossref.org/issn/1051-2004",
+        "issn-type": "print"
+      },
+      {
+        "issue": "2",
+        "key": "10.1016/j.dsp.2025.105411_br0040",
+        "doi-asserted-by": "crossref",
+        "first-page": "936",
+        "DOI": "10.1109/TSMC.2020.3005231",
+        "article-title": "A survey of the four pillars for small object detection: multiscale representation, contextual information, super-resolution, and region proposal",
+        "volume": "52",
+        "author": "Chen",
+        "year": "2022",
+        "journal-title": "IEEE Trans. Syst. Man Cybern. Syst."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0050",
+        "doi-asserted-by": "crossref",
+        "first-page": "3993",
+        "DOI": "10.32604/cmc.2024.048351",
+        "article-title": "Enhancing dense small object detection in UAV images based on hybrid transformer",
+        "volume": "78",
+        "author": "Feng",
+        "year": "2024",
+        "journal-title": "Comput. Mater. Continua",
+        "ISSN": "https://id.crossref.org/issn/1546-2218",
+        "issn-type": "print"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0060",
+        "doi-asserted-by": "crossref",
+        "first-page": "271",
+        "DOI": "10.1016/j.comcom.2023.12.018",
+        "article-title": "KDSMALL: a lightweight small object detection algorithm based on knowledge distillation",
+        "volume": "219",
+        "author": "Zhou",
+        "year": "2024",
+        "journal-title": "Comput. Commun.",
+        "ISSN": "https://id.crossref.org/issn/0140-3664",
+        "issn-type": "print"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0070",
+        "doi-asserted-by": "crossref",
+        "DOI": "10.1016/j.dsp.2024.104957",
+        "article-title": "EVMNet: eagle visual mechanism-inspired lightweight network for small object detection in UAV aerial images",
+        "volume": "158",
+        "author": "Chen",
+        "year": "2025",
+        "journal-title": "Digit. Signal Process.",
+        "ISSN": "https://id.crossref.org/issn/1051-2004",
+        "issn-type": "print"
+      },
+      {
+        "issue": "2",
+        "key": "10.1016/j.dsp.2025.105411_br0080",
+        "first-page": "34",
+        "article-title": "Faster R-CNN: towards real-time object detection with region proposal networks",
+        "volume": "28",
+        "author": "Ren",
+        "year": "2015",
+        "journal-title": "Adv. Neural Inf. Process. Syst."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0090",
+        "series-title": "Proceedings of the IEEE International Conference on Computer Vision",
+        "first-page": "2980",
+        "article-title": "Focal loss for dense object detection",
+        "author": "Lin",
+        "year": "2017"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0100",
+        "series-title": "Proceedings of the 16th European Conference on Computer Vision",
+        "first-page": "213",
+        "article-title": "End-to-end object detection with transformers",
+        "author": "Carion",
+        "year": "2020"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0110",
+        "author": "Kim"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0120",
+        "doi-asserted-by": "crossref",
+        "first-page": "16632",
+        "DOI": "10.1109/TITS.2022.3170354",
+        "article-title": "Traffic sign detection and recognition in multiimages using a fusion model with YOLO and VGG network",
+        "volume": "23",
+        "author": "Yu",
+        "year": "2022",
+        "journal-title": "IEEE Trans. Intell. Transp. Syst."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0130",
+        "series-title": "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition",
+        "first-page": "779",
+        "article-title": "You only look once: unified, real-time object detection",
+        "author": "Redmon",
+        "year": "2016"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0140",
+        "series-title": "European Conference on Computer Vision",
+        "first-page": "21",
+        "article-title": "SSD: single shot MultiBox detector",
+        "author": "Liu",
+        "year": "2016"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0150",
+        "series-title": "Proceedings of the IEEE International Conference on Computer Vision",
+        "first-page": "1440",
+        "article-title": "Fast R-CNN",
+        "author": "Girshick",
+        "year": "2015"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0160",
+        "series-title": "European Conference on Computer Vision",
+        "first-page": "740",
+        "article-title": "Microsoft COCO: common objects in context",
+        "author": "Lin",
+        "year": "2014"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0170",
+        "series-title": "Asian Conference on Computer Vision",
+        "first-page": "214",
+        "article-title": "R-CNN for small object detection",
+        "author": "Chen",
+        "year": "2016"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0180",
+        "doi-asserted-by": "crossref",
+        "first-page": "22342",
+        "DOI": "10.1109/ACCESS.2023.3252021",
+        "article-title": "MCS-YOLO: a multiscale object detection method for autonomous driving road environment recognition",
+        "volume": "11",
+        "author": "Cao",
+        "year": "2023",
+        "journal-title": "IEEE Access"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0190",
+        "author": "Hu"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0200",
+        "author": "Khanam"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0210",
+        "series-title": "2021 International Conference on Artificial Intelligence in Information and Communication (ICAIIC)",
+        "first-page": "181",
+        "article-title": "Small object detection using context and attention",
+        "author": "Lim",
+        "year": "2021"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0220",
+        "series-title": "2021 IEEE/CVF International Conference on Computer Vision Workshops (ICCVW)",
+        "first-page": "2778",
+        "article-title": "TPH-YOLOv5: improved YOLOv5 based on transformer prediction head for object detection on drone-captured scenarios",
+        "author": "Zhu",
+        "year": "2021"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0230",
+        "doi-asserted-by": "crossref",
+        "DOI": "10.1016/j.imavis.2024.105190",
+        "article-title": "LDConv: linear deformable convolution for improving convolutional neural networks",
+        "volume": "149",
+        "author": "Zhang",
+        "year": "2024",
+        "journal-title": "Image Vis. Comput.",
+        "ISSN": "https://id.crossref.org/issn/0262-8856",
+        "issn-type": "print"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0240",
+        "series-title": "Proceedings of the 2024 14th International Conference on Computer and Knowledge Engineering (ICCKE)",
+        "first-page": "131",
+        "article-title": "Accurate and lightweight vehicle and pedestrian detector in foggy weather",
+        "author": "Pour",
+        "year": "2024"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0250",
+        "author": "Zhu"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0260",
+        "article-title": "GMS-YOLO: a lightweight real-time object detection algorithm for pedestrians and vehicles under foggy conditions",
+        "author": "Chen",
+        "year": "2025",
+        "journal-title": "IEEE Internet Things J."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0270",
+        "doi-asserted-by": "crossref",
+        "DOI": "10.1016/j.eswa.2024.125727",
+        "article-title": "A lightweight hierarchical aggregation task alignment network for industrial surface defect detection",
+        "volume": "263",
+        "author": "Lv",
+        "year": "2025",
+        "journal-title": "Expert Syst. Appl."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0280",
+        "doi-asserted-by": "crossref",
+        "first-page": "196",
+        "DOI": "10.3390/s25010196",
+        "article-title": "EBR-YOLO: a lightweight detection method for non-motorized vehicles based on drone aerial images",
+        "volume": "25",
+        "author": "Zhou",
+        "year": "2025",
+        "journal-title": "Sensors"
+      },
+      {
+        "issue": "1",
+        "key": "10.1016/j.dsp.2025.105411_br0290",
+        "doi-asserted-by": "crossref",
+        "DOI": "10.1038/s41598-024-78749-w",
+        "article-title": "PTCDet: advanced UAV imagery target detection",
+        "volume": "14",
+        "author": "Su",
+        "year": "2024",
+        "journal-title": "Sci. Rep."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0300",
+        "series-title": "2023 IEEE/CVF International Conference on Computer Vision (ICCV)",
+        "first-page": "6004",
+        "article-title": "Learning to upsample by learning to sample",
+        "author": "Liu",
+        "year": "2023"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0310",
+        "author": "Tong"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0320",
+        "series-title": "Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining",
+        "first-page": "71",
+        "article-title": "Rosetta: large scale system for text detection and recognition in images",
+        "author": "Borisyuk",
+        "year": "2018"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0330",
+        "series-title": "International Joint Conferences on Artificial Intelligence",
+        "first-page": "935",
+        "article-title": "Exploring Fourier prior for single image rain removal",
+        "author": "Guo",
+        "year": "2022"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0340",
+        "series-title": "Proc. Adv. Neural Inf. Process. Syst, vol. 32",
+        "first-page": "1",
+        "article-title": "PyTorch: an imperative style, high-performance deep learning library",
+        "author": "Paszke",
+        "year": "2019"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0350",
+        "series-title": "Proceedings of the IEEE/CVF International Conference on Computer Vision Workshops",
+        "first-page": "213",
+        "article-title": "VisDrone-DET2019: the vision meets drone object detection in image challenge results [dataset]",
+        "author": "Du",
+        "year": "2019"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0360",
+        "series-title": "2020 IEEE Winter Conference on Applications of Computer Vision (WACV)",
+        "first-page": "1246",
+        "article-title": "Scale match for tiny person detection [dataset]",
+        "author": "Yu",
+        "year": "2020"
+      },
+      {
+        "issue": "5",
+        "key": "10.1016/j.dsp.2025.105411_br0370",
+        "doi-asserted-by": "crossref",
+        "first-page": "1171",
+        "DOI": "10.3390/rs15051171",
+        "article-title": "YOLOLens: a deep learning model based on super-resolution to enhance the crater detection of the planetary surfaces [dataset]",
+        "volume": "15",
+        "author": "La Grassa",
+        "year": "2023",
+        "journal-title": "Remote Sens."
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0380",
+        "series-title": "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+        "first-page": "3974",
+        "article-title": "DOTA: a large-scale dataset for object detection in aerial images",
+        "author": "Xia",
+        "year": "2018"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0390",
+        "author": "Li"
+      },
+      {
+        "key": "10.1016/j.dsp.2025.105411_br0400",
+        "series-title": "Proceedings of the European Conference on Computer Vision (ECCV)",
+        "first-page": "1",
+        "article-title": "YOLOv9: learning what you want to learn using programmable gradient information",
+        "author": "Wang",
+        "year": "2024"
+      }
+    ],
+    "container-title": [
+      "Digital Signal Processing"
+    ],
+    "original-title": [],
+    "language": "en",
+    "link": [
+      {
+        "URL": "https://api.elsevier.com/content/article/PII:S1051200425004336?httpAccept=text/xml",
+        "content-type": "text/xml",
+        "content-version": "vor",
+        "intended-application": "text-mining"
+      },
+      {
+        "URL": "https://api.elsevier.com/content/article/PII:S1051200425004336?httpAccept=text/plain",
+        "content-type": "text/plain",
+        "content-version": "vor",
+        "intended-application": "text-mining"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2025,
+          7,
+          2
+        ]
+      ],
+      "date-time": "2025-07-02T03:28:09Z",
+      "timestamp": 1751426889000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://linkinghub.elsevier.com/retrieve/pii/S1051200425004336"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2025,
+          11
+        ]
+      ]
+    },
+    "references-count": 40,
+    "alternative-id": [
+      "S1051200425004336"
+    ],
+    "URL": "https://doi.org/10.1016/j.dsp.2025.105411",
+    "relation": {},
+    "ISSN": [
+      "1051-2004"
+    ],
+    "issn-type": [
+      {
+        "value": "1051-2004",
+        "type": "print"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          11
+        ]
+      ]
+    },
+    "assertion": [
+      {
+        "value": "Elsevier",
+        "name": "publisher",
+        "label": "This article is maintained by"
+      },
+      {
+        "value": "AED-YOLO11: A small object detection model based on YOLO11",
+        "name": "articletitle",
+        "label": "Article Title"
+      },
+      {
+        "value": "Digital Signal Processing",
+        "name": "journaltitle",
+        "label": "Journal Title"
+      },
+      {
+        "value": "https://doi.org/10.1016/j.dsp.2025.105411",
+        "name": "articlelink",
+        "label": "CrossRef DOI link to publisher maintained version"
+      },
+      {
+        "value": "article",
+        "name": "content_type",
+        "label": "Content Type"
+      },
+      {
+        "value": "© 2025 Elsevier Inc. All rights are reserved, including those for text and data mining, AI training, and similar technologies.",
+        "name": "copyright",
+        "label": "Copyright"
+      }
+    ],
+    "article-number": "105411"
+  },
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          30
+        ]
+      ],
+      "date-time": "2026-10-30T00:44:12Z",
+      "timestamp": 1793321052448,
+      "version": "4.5.0"
+    },
+    "reference-count": 44,
+    "publisher": "MDPI AG",
+    "issue": "7",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              3,
+              30
+            ]
+          ],
+          "date-time": "2025-03-30T00:00:00Z",
+          "timestamp": 1743292800000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "funder": [
+      {
+        "name": "Discipline with Strong Characteristics of Liaocheng University—Intelligent Science and Technology",
+        "award": [
+          "319462208"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "319462208"
+            ]
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "Sensors"
+    ],
+    "abstract": "<jats:p>The YOLO series of object detection methods have achieved significant success in a wide range of computer vision tasks due to their efficiency and accuracy. However, detecting small objects in UAV images remains a formidable challenge due to factors such as a low resolution, complex background interference, and significant scale variations, which collectively degrade the quality of feature extraction and limit detection performance. To address these challenges, we propose the receptive field attention-guided YOLO (RFAG-YOLO) method, an advanced adaptation of YOLOv8 tailored for small-object detection in UAV imagery, with a focus on improving feature representation and detection robustness. To this end, we introduce a novel network building block, termed the receptive field network block (RFN block), which leverages dynamic kernel parameter adjustments to enhance the model’s ability to capture fine-grained local details. To effectively harness multi-scale features, we designed an enhanced FasterNet module based on RFN blocks as the core component of the backbone network in RFAG-YOLO, enabling robust feature extraction across varying resolutions. This approach achieves a balance of semantic information by employing staged downsampling and a hierarchical arrangement of RFN blocks, ensuring optimal feature representation across different resolutions. Additionally, we introduced a Scale-Aware Feature Amalgamation (SAF) component prior to the detection head of RFAG-YOLO. This component employs a scale attention mechanism to dynamically weight features from both higher and lower layers, facilitating richer information flow and significantly improving the model’s robustness to complex backgrounds and scale variations. Experimental results on the VisDrone2019 dataset demonstrated that RFAG-YOLO outperformed state-of-the-art models, including YOLOv7, YOLOv8, YOLOv10, and YOLOv11, in terms of detection accuracy and efficiency. In particular, RFAG-YOLO achieved an mAP50 of 38.9%, representing substantial improvements over multiple baseline models: a 12.43% increase over YOLOv7, a 5.99% improvement over YOLOv10, and significant gains of 16.12% compared to YOLOv8n and YOLOv11. Moreover, compared to the larger YOLOv8s model, RFAG-YOLO achieved 97.98% of its mAP50 performance while utilizing only 53.51% of the parameters, highlighting its exceptional efficiency in terms of the performance-to-parameter ratio and making it highly suitable for resource-constrained UAV applications. These results underscore the substantial potential of RFAG-YOLO for real-world UAV applications, particularly in scenarios demanding accurate detection of small objects under challenging conditions such as varying lighting, complex backgrounds, and diverse scales.</jats:p>",
+    "DOI": "10.3390/s25072193",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2025,
+          3,
+          31
+        ]
+      ],
+      "date-time": "2025-03-31T02:50:16Z",
+      "timestamp": 1743389416000
+    },
+    "page": "2193",
+    "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+    "source": "Crossref",
+    "is-referenced-by-count": 34,
+    "title": [
+      "RFAG-YOLO: A Receptive Field Attention-Guided YOLO Network for Small-Object Detection in UAV Images"
+    ],
+    "prefix": "10.3390",
+    "volume": "25",
+    "author": [
+      {
+        "ORCID": "https://orcid.org/0009-0001-1717-5187",
+        "authenticated-orcid": false,
+        "given": "Chengmeng",
+        "family": "Wei",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "College of Computer Science, Liaocheng University, Liaocheng 252059, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-7739-5109",
+        "authenticated-orcid": false,
+        "given": "Wenhong",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Computer Science, Liaocheng University, Liaocheng 252059, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "1968",
+    "published-online": {
+      "date-parts": [
+        [
+          2025,
+          3,
+          30
+        ]
+      ]
+    },
+    "reference": [
+      {
+        "key": "ref_1",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Mohsan, S.A.H., Khan, M.A., Noor, F., Ullah, I., and Alsharif, M.H. (2022). Towards the Unmanned Aerial Vehicles (UAVs): A Comprehensive Review. Drones, 6.",
+        "DOI": "10.3390/drones6060147"
+      },
+      {
+        "key": "ref_2",
+        "doi-asserted-by": "crossref",
+        "first-page": "1341",
+        "DOI": "10.1109/TITS.2020.2972974",
+        "article-title": "Deep Multi-Modal Object Detection and Semantic Segmentation for Autonomous Driving: Datasets, Methods, and Challenges",
+        "volume": "22",
+        "author": "Feng",
+        "year": "2021",
+        "journal-title": "IEEE Trans. Intell. Transp Syst."
+      },
+      {
+        "key": "ref_3",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Hoang, M.L. (2023). Smart Drone Surveillance System Based on AI and on IoT Communication in Case of Intrusion and Fire Accident. Drones, 7.",
+        "DOI": "10.3390/drones7120694"
+      },
+      {
+        "key": "ref_4",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Cao, Z., Kooistra, L., Wang, W., Guo, L., and Valente, J. (2023). Real-Time Object Detection Based on UAV Remote Sensing: A Systematic Literature Review. Drones, 7.",
+        "DOI": "10.3390/drones7100620"
+      },
+      {
+        "key": "ref_5",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Chen, C., Zheng, Z., Xu, T., Guo, S., Feng, S., Yao, W., and Lan, Y. (2023). YOLO-Based UAV Technology: A Review of the Research and Its Applications. Drones, 7.",
+        "DOI": "10.3390/drones7030190"
+      },
+      {
+        "key": "ref_6",
+        "doi-asserted-by": "crossref",
+        "first-page": "257",
+        "DOI": "10.1109/JPROC.2023.3238524",
+        "article-title": "Object Detection in 20 Years: A Survey",
+        "volume": "111",
+        "author": "Zou",
+        "year": "2023",
+        "journal-title": "Proc. IEEE"
+      },
+      {
+        "key": "ref_7",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhang, Y., Li, X., Wang, F., Wei, B., and Li, L. (2021, January 17–19). A Comprehensive Review of One-stage Networks for Object Detection. Proceedings of the IEEE International Conference on Signal Processing, Communications and Computing (ICSPCC), Xi’an, China.",
+        "DOI": "10.1109/ICSPCC52875.2021.9564613"
+      },
+      {
+        "key": "ref_8",
+        "doi-asserted-by": "crossref",
+        "first-page": "154",
+        "DOI": "10.1007/s11263-013-0620-5",
+        "article-title": "Selective Search for Object Recognition",
+        "volume": "104",
+        "author": "Uijlings",
+        "year": "2013",
+        "journal-title": "Int. J. Comput. Vis."
+      },
+      {
+        "key": "ref_9",
+        "first-page": "1137",
+        "article-title": "Faster r-cnn: Towards real-time object detection with region proposal networks",
+        "volume": "28",
+        "author": "Ren",
+        "year": "2015",
+        "journal-title": "NeurIPS"
+      },
+      {
+        "key": "ref_10",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R., Donahue, J., Darrell, T., and Malik, J. (2014, January 23–28). Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Columbus, OH, USA.",
+        "DOI": "10.1109/CVPR.2014.81"
+      },
+      {
+        "key": "ref_11",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R. (2015, January 7–13). Fast R-CNN. Proceedings of the International Conference on Computer Vision (ICCV), Santiago, Chile.",
+        "DOI": "10.1109/ICCV.2015.169"
+      },
+      {
+        "key": "ref_12",
+        "doi-asserted-by": "crossref",
+        "unstructured": "He, K., Gkioxari, G., Dollar, P., and Girshick, R. (2017, January 22–29). Mask R-CNN. Proceedings of the International Conference on Computer Vision (ICCV), Venice, Italy.",
+        "DOI": "10.1109/ICCV.2017.322"
+      },
+      {
+        "key": "ref_13",
+        "doi-asserted-by": "crossref",
+        "first-page": "1680",
+        "DOI": "10.3390/make5040083",
+        "article-title": "A Comprehensive Review of YOLO Architectures in Computer Vision: From YOLOv1 to YOLOv8 and YOLO-NAS",
+        "volume": "5",
+        "author": "Terven",
+        "year": "2023",
+        "journal-title": "Mach. Learn. Knowl. Extr."
+      },
+      {
+        "key": "ref_14",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C., and Berg, A.C. (2016, January 11–14). SSD: Single Shot MultiBox Detector. Proceedings of the European Conference on Computer Vision (ECCV), Amsterdam, The Netherlands.",
+        "DOI": "10.1007/978-3-319-46448-0_2"
+      },
+      {
+        "key": "ref_15",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Chen, J., Kao, S.H., He, H., Zhuo, W., Wen, S., Lee, C.H., and Chan, S.H.G. (2023, January 17–24). Run, Don’t walk: Chasing higher FLOPS for faster neural networks. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Vancouver, BC, Canada.",
+        "DOI": "10.1109/CVPR52729.2023.01157"
+      },
+      {
+        "key": "ref_16",
+        "unstructured": "Zhang, X., Liu, C., Yang, D., Song, T., Ye, Y., Li, K., and Song, Y. (2023). RFAConv: Innovating Spatial Attention and Standard Convolutional Operation. arXiv."
+      },
+      {
+        "key": "ref_17",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Redmon, J. (2016, January 27–30). You Only Look Once: Unified, Real-Time Object Detection. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Las Vegas, NV, USA.",
+        "DOI": "10.1109/CVPR.2016.91"
+      },
+      {
+        "key": "ref_18",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Redmon, J., and Farhadi, A. (2017, January 21–26). YOLO9000: Better, Faster, Stronger. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Honolulu, HI, USA.",
+        "DOI": "10.1109/CVPR.2017.690"
+      },
+      {
+        "key": "ref_19",
+        "unstructured": "Farhadi, A., and Redmon, J. YOLOv3: An Incremental Improvement. In Proceedings of the Computer Vision and Pattern Recognition (CVPR), Salt Lake City, UT, USA, 18–23 June 2018."
+      },
+      {
+        "key": "ref_20",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lin, T.Y., Dollár, P., Girshick, R., He, K., Hariharan, B., and Belongie, S. Feature pyramid networks for object detection. In Proceedings of the Computer Vision and Pattern Recognition (CVPR), Honolulu, HI, USA, 21–26 July 2017.",
+        "DOI": "10.1109/CVPR.2017.106"
+      },
+      {
+        "key": "ref_21",
+        "unstructured": "Bochkovskiy, A., Wang, C.Y., and Liao, H.Y.M. (2020). YOLOv4: Optimal Speed and Accuracy of Object Detection. arXiv."
+      },
+      {
+        "key": "ref_22",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.Y., Liao, H.Y.M., Wu, Y.H., Chen, P.Y., Hsieh, J.W., and Yeh, I.H. (2020, January 13–19). CSPNet: A New Backbone That Can Enhance Learning Capability of CNN. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA.",
+        "DOI": "10.1109/CVPRW50498.2020.00203"
+      },
+      {
+        "key": "ref_23",
+        "doi-asserted-by": "crossref",
+        "first-page": "1904",
+        "DOI": "10.1109/TPAMI.2015.2389824",
+        "article-title": "Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition",
+        "volume": "37",
+        "author": "He",
+        "year": "2015",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_24",
+        "unstructured": "Misra, D. (2019). Mish: A Self-Regularized Non-Monotonic Activation Function. arXiv."
+      },
+      {
+        "key": "ref_25",
+        "unstructured": "Jocher, G., Stoken, A., Chaurasia, A., Borovec, J., Kwon, Y., Michael, K., Changyu, L., Fang, J., Skalski, P., and Hogan, A. (2024, October 07). Ultralytics/Yolov5 at v6.0. Available online: https://github.com/ultralytics/yolov5/tree/v6.0."
+      },
+      {
+        "key": "ref_26",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Han, K., Wang, Y., Tian, Q., Guo, J., Xu, C., and Xu, C. (2020, January 13–19). GhostNet: More Features from Cheap Operations. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA.",
+        "DOI": "10.1109/CVPR42600.2020.00165"
+      },
+      {
+        "key": "ref_27",
+        "unstructured": "Wang, K., Liew, J.H., Zou, Y., Zhou, D., and Feng, J. (November, January 27). PaNet: Few-Shot Image Semantic Segmentation with Prototype Alignment. Proceedings of the International Conference on Computer Vision (ICCV), Seoul, Republic of Korea."
+      },
+      {
+        "key": "ref_28",
+        "unstructured": "Li, C., Li, L., Jiang, H., Weng, K., Geng, Y., Li, L., and Wei, X. (2022). YOLOv6: A Single-Stage Object Detection Framework for Industrial Applications. arXiv."
+      },
+      {
+        "key": "ref_29",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.Y., Bochkovskiy, A., and Liao, H.Y.M. (2023, January 17–24). YOLOv7: Trainable Bag-of-Freebies Sets New State-of-the-Art for Real-Time Object Detectors. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Vancouver, BC, Canada.",
+        "DOI": "10.1109/CVPR52729.2023.00721"
+      },
+      {
+        "key": "ref_30",
+        "unstructured": "Wang, C.Y., Yeh, I.H., and Liao, H.Y.M. (October, January 29). YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information. Proceedings of the European Conference on Computer Vision (ECCV), Milan, Italy."
+      },
+      {
+        "key": "ref_31",
+        "unstructured": "Wang, A., Chen, H., Liu, L., Chen, K., Lin, Z., Han, J., and Ding, G. (2024). YOLOv10: Real-Time End-to-End Object Detection. arXiv."
+      },
+      {
+        "key": "ref_32",
+        "doi-asserted-by": "crossref",
+        "first-page": "1787",
+        "DOI": "10.1007/s00371-023-02886-y",
+        "article-title": "SCA-YOLO: A New Small Object Detection Model for UAV Images",
+        "volume": "40",
+        "author": "Zeng",
+        "year": "2024",
+        "journal-title": "Vis. Comput."
+      },
+      {
+        "key": "ref_33",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Shin, Y., Shin, H., Ok, J., Back, M., Youn, J., and Kim, S. (2024). DCEF2-YOLO: Aerial Detection YOLO with Deformable Convolution–Efficient Feature Fusion for Small Target Detection. Remote Sens., 16.",
+        "DOI": "10.3390/rs16061071"
+      },
+      {
+        "key": "ref_34",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Dai, J., Qi, H., Xiong, Y., Li, Y., Zhang, G., Hu, H., and Wei, Y. (2017, January 22–29). Deformable convolutional networks. Proceedings of the International Conference on Computer Vision (ICCV), Venice, Italy.",
+        "DOI": "10.1109/ICCV.2017.89"
+      },
+      {
+        "key": "ref_35",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Chen, Z., Liu, C., Filaretov, V.F., and Yukhimets, D.A. (2023). Multi-Scale Ship Detection Algorithm Based on YOLOv7 for Complex Scene SAR Images. Remote Sens., 15.",
+        "DOI": "10.3390/rs15082071"
+      },
+      {
+        "key": "ref_36",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhang, Q.L., and Yang, Y.B. (2021, January 6–11). SA-Net: Shuffle Attention for Deep Convolutional Neural Networks. Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), Toronto, ON, Canada.",
+        "DOI": "10.1109/ICASSP39728.2021.9414568"
+      },
+      {
+        "key": "ref_37",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhu, X., Lyu, S., Wang, X., and Zhao, Q. (2021, January 10–17). TPH-YOLOv5: Improved YOLOv5 based on transformer prediction head for object detection on drone-captured scenarios. Proceedings of the International Conference on Computer Vision (ICCV), Montreal, QC, Canada.",
+        "DOI": "10.1109/ICCVW54120.2021.00312"
+      },
+      {
+        "key": "ref_38",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Woo, S., Park, J., Lee, J.Y., and Kweon, I.S. (2018, January 8–14). Cbam: Convolutional block attention module. Proceedings of the European Conference on Computer Vision (ECCV), Munich, Germany.",
+        "DOI": "10.1007/978-3-030-01234-2_1"
+      },
+      {
+        "key": "ref_39",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., and Zagoruyko, S. (2020, January 23–28). End-to-End Object Detection with Transformers. Proceedings of the European Conference on Computer Vision (ECCV), Glasgow, UK.",
+        "DOI": "10.1007/978-3-030-58452-8_13"
+      },
+      {
+        "key": "ref_40",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhao, Y., Lv, W., Xu, S., Wei, J., Wang, G., Dang, Q., Liu, Y., and Chen, J. (2024, January 16–22). Detrs beat yolos on real-time object detection. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA.",
+        "DOI": "10.1109/CVPR52733.2024.01605"
+      },
+      {
+        "key": "ref_41",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Kong, Y., Shang, X., and Jia, S. (2024). Drone-DETR: Efficient Small Object Detection for Remote Sensing Image Using Enhanced RT-DETR Model. Sensors, 24.",
+        "DOI": "10.3390/s24175496"
+      },
+      {
+        "key": "ref_42",
+        "unstructured": "Peng, Y., Li, H., Wu, P., Zhang, Y., Sun, X., and Wu, F. (2024). D-FINE: Redefine Regression Task in DETRs as Fine-grained Distribution Refinement. arXiv."
+      },
+      {
+        "key": "ref_43",
+        "unstructured": "Huang, S., Lu, Z., Cun, X., Yu, Y., Zhou, X., and Shen, X. (2025, January 11–15). DEIM: DETR with Improved Matching for Fast Convergence. Proceedings of the Computer Vision and Pattern Recognition (CVPR), Nashville, TN, USA."
+      },
+      {
+        "key": "ref_44",
+        "unstructured": "Du, D., Zhu, P., Wen, L., Bian, X., Lin, H., Hu, Q., and Zhang, L. (November, January 27). VisDrone-DET2019: The vision meets drone object detection in image challenge results. Proceedings of the International Conference on Computer Vision (ICCV), Seoul, Republic of Korea."
+      }
+    ],
+    "container-title": [
+      "Sensors"
+    ],
+    "original-title": [],
+    "language": "en",
+    "link": [
+      {
+        "URL": "https://www.mdpi.com/1424-8220/25/7/2193/pdf",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2025,
+          10,
+          9
+        ]
+      ],
+      "date-time": "2025-10-09T17:06:08Z",
+      "timestamp": 1760029568000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://www.mdpi.com/1424-8220/25/7/2193"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2025,
+          3,
+          30
+        ]
+      ]
+    },
+    "references-count": 44,
+    "journal-issue": {
+      "issue": "7",
+      "published-online": {
+        "date-parts": [
+          [
+            2025,
+            4
+          ]
+        ]
+      }
+    },
+    "alternative-id": [
+      "s25072193"
+    ],
+    "URL": "https://doi.org/10.3390/s25072193",
+    "relation": {},
+    "ISSN": [
+      "1424-8220"
+    ],
+    "issn-type": [
+      {
+        "value": "1424-8220",
+        "type": "electronic"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          3,
+          30
+        ]
+      ]
+    }
+  },
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          20
+        ]
+      ],
+      "date-time": "2026-10-20T16:52:28Z",
+      "timestamp": 1792515148026,
+      "version": "4.5.0"
+    },
+    "reference-count": 42,
+    "publisher": "MDPI AG",
+    "issue": "19",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              9,
+              27
+            ]
+          ],
+          "date-time": "2025-09-27T00:00:00Z",
+          "timestamp": 1758931200000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "funder": [
+      {
+        "DOI": "10.13039/501100001809",
+        "name": "National Natural Science Foundation of China",
+        "doi-asserted-by": "crossref",
+        "award": [
+          "81101116"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "81101116"
+            ]
+          }
+        ],
+        "id": [
+          {
+            "id": "10.13039/501100001809",
+            "id-type": "DOI",
+            "asserted-by": "crossref"
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [
+        "www.mdpi.com"
+      ],
+      "crossmark-restriction": true
+    },
+    "short-container-title": [
+      "Electronics"
+    ],
+    "abstract": "<jats:p>To enhance small object detection in UAV aerial imagery suffering from low resolution and complex backgrounds, this paper proposes GLDS-YOLO, an improved lightweight detection model. The model integrates four core modules: Group Shuffle Attention (GSA) to strengthen small-scale feature perception, Large Separable Kernel Attention (LSKA) to capture global semantic context, DCNv4 to enhance feature adaptability with reduced parameters, and further proposes a novel Small-object-enhanced Multi-scale and Structure Detail Enhancement (SMSDE) module, which enhances edge-detail representation of small objects while maintaining lightweight efficiency. Experiments on VisDrone2019 and DOTA1.0 demonstrate that GLDS-YOLO achieves superior detection performance. On VisDrone2019, it improves mAP@0.5 and mAP@0.5:0.95 by 12.1% and 7%, respectively, compared with YOLOv11n, while maintaining competitive results on DOTA. These results confirm the model’s effectiveness, robustness, and adaptability for complex small object detection tasks in UAV scenarios.</jats:p>",
+    "DOI": "10.3390/electronics14193831",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2025,
+          9,
+          29
+        ]
+      ],
+      "date-time": "2025-09-29T12:59:46Z",
+      "timestamp": 1759150786000
+    },
+    "page": "3831",
+    "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+    "source": "Crossref",
+    "is-referenced-by-count": 7,
+    "title": [
+      "GLDS-YOLO: An Improved Lightweight Model for Small Object Detection in UAV Aerial Imagery"
+    ],
+    "prefix": "10.3390",
+    "volume": "14",
+    "author": [
+      {
+        "given": "Zhiyong",
+        "family": "Ju",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology, Shanghai 200093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiacheng",
+        "family": "Shui",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology, Shanghai 200093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiameng",
+        "family": "Huang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of Optical-Electrical and Computer Engineering, University of Shanghai for Science and Technology, Shanghai 200093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "1968",
+    "published-online": {
+      "date-parts": [
+        [
+          2025,
+          9,
+          27
+        ]
+      ]
+    },
+    "reference": [
+      {
+        "key": "ref_1",
+        "doi-asserted-by": "crossref",
+        "first-page": "26652",
+        "DOI": "10.1109/ACCESS.2023.3253767",
+        "article-title": "DroMOD: A drone-based multi-scope object detection system",
+        "volume": "11",
+        "author": "Abdellatif",
+        "year": "2023",
+        "journal-title": "IEEE Access"
+      },
+      {
+        "key": "ref_2",
+        "doi-asserted-by": "crossref",
+        "first-page": "888",
+        "DOI": "10.1109/JSTARS.2016.2602439",
+        "article-title": "Building detection using enhanced HOG–LBP features and region refinement processes",
+        "volume": "10",
+        "author": "Konstantinidis",
+        "year": "2016",
+        "journal-title": "IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens."
+      },
+      {
+        "key": "ref_3",
+        "first-page": "7",
+        "article-title": "Comparison of feature detection and matching approaches: SIFT and SURF",
+        "volume": "2",
+        "author": "Mistry",
+        "year": "2017",
+        "journal-title": "Glob. Res. Dev. J. Eng."
+      },
+      {
+        "key": "ref_4",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R., Donahue, J., Darrell, T., and Malik, J. (2014, January 23–28). Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, Columbus, OH, USA.",
+        "DOI": "10.1109/CVPR.2014.81"
+      },
+      {
+        "key": "ref_5",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R. (2015, January 7–13). Fast r-cnn. Proceedings of the IEEE International Conference on Computer Vision, Santiago, Chile.",
+        "DOI": "10.1109/ICCV.2015.169"
+      },
+      {
+        "key": "ref_6",
+        "unstructured": "Ren, S., He, K., Girshick, R., and Sun, J. (2015). Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks. Adv. Neural Inf. Process. Syst., 28."
+      },
+      {
+        "key": "ref_7",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Redmon, J., Divvala, S., Girshick, R., and Farhadi, A. (2016, January 27–30). You Only Look Once: Unified, Real-Time Object Detection. Proceedings of the 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Las Vegas, NV, USA.",
+        "DOI": "10.1109/CVPR.2016.91"
+      },
+      {
+        "key": "ref_8",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.-Y., and Berg, A.C. (2016, January 11–14). Ssd: Single shot multibox detector. Proceedings of the European Conference on Computer Vision, Amsterdam, The Netherlands.",
+        "DOI": "10.1007/978-3-319-46448-0_2"
+      },
+      {
+        "key": "ref_9",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yang, S., Li, F., Du, Y., Gao, W., and Sun, T. (2024, January 24–26). GS-YOLOv8: An Improved UAV Target Detection Algorithm Based on YOLOv8. Proceedings of the 2024 IEEE 4th International Conference on Electronic Technology, Communication and Information (ICETCI), Changchun, China.",
+        "DOI": "10.1109/ICETCI61221.2024.10594268"
+      },
+      {
+        "key": "ref_10",
+        "first-page": "112",
+        "article-title": "A Small Object Detection Algorithm for UAV Aerial Images Based on Improved YOLOv8",
+        "volume": "46",
+        "author": "Wei",
+        "year": "2024",
+        "journal-title": "Comput. Eng. Sci."
+      },
+      {
+        "key": "ref_11",
+        "doi-asserted-by": "crossref",
+        "first-page": "12556",
+        "DOI": "10.1007/s10489-021-03121-8",
+        "article-title": "SA-FPN: An Effective Feature Pyramid Network for Crowded Human Detection",
+        "volume": "52",
+        "author": "Zhou",
+        "year": "2022",
+        "journal-title": "Appl. Intell."
+      },
+      {
+        "key": "ref_12",
+        "first-page": "145",
+        "article-title": "UAV Small Object Detection Algorithm Based on Composite Features and Multi-Scale Fusion",
+        "volume": "59",
+        "author": "Liao",
+        "year": "2023",
+        "journal-title": "Comput. Eng. Appl."
+      },
+      {
+        "key": "ref_13",
+        "first-page": "191",
+        "article-title": "AEM-YOLOv8s: Small Object Detection in UAV Aerial Images",
+        "volume": "60",
+        "author": "Jiang",
+        "year": "2024",
+        "journal-title": "Comput. Eng. Appl."
+      },
+      {
+        "key": "ref_14",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liang, H., Yang, J., and Shao, M. (2021). FE-RetinaNet: Small Target Detection with Parallel Multi-Scale Feature Enhancement. Symmetry, 13.",
+        "DOI": "10.3390/sym13060950"
+      },
+      {
+        "key": "ref_15",
+        "first-page": "4643",
+        "article-title": "RemDet: Rethinking Efficient Model Design for UAV Object Detection",
+        "volume": "39",
+        "author": "Li",
+        "year": "2025",
+        "journal-title": "Proc. AAAI Conf. Artif. Intell."
+      },
+      {
+        "key": "ref_16",
+        "unstructured": "Lu, L., He, D., Liu, C., and Deng, Z. (2025). MASF-YOLO: An Improved YOLOv11 Network for Small Object Detection on Drone View. arXiv."
+      },
+      {
+        "key": "ref_17",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wan, Z., Lan, Y., Xu, Z., Shang, K., and Zhang, F. (2025). DAU-YOLO: A Lightweight and Effective Method for Small Object Detection in UAV Images. Remote Sens., 17.",
+        "DOI": "10.3390/rs17101768"
+      },
+      {
+        "key": "ref_18",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhang, Y., Chen, L., Wang, X., and Liu, J. (2025). BPD-YOLO: A Lightweight Small Object Detection Model for UAV Images Based on Deep Semantic Integration. Sci. Rep., 15.",
+        "DOI": "10.1038/s41598-025-07021-6"
+      },
+      {
+        "key": "ref_19",
+        "first-page": "105",
+        "article-title": "LightUAV-YOLO: A Lightweight YOLOv8n-Based UAV Object Detection Algorithm with Optimized Feature Fusion and Local Attention",
+        "volume": "81",
+        "author": "Zhao",
+        "year": "2025",
+        "journal-title": "J. Supercomput."
+      },
+      {
+        "key": "ref_20",
+        "doi-asserted-by": "crossref",
+        "first-page": "5200",
+        "DOI": "10.3390/s25165200",
+        "article-title": "EMFE-YOLO: A Lightweight Small Object Detection Model for UAVs Based on Efficient Multi-Scale Feature Enhancement",
+        "volume": "25",
+        "author": "Liu",
+        "year": "2025",
+        "journal-title": "Sensors"
+      },
+      {
+        "key": "ref_21",
+        "doi-asserted-by": "crossref",
+        "first-page": "2096",
+        "DOI": "10.3390/rs17122096",
+        "article-title": "ELNet: An Efficient and Lightweight Network for Small Object Detection in UAV Imagery",
+        "volume": "17",
+        "author": "Wang",
+        "year": "2025",
+        "journal-title": "Remote Sens."
+      },
+      {
+        "key": "ref_22",
+        "doi-asserted-by": "crossref",
+        "first-page": "4265",
+        "DOI": "10.3390/rs16224265",
+        "article-title": "Small Object Detection in UAV Remote Sensing Images Based on Intra-Group Multi-Scale Fusion Attention and Adaptive Weighted Feature Fusion Mechanism",
+        "volume": "16",
+        "author": "Liu",
+        "year": "2024",
+        "journal-title": "Remote Sens."
+      },
+      {
+        "key": "ref_23",
+        "doi-asserted-by": "crossref",
+        "first-page": "151",
+        "DOI": "10.26866/jees.2024.2.r.215",
+        "article-title": "Analysis of the Interference Effects in CMOS Image Sensors Caused by Strong Electromagnetic Pulses",
+        "volume": "24",
+        "author": "Yang",
+        "year": "2024",
+        "journal-title": "J. Electromagn. Eng. Sci."
+      },
+      {
+        "key": "ref_24",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Kim, S.-G., Lee, E., Hong, I.-P., and Yook, J.-G. (2022). Review of Intentional Electromagnetic Interference on UAV Sensor Modules and Experimental Study. Sensors, 22.",
+        "DOI": "10.3390/s22062384"
+      },
+      {
+        "key": "ref_25",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Singh, R.K., Mishra, S., and Pavan Kumar, Y. (2024, January 24–27). Undermining Live Feed ML Object Detection Accuracy with EMI on Vehicular Camera Sensors. Proceedings of the 2024 IEEE 99th Vehicular Technology Conference (VTC2024-Spring), Singapore.",
+        "DOI": "10.1109/VTC2024-Spring62846.2024.10683002"
+      },
+      {
+        "key": "ref_26",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Xu, J., and Tong, L. (2024, January 6–10). Lb-unet: A lightweight boundary-assisted unet for skin lesion segmentation. Proceedings of the International Conference on Medical Image Computing and Computer-Assisted Intervention, Marrakesh, Morocco.",
+        "DOI": "10.1007/978-3-031-72114-4_35"
+      },
+      {
+        "key": "ref_27",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Cao, H., Wang, Y., Chen, J., Jiang, D., Zhang, X., Tian, Q., and Wang, M. (2022, January 25–27). Swin-unet: Unet-like pure transformer for medical image segmentation. Proceedings of the European Conference on Computer Vision, Tel Aviv, Israel.",
+        "DOI": "10.1007/978-3-031-25066-8_9"
+      },
+      {
+        "key": "ref_28",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Valanarasu, J.M.J., and Patel, V.M. (2022, January 18–22). Unext: Mlp-based rapid medical image segmentation network. Proceedings of the International Conference on Medical Image Computing and Computer-Assisted Intervention, Singapore.",
+        "DOI": "10.1007/978-3-031-16443-9_3"
+      },
+      {
+        "key": "ref_29",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhang, X., Zhou, X., Lin, M., and Sun, J. (2018, January 18–22). Shufflenet: An extremely efficient convolutional neural network for mobile devices. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, USA.",
+        "DOI": "10.1109/CVPR.2018.00716"
+      },
+      {
+        "key": "ref_30",
+        "doi-asserted-by": "crossref",
+        "first-page": "121352",
+        "DOI": "10.1016/j.eswa.2023.121352",
+        "article-title": "Large separable kernel attention: Rethinking the large kernel attention design in cnn",
+        "volume": "236",
+        "author": "Lau",
+        "year": "2024",
+        "journal-title": "Expert Syst. Appl."
+      },
+      {
+        "key": "ref_31",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Xiong, Y., Li, Z., Chen, Y., Wang, F., Zhu, X., Luo, J., Wang, W., Lu, T., Li, H., and Qiao, Y. (2024, January 17–21). Efficient Deformable ConvNets: Rethinking Dynamic and Sparse Operator for Vision Applications. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA.",
+        "DOI": "10.1109/CVPR52733.2024.00540"
+      },
+      {
+        "key": "ref_32",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Ruan, J., Xie, M., Gao, J., Liu, T., and Fu, Y. (2023, January 8–12). Ege-unet: An efficient group enhanced unet for skin lesion segmentation. Proceedings of the International Conference on Medical Image Computing and Computer-Assisted Intervention, Vancouver, BC, Canada.",
+        "DOI": "10.1007/978-3-031-43901-8_46"
+      },
+      {
+        "key": "ref_33",
+        "unstructured": "Gao, S., Zhang, P., Yan, T., and Lu, H. (November, January 28). Multi-scale and detail-enhanced segment anything model for salient object detection. Proceedings of the 32nd ACM International Conference on Multimedia, Melbourne, VIC, Australia."
+      },
+      {
+        "key": "ref_34",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Chen, T., Zhu, L., Ding, C., Cao, R., Wang, Y., Li, Z., Sun, L., Mao, P., and Zang, Y. (2023, January 2–3). Sam-adapter: Adapting segment anything in underperformed scenes. Proceedings of the IEEE/CVF International Conference on Computer Vision, Paris, France.",
+        "DOI": "10.1109/ICCVW60793.2023.00361"
+      },
+      {
+        "key": "ref_35",
+        "doi-asserted-by": "crossref",
+        "unstructured": "He, C., Li, K., Zhang, Y., Tang, L., Zhang, Y., Guo, Z., and Li, X. (2023, January 17–24). Shenzhen International Graduate School; Tsinghua University, NEC Laboratories America; 3ETH Zürich; Tianyi Traffic Technology. Camouflaged object detection with feature decomposition and edge reconstruction. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, Vancouver, BC, Canada.",
+        "DOI": "10.1109/CVPR52729.2023.02111"
+      },
+      {
+        "key": "ref_36",
+        "unstructured": "Du, D., Zhu, P., Wen, L., Bian, X., Lin, H., Hu, Q., Peng, T., Zheng, J., Wang, X., and Zhang, Y. (2019, January 28–29). VisDrone-DET2019: The Vision Meets Drone Object Detection in Image Challenge. Proceedings of the 2019 IEEE/CVF International Conference on Computer Vision Workshop (ICCVW), Seoul, Republic of Korea."
+      },
+      {
+        "key": "ref_37",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Xia, G.-S., Bai, X., Ding, J., Zhu, Z., Belongie, S., Luo, J., Datcu, M., Pelillo, M., and Zhang, L. (2018, January 18–23). DOTA: A Large-Scale Dataset for Object Detection in Aerial Images. Proceedings of the 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, USA.",
+        "DOI": "10.1109/CVPR.2018.00418"
+      },
+      {
+        "key": "ref_38",
+        "doi-asserted-by": "crossref",
+        "first-page": "1",
+        "DOI": "10.1007/s00530-024-01447-0",
+        "article-title": "PS-YOLO: A Small Object Detector Based on Efficient Convolution and Multi-Scale Feature Fusion",
+        "volume": "30",
+        "author": "Peng",
+        "year": "2024",
+        "journal-title": "Multimedia Syst."
+      },
+      {
+        "key": "ref_39",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhao, Y., Lv, W., Xu, S., Wei, J., Wang, G., Dang, Q., Liu, Y., and Chen, J. (2023). DETRs Beat YOLOs on Real-Time Object Detection (RT-DETR). arXiv.",
+        "DOI": "10.1109/CVPR52733.2024.01605"
+      },
+      {
+        "key": "ref_40",
+        "unstructured": "Li, C., Li, L., Zhang, B., Ouyang, W., and Wang, L. (2022). YOLOv6: A Single-Stage Object Detection Framework for Industrial Applications. arXiv."
+      },
+      {
+        "key": "ref_41",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.-Y., Bochkovskiy, A., and Liao, H.-Y.M. (2022). YOLOv7: Trainable Bag-of-Freebies Sets New State of the Art for Real-Time Object Detectors. arXiv.",
+        "DOI": "10.1109/CVPR52729.2023.00721"
+      },
+      {
+        "key": "ref_42",
+        "unstructured": "Wang, A., Chen, H., Liu, L., Chen, K., Lin, Z., Han, J., and Ding, G. (2024). YOLOv10: Real-Time End-to-End Object Detection. arXiv."
+      }
+    ],
+    "container-title": [
+      "Electronics"
+    ],
+    "original-title": [],
+    "language": "en",
+    "link": [
+      {
+        "URL": "https://www.mdpi.com/2079-9292/14/19/3831/pdf",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2025,
+          9,
+          30
+        ]
+      ],
+      "date-time": "2025-09-30T04:25:22Z",
+      "timestamp": 1759206322000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://www.mdpi.com/2079-9292/14/19/3831"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2025,
+          9,
+          27
+        ]
+      ]
+    },
+    "references-count": 42,
+    "journal-issue": {
+      "issue": "19",
+      "published-online": {
+        "date-parts": [
+          [
+            2025,
+            10
+          ]
+        ]
+      }
+    },
+    "alternative-id": [
+      "electronics14193831"
+    ],
+    "URL": "https://doi.org/10.3390/electronics14193831",
+    "relation": {},
+    "ISSN": [
+      "2079-9292"
+    ],
+    "issn-type": [
+      {
+        "value": "2079-9292",
+        "type": "electronic"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          9,
+          27
+        ]
+      ]
+    }
+  },
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          9,
+          19
+        ]
+      ],
+      "date-time": "2026-09-19T11:08:13Z",
+      "timestamp": 1789816093058,
+      "version": "4.0.1"
+    },
+    "reference-count": 66,
+    "publisher": "MDPI AG",
+    "issue": "12",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2026,
+              6,
+              15
+            ]
+          ],
+          "date-time": "2026-06-15T00:00:00Z",
+          "timestamp": 1781481600000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "funder": [
+      {
+        "name": "The Science and Technology Development Fund of Macau",
+        "award": [
+          "0020/2024/RIA1"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "0020/2024/RIA1"
+            ]
+          }
+        ]
+      },
+      {
+        "award": [
+          "0020/2024/RIA1"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "0020/2024/RIA1"
+            ]
+          }
+        ],
+        "id": [
+          {
+            "id": "https://ror.org/044vr6g03",
+            "id-type": "ROR",
+            "asserted-by": "publisher"
+          }
+        ]
+      },
+      {
+        "name": "The Wuyi University Hong Kong Macao Joint Research and Development Fund",
+        "award": [
+          "2022WGALH19"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "2022WGALH19"
+            ]
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "Applied Sciences"
+    ],
+    "abstract": "<jats:p>Unmanned aerial vehicle (UAV) object detection plays an essential role in modern visual perception, but it remains challenging because UAV imagery typically contains extremely small, densely distributed objects embedded in complex backgrounds. Conventional detectors, including the recent YOLOv12, are prone to losing critical spatial details during downsampling and often exhibit task misalignment between classification and localization, particularly under severe scale variations. To address these problems, this study proposes SPTD-YOLO, a small-object-aware pyramidal and task-aligned dynamic detector. Specifically, a Small Object Enhanced Pyramid (SOEP) is developed by incorporating SPDConv and CSPOmniKernel to preserve and refine shallow, fine-grained features. In addition, a high-resolution P2 detection layer is introduced to increase spatial grid density and strengthen the structural representation of tiny objects. Furthermore, a Task-Aligned Dynamic Detection Head (TADDH) is designed to decouple and coordinate classification and regression through dynamic convolution and a synergistic dual-gating mechanism. Experiments on VisDrone2019 show that SPTD-YOLO improves mAP@0.5 by 8.37% and mAP@0.5:0.95 by 5.11% over YOLOv12 while maintaining practical efficiency for UAV edge deployment.</jats:p>",
+    "DOI": "10.3390/app16126062",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          16
+        ]
+      ],
+      "date-time": "2026-06-16T05:46:28Z",
+      "timestamp": 1781588788000
+    },
+    "page": "6062",
+    "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+    "source": "Crossref",
+    "is-referenced-by-count": 1,
+    "title": [
+      "SPTD-YOLO: Small-Object-Aware Pyramidal and Task-Aligned Dynamic YOLO for UAV Small Object Detection"
+    ],
+    "prefix": "10.3390",
+    "volume": "16",
+    "author": [
+      {
+        "ORCID": "https://orcid.org/0000-0002-6433-8460",
+        "authenticated-orcid": false,
+        "given": "Jiarui",
+        "family": "Liang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Faculty of Innovation Engineering, Macau University of Science and Technology, Avenida Wai Long N°S 100–460, Taipa, Macau, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiachen",
+        "family": "Yu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Faculty of Innovation Engineering, Macau University of Science and Technology, Avenida Wai Long N°S 100–460, Taipa, Macau, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mingyang",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Faculty of Innovation Engineering, Macau University of Science and Technology, Avenida Wai Long N°S 100–460, Taipa, Macau, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-0154-9743",
+        "authenticated-orcid": false,
+        "given": "Yikui",
+        "family": "Zhai",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Department of Intelligent Manufacturing, Wuyi University, Jiangmen 529020, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xiaolin",
+        "family": "Tian",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Faculty of Innovation Engineering, Macau University of Science and Technology, Avenida Wai Long N°S 100–460, Taipa, Macau, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "1968",
+    "published-online": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          15
+        ]
+      ]
+    },
+    "reference": [
+      {
+        "key": "ref_1",
+        "doi-asserted-by": "crossref",
+        "first-page": "1137",
+        "DOI": "10.1109/TPAMI.2016.2577031",
+        "article-title": "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks",
+        "volume": "39",
+        "author": "Ren",
+        "year": "2017",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_2",
+        "doi-asserted-by": "crossref",
+        "first-page": "128837",
+        "DOI": "10.1109/ACCESS.2019.2939201",
+        "article-title": "A Survey of Deep Learning-Based Object Detection",
+        "volume": "7",
+        "author": "Jiao",
+        "year": "2019",
+        "journal-title": "IEEE Access"
+      },
+      {
+        "key": "ref_3",
+        "unstructured": "Sermanet, P., Eigen, D., Zhang, X., Mathieu, M., Fergus, R., and LeCun, Y. (2014, January 14–16). OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks. Proceedings of the International Conference on Learning Representations (ICLR), Banff, AB, Canada."
+      },
+      {
+        "key": "ref_4",
+        "doi-asserted-by": "crossref",
+        "first-page": "91",
+        "DOI": "10.1109/MGRS.2021.3115137",
+        "article-title": "Deep Learning for Unmanned Aerial Vehicle-Based Object Detection and Tracking: A Survey",
+        "volume": "10",
+        "author": "Wu",
+        "year": "2022",
+        "journal-title": "IEEE Geosci. Remote Sens. Mag."
+      },
+      {
+        "key": "ref_5",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Du, D., Qi, Y., Yu, H., Yang, Y., Duan, K., Li, G., Zhang, W., Huang, Q., and Tian, Q. (2018). The Unmanned Aerial Vehicle Benchmark: Object Detection and Tracking. Proceedings of the European Conference on Computer Vision (ECCV), Munich, Germany, 8–14 September 2018, CVF.",
+        "DOI": "10.1007/978-3-030-01249-6_23"
+      },
+      {
+        "key": "ref_6",
+        "unstructured": "Du, D., Zhu, P., Wen, L., Bian, X., Lin, H., Hu, Q., Peng, T., Zheng, J., Wang, X., and Zhang, Y. (November, January 27). VisDrone-DET2019: The Vision Meets Drones Object Detection Challenge Results. Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) Workshops, Seoul, Republic of Korea."
+      },
+      {
+        "key": "ref_7",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yang, C., Huang, Z., and Hu, N. (2022). QueryDet: Cascaded Sparse Query for High-Resolution Small Object Detection. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), New Orleans, LA, USA, 18–24 June 2022, CVF.",
+        "DOI": "10.1109/CVPR52688.2022.01330"
+      },
+      {
+        "key": "ref_8",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Akyon, F.C., Altinuc, S.O., and Temizel, A. (2022). Slicing Aided Hyper Inference and Fine-tuning for Small Object Detection. Proceedings of IEEE International Conference on Image Processing (ICIP), IEEE.",
+        "DOI": "10.1109/ICIP46576.2022.9897990"
+      },
+      {
+        "key": "ref_9",
+        "doi-asserted-by": "crossref",
+        "first-page": "3388",
+        "DOI": "10.1109/TPAMI.2020.2981890",
+        "article-title": "Imbalance Problems in Object Detection: A Review",
+        "volume": "43",
+        "author": "Oksuz",
+        "year": "2021",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_10",
+        "doi-asserted-by": "crossref",
+        "first-page": "1738",
+        "DOI": "10.1109/JPROC.2019.2918951",
+        "article-title": "Edge Intelligence: Paving the Last Mile of Artificial Intelligence with Edge Computing",
+        "volume": "107",
+        "author": "Zhou",
+        "year": "2019",
+        "journal-title": "Proc. IEEE"
+      },
+      {
+        "key": "ref_11",
+        "doi-asserted-by": "crossref",
+        "first-page": "11916",
+        "DOI": "10.1109/JIOT.2021.3063147",
+        "article-title": "On-Device Learning Systems for Edge Intelligence: A Software and Hardware Synergy Perspective",
+        "volume": "8",
+        "author": "Zhou",
+        "year": "2021",
+        "journal-title": "IEEE Internet Things J."
+      },
+      {
+        "key": "ref_12",
+        "doi-asserted-by": "crossref",
+        "first-page": "257",
+        "DOI": "10.1109/JPROC.2023.3238524",
+        "article-title": "Object Detection in 20 Years: A Survey",
+        "volume": "111",
+        "author": "Zou",
+        "year": "2023",
+        "journal-title": "Proc. IEEE"
+      },
+      {
+        "key": "ref_13",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Cai, Z., and Vasconcelos, N. (2018). Cascade R-CNN: Delving into High Quality Object Detection. Proceedings of Computer Vision and Pattern Recognition 2018, CVF.",
+        "DOI": "10.1109/CVPR.2018.00644"
+      },
+      {
+        "key": "ref_14",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Ding, J., Xue, N., Long, Y., Xia, G.S., and Lu, Q. (2019). Learning RoI Transformer for Oriented Object Detection in Aerial Images. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition 2019, CVF.",
+        "DOI": "10.1109/CVPR.2019.00296"
+      },
+      {
+        "key": "ref_15",
+        "doi-asserted-by": "crossref",
+        "unstructured": "He, K., Gkioxari, G., Dollár, P., and Girshick, R. (2017). Mask R-CNN. Proceedings of the IEEE International Conference on Computer Vision (ICCV), Venice, Italy, 22–29 October 2017, IEEE.",
+        "DOI": "10.1109/ICCV.2017.322"
+      },
+      {
+        "key": "ref_16",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhang, X., Zhou, X., Lin, M., and Sun, J. (2018). ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition 2018, IEEE.",
+        "DOI": "10.1109/CVPR.2018.00716"
+      },
+      {
+        "key": "ref_17",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.Y., and Berg, A.C. (2016). SSD: Single Shot MultiBox Detector. Computer Vision—ECCV 2016, Springer.",
+        "DOI": "10.1007/978-3-319-46448-0_2"
+      },
+      {
+        "key": "ref_18",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lin, T.Y., Goyal, P., Girshick, R., He, K., and Dollár, P. (2017). Focal Loss for Dense Object Detection. Proceedings of the IEEE International Conference on Computer Vision 2017, IEEE.",
+        "DOI": "10.1109/ICCV.2017.324"
+      },
+      {
+        "key": "ref_19",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Tian, Z., Shen, C., Chen, H., and He, T. (2019). FCOS: Fully Convolutional One-Stage Object Detection. Proceedings of the IEEE/CVF International Conference on Computer Vision 2019, CVF.",
+        "DOI": "10.1109/ICCV.2019.00972"
+      },
+      {
+        "key": "ref_20",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Xia, G.S., Bai, X., Ding, J., Zhu, Z., Belongie, S., Luo, J., Datcu, M., Pelillo, M., and Zhang, L. (2018). A Large-Scale Dataset for Object Detection in Aerial Images. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition 2018, IEEE.",
+        "DOI": "10.1109/CVPR.2018.00418"
+      },
+      {
+        "key": "ref_21",
+        "doi-asserted-by": "crossref",
+        "first-page": "7380",
+        "DOI": "10.1109/TPAMI.2021.3119563",
+        "article-title": "Detection and Tracking Meet Drones Challenge",
+        "volume": "44",
+        "author": "Zhu",
+        "year": "2022",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_22",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lin, T.Y., Dollár, P., Girshick, R., He, K., Hariharan, B., and Belongie, S. (2017). Feature Pyramid Networks for Object Detection. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition 2017, IEEE.",
+        "DOI": "10.1109/CVPR.2017.106"
+      },
+      {
+        "key": "ref_23",
+        "unstructured": "Chen, Y., Han, C., Wang, N., and Zhang, Z. (2019). Revisiting Feature Alignment for One-Stage Object Detection. arXiv."
+      },
+      {
+        "key": "ref_24",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Li, Y., Li, Q., Pan, J., Zhou, Y., Zhu, H., Wei, H., and Liu, C. (2024). SOD-YOLO: Small-Object-Detection Algorithm Based on Improved YOLOv8 for UAV Images. Remote Sens., 16.",
+        "DOI": "10.3390/rs16163057"
+      },
+      {
+        "key": "ref_25",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yuan, Z., Gong, J., Guo, B., Wang, C., Liao, N., Song, J., and Wu, Q. (2024). Small Object Detection in UAV Remote Sensing Images Based on Intra-Group Multi-Scale Fusion Attention and Adaptive Weighted Feature Fusion Mechanism. Remote Sens., 16.",
+        "DOI": "10.3390/rs16224265"
+      },
+      {
+        "key": "ref_26",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Tan, M., Pang, R., and Le, Q.V. (2020). EfficientDet: Scalable and Efficient Object Detection. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Seattle, WA, USA, 13–19 June 2020, IEEE.",
+        "DOI": "10.1109/CVPR42600.2020.01079"
+      },
+      {
+        "key": "ref_27",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yang, G., Lei, J., Zhu, Z., Cheng, S., Feng, Z., and Chen, R. (2023, January 1–4). AFPN: Asymptotic Feature Pyramid Network for Object Detection. Proceedings of the 2023 IEEE International Conference on Systems, Man, and Cybernetics (SMC), Honolulu, HI, USA.",
+        "DOI": "10.1109/SMC53992.2023.10394415"
+      },
+      {
+        "key": "ref_28",
+        "unstructured": "Ge, Z., Liu, S., Wang, F., Li, Z., and Sun, J. (2021). YOLOX: Exceeding YOLO Series in 2021. arXiv."
+      },
+      {
+        "key": "ref_29",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhu, X., Lyu, S., Wang, X., and Zhao, Q. (2021). TPH-YOLOv5: Improved YOLOv5 Based on Transformer Prediction Head for Object Detection on Drone-captured Scenarios. Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) Workshops, Montreal, QC, Canada, 11–17 October 2021, IEEE.",
+        "DOI": "10.1109/ICCVW54120.2021.00312"
+      },
+      {
+        "key": "ref_30",
+        "unstructured": "Bochkovskiy, A., Wang, C.-Y., and Liao, H.-Y.M. (2020). YOLOv4: Optimal Speed and Accuracy of Object Detection. arXiv."
+      },
+      {
+        "key": "ref_31",
+        "doi-asserted-by": "crossref",
+        "first-page": "223",
+        "DOI": "10.1007/s44196-024-00632-3",
+        "article-title": "Small Object Detection in UAV Images Based on YOLOv8n",
+        "volume": "17",
+        "author": "Xu",
+        "year": "2024",
+        "journal-title": "Int. J. Comput. Intell. Syst."
+      },
+      {
+        "key": "ref_32",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhao, X., Zhang, H., Zhang, W., Ma, J., Li, C., Ding, Y., and Zhang, Z. (2025). MSUD-YOLO: A Novel Multiscale Small Object Detection Model for UAV Aerial Images. Drones, 9.",
+        "DOI": "10.3390/drones9060429"
+      },
+      {
+        "key": "ref_33",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Ma, N., Zhang, X., Zheng, H.T., and Sun, J. (2018). ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design. Proceedings of the European Conference on Computer Vision (ECCV), Munich, Germany, 8–14 September 2018, CVF.",
+        "DOI": "10.1007/978-3-030-01264-9_8"
+      },
+      {
+        "key": "ref_34",
+        "unstructured": "Larsson, G., Maire, M., and Shakhnarovich, G. (2016). Fractalnet: Ultra-deep neural networks without residuals. arXiv."
+      },
+      {
+        "key": "ref_35",
+        "unstructured": "Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., and Gelly, S. (2021, January 3–7). An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale. Proceedings of the International Conference on Learning Representations (ICLR), Vienna, Austria."
+      },
+      {
+        "key": "ref_36",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A., and Zagoruyko, S. (2020). End-to-End Object Detection with Transformers. Proceedings of the European Conference on Computer Vision (ECCV), Glasgow, UK, 23–28 August 2020, CVF.",
+        "DOI": "10.1007/978-3-030-58452-8_13"
+      },
+      {
+        "key": "ref_37",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Redmon, J., Divvala, S., Girshick, R., and Farhadi, A. (2016). You Only Look Once: Unified, Real-Time Object Detection. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Las Vegas, NV, USA, 27–30 June 2016, IEEE.",
+        "DOI": "10.1109/CVPR.2016.91"
+      },
+      {
+        "key": "ref_38",
+        "unstructured": "Redmon, J., and Farhadi, A. (2018). YOLOv3: An Incremental Improvement. arXiv."
+      },
+      {
+        "key": "ref_39",
+        "first-page": "5647715",
+        "article-title": "DPH-YOLOv8: Improved YOLOv8 Based on Double Prediction Heads for the UAV Image Object Detection",
+        "volume": "62",
+        "author": "Wang",
+        "year": "2024",
+        "journal-title": "IEEE Trans. Geosci. Remote Sens."
+      },
+      {
+        "key": "ref_40",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Hou, Q., Zhou, D., and Feng, J. (2021). Coordinate Attention for Efficient Mobile Network Design. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Nashville, TN, USA, 20–25 June 2021, IEEE.",
+        "DOI": "10.1109/CVPR46437.2021.01350"
+      },
+      {
+        "key": "ref_41",
+        "first-page": "5611215",
+        "article-title": "FFCA-YOLO for Small Object Detection in Remote Sensing Images",
+        "volume": "62",
+        "author": "Zhang",
+        "year": "2024",
+        "journal-title": "IEEE Trans. Geosci. Remote Sens."
+      },
+      {
+        "key": "ref_42",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, M., Wang, X., Zhou, A., Fu, X., Ma, Y., and Piao, C. (2020). UAV-YOLO: Small Object Detection on Unmanned Aerial Vehicle Perspective. Sensors, 20.",
+        "DOI": "10.3390/s20082238"
+      },
+      {
+        "key": "ref_43",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Hu, J., Wei, Y., Chen, W., Zhi, X., and Zhang, W. (2025). CM-YOLO: Typical Object Detection Method in Remote Sensing Cloud and Mist Scene Images. Remote Sens., 17.",
+        "DOI": "10.3390/rs17010125"
+      },
+      {
+        "key": "ref_44",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wan, Z., Lan, Y., Xu, Z., Shang, K., and Zhang, F. (2025). DAU-YOLO: A Lightweight and Effective Method for Small Object Detection in UAV Images. Remote Sens., 17.",
+        "DOI": "10.3390/rs17101768"
+      },
+      {
+        "key": "ref_45",
+        "unstructured": "Ultralytics (2026, June 10). YOLOv8. Available online: https://github.com/ultralytics/ultralytics/tree/main/ultralytics/cfg/models/v8."
+      },
+      {
+        "key": "ref_46",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.-Y., Yeh, I.-H., and Liao, H.-Y.M. (2024). YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information. arXiv.",
+        "DOI": "10.1007/978-3-031-72751-1_1"
+      },
+      {
+        "key": "ref_47",
+        "unstructured": "Wang, A., Chen, H., Liu, Z., Jian, Y., Zheng, C., Gao, J., Li, X., Jiang, C., and Wang, Y. (2024). YOLOv10: Real-Time End-to-End Object Detection. arXiv."
+      },
+      {
+        "key": "ref_48",
+        "unstructured": "Ultralytics (2026, June 10). YOLOv11. Available online: https://github.com/ultralytics/ultralytics/tree/main/ultralytics/cfg/models/11."
+      },
+      {
+        "key": "ref_49",
+        "unstructured": "Lei, M., Li, S., Wu, Y., Hu, H., Zhou, Y., Zheng, X., Ding, G., Du, S., Wu, Z., and Gao, Y. (2026, June 10). YOLOv13: Real-Time Object Detection with Hypergraph-Enhanced Adaptive Visual Perception. Available online: https://github.com/iMoonLab/yolov13."
+      },
+      {
+        "key": "ref_50",
+        "first-page": "13467",
+        "article-title": "Towards Large-Scale Small Object Detection: Survey and Benchmarks",
+        "volume": "45",
+        "author": "Cheng",
+        "year": "2023",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_51",
+        "unstructured": "Tian, Y., Ye, Q., and Doermann, D. (2025). YOLOv12: Attention-Centric Real-Time Object Detectors. arXiv."
+      },
+      {
+        "key": "ref_52",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lin, T.Y., Maire, M., Belongie, S., Hays, J., Perona, P., Ramanan, D., Dollár, P., and Zitnick, C.L. (2014). Microsoft COCO: Common Objects in Context. Computer Vision—ECCV 2014, Springer.",
+        "DOI": "10.1007/978-3-319-10602-1_48"
+      },
+      {
+        "key": "ref_53",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Sunkara, R., and Luo, T. (2023). No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects. Machine Learning and Knowledge Discovery in Databases, Springer.",
+        "DOI": "10.1007/978-3-031-26409-2_27"
+      },
+      {
+        "key": "ref_54",
+        "doi-asserted-by": "crossref",
+        "first-page": "31888",
+        "DOI": "10.1038/s41598-025-16878-6",
+        "article-title": "A lightweight small object detection model for UAV images based on deep semantic integration",
+        "volume": "15",
+        "author": "Chao",
+        "year": "2025",
+        "journal-title": "Sci. Rep."
+      },
+      {
+        "key": "ref_55",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Feng, C., Zhong, Y., Gao, Y., Scott, M.R., and Huang, W. (2021). TOOD: Task-Aligned One-Stage Object Detection. Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), Montreal, QC, Canada, 11–17 October 2021, IEEE.",
+        "DOI": "10.1109/ICCV48922.2021.00349"
+      },
+      {
+        "key": "ref_56",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Di, X., Cui, K., and Wang, R.-F. (2025). Toward Efficient UAV-Based Small Object Detection: A Lightweight Network with Enhanced Feature Fusion. Remote Sens., 17.",
+        "DOI": "10.3390/rs17132235"
+      },
+      {
+        "key": "ref_57",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, S., Qi, L., Qin, H., Shi, J., and Jia, J. (2018). Path Aggregation Network for Instance Segmentation. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Salt Lake City, UT, USA, 18–22 June 2018, IEEE.",
+        "DOI": "10.1109/CVPR.2018.00913"
+      },
+      {
+        "key": "ref_58",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Cui, Y., Ren, W., and Knoll, A. (2024). Omni-Kernel Network for Image Restoration. Proceedings of the AAAI Conference on Artificial Intelligence, Vancouver, BC, Canada, 20–27 February 2024, AAAI.",
+        "DOI": "10.1609/aaai.v38i2.27907"
+      },
+      {
+        "key": "ref_59",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wu, Y., and He, K. (2018). Group Normalization. Proceedings of the European Conference on Computer Vision (ECCV), Munich, Germany, 8–14 September 2018, CVF.",
+        "DOI": "10.1007/978-3-030-01261-8_1"
+      },
+      {
+        "key": "ref_60",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhu, X., Hu, H., Lin, S., and Dai, J. (2019). Deformable ConvNets v2: More Deformable, Better Results. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Long Beach, CA, USA, 15–20 June 2019, IEEE.",
+        "DOI": "10.1109/CVPR.2019.00953"
+      },
+      {
+        "key": "ref_61",
+        "unstructured": "Zhou, X., Wang, D., and Krähenbühl, P. (2019). Objects as Points. arXiv."
+      },
+      {
+        "key": "ref_62",
+        "unstructured": "Jocher, G. (2026, June 10). Ultralytics YOLOv5. Available online: https://github.com/ultralytics/yolov5."
+      },
+      {
+        "key": "ref_63",
+        "unstructured": "Li, C., Li, L., Jiang, H., Weng, K., Wu, Y., Fang, L., Li, X., Ji, J., Linn, H., and Cheng, G. (2022). YOLOv6: A Single-Stage Object Detection Framework for Industrial Applications. arXiv."
+      },
+      {
+        "key": "ref_64",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yin, S., and Tang, W. (2026). Capacity-Aware Lightweight Object Detection for UAV Remote Sensing: Dynamic Coupling Regularity and the SP-YOLO Model Family. Appl. Sci., 16.",
+        "DOI": "10.3390/app16115249"
+      },
+      {
+        "key": "ref_65",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Xie, H., Wang, M., Cao, R., Wang, J., Jiang, Y., Huang, Q., and Jiang, L. (2025). MTD-YOLO: A Multi-Scale Perception Framework with Task Decoupling and Dynamic Alignment for UAV Small Object Detection. Remote Sens., 17.",
+        "DOI": "10.3390/rs17233823"
+      },
+      {
+        "key": "ref_66",
+        "first-page": "8673",
+        "article-title": "FBRT-YOLO: Faster and Better for Real-Time Aerial Image Detection",
+        "volume": "Volume 39",
+        "author": "Xiao",
+        "year": "2025",
+        "journal-title": "Proceedings of the AAAI Conference on Artificial Intelligence, Philadelphia, PA, USA, 25 February–4 March 2025"
+      }
+    ],
+    "container-title": [
+      "Applied Sciences"
+    ],
+    "original-title": [],
+    "language": "en",
+    "link": [
+      {
+        "URL": "https://www.mdpi.com/2076-3417/16/12/6062/pdf",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          19
+        ]
+      ],
+      "date-time": "2026-06-19T04:33:44Z",
+      "timestamp": 1781843624000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://www.mdpi.com/2076-3417/16/12/6062"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          15
+        ]
+      ]
+    },
+    "references-count": 66,
+    "journal-issue": {
+      "issue": "12",
+      "published-online": {
+        "date-parts": [
+          [
+            2026,
+            6
+          ]
+        ]
+      }
+    },
+    "alternative-id": [
+      "app16126062"
+    ],
+    "URL": "https://doi.org/10.3390/app16126062",
+    "relation": {},
+    "ISSN": [
+      "2076-3417"
+    ],
+    "issn-type": [
+      {
+        "value": "2076-3417",
+        "type": "electronic"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          15
+        ]
+      ]
+    }
+  },
+  {
+    "indexed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          24
+        ]
+      ],
+      "date-time": "2026-10-24T23:07:18Z",
+      "timestamp": 1792883238881,
+      "version": "4.5.0"
+    },
+    "reference-count": 43,
+    "publisher": "MDPI AG",
+    "issue": "3",
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              2,
+              21
+            ]
+          ],
+          "date-time": "2025-02-21T00:00:00Z",
+          "timestamp": 1740096000000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "funder": [
+      {
+        "name": "Xi’an Institute of Optics and Precision Mechanics",
+        "award": [
+          "E45531ZB"
+        ],
+        "award-info": [
+          {
+            "award-number": [
+              "E45531ZB"
+            ]
+          }
+        ],
+        "id": [
+          {
+            "id": "https://ror.org/0444j5556",
+            "id-type": "ROR",
+            "asserted-by": "crossref"
+          }
+        ]
+      }
+    ],
+    "content-domain": {
+      "domain": [],
+      "crossmark-restriction": false
+    },
+    "short-container-title": [
+      "Drones"
+    ],
+    "abstract": "<jats:p>Unmanned aerial vehicle (UAV) targets are typically small in size, occupy only a limited pixel area, and are often located in complex environments. Existing models, however, tend to overlook smaller targets in complex backgrounds, making it easy to miss important information and resulting in missing targets. This paper proposes an innovative UAV detection method called BRA-YOLOv10. Firstly, Bi-Level Routing Attention (BRA) is used during the feature extraction stage to effectively reduce background interference. By focusing on the target’s key information, the model optimizes overall detection performance. Secondly, based on this improvement, adding a high-resolution small target detection layer (STDL) enhances the model’s detection accuracy by providing more detailed target information. Then, the SimCSPSPPF module is incorporated to further improve the model’s performance, particularly with regard to small targets on complex backgrounds, to effectively retain low-level feature information. Finally, training and testing are conducted on the SIDD dataset, and its generalization performance is shown on a variety of datasets (TIB-Net, Det-Fly, and UAVfly). Experimental results show that BRA-YOLOv10 has superior performance to existing models on 98.9% precision, 92.3% recall, and 96.5% mAP50, respectively, representing an improvement of 2.5%, 2.9%, and 1.7% over YOLOv10. For targets with target sizes between 10×10 and 5×5, the detection rate reached 84.97%, an increase of 16.76% compared with YOLOv10.</jats:p>",
+    "DOI": "10.3390/drones9030159",
+    "type": "journal-article",
+    "created": {
+      "date-parts": [
+        [
+          2025,
+          2,
+          21
+        ]
+      ],
+      "date-time": "2025-02-21T06:39:07Z",
+      "timestamp": 1740119947000
+    },
+    "page": "159",
+    "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+    "source": "Crossref",
+    "is-referenced-by-count": 41,
+    "title": [
+      "BRA-YOLOv10: UAV Small Target Detection Based on YOLOv10"
+    ],
+    "prefix": "10.3390",
+    "volume": "9",
+    "author": [
+      {
+        "given": "Quanyu",
+        "family": "Zhang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xin",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Heng",
+        "family": "Shi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kunhui",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yan",
+        "family": "Tian",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zhaohui",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yongkang",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          },
+          {
+            "name": "Key Laboratory of Space Precision Measurement Technology, Chinese Academy of Sciences, Xi’an 710119, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Gaoxiang",
+        "family": "Jia",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Xi’an Institute of Optics and Precision Mechanics, Chinese Academy of Sciences, Xi’an 710119, China"
+          },
+          {
+            "name": "University of Chinese Academy of Sciences, Beijing 100049, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "member": "1968",
+    "published-online": {
+      "date-parts": [
+        [
+          2025,
+          2,
+          21
+        ]
+      ]
+    },
+    "reference": [
+      {
+        "key": "ref_1",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Lyu, M., Zhao, Y., Huang, C., and Huang, H. (2023). Unmanned aerial vehicles for search and rescue: A survey. Remote Sens., 15.",
+        "DOI": "10.3390/rs15133266"
+      },
+      {
+        "key": "ref_2",
+        "doi-asserted-by": "crossref",
+        "first-page": "95",
+        "DOI": "10.3390/standards3020009",
+        "article-title": "A review of unmanned aerial vehicle applications in construction management: 2016–2021",
+        "volume": "3",
+        "author": "Molina",
+        "year": "2023",
+        "journal-title": "Standards"
+      },
+      {
+        "key": "ref_3",
+        "doi-asserted-by": "crossref",
+        "first-page": "107148",
+        "DOI": "10.1016/j.comnet.2020.107148",
+        "article-title": "A compilation of UAV applications for precision agriculture",
+        "volume": "172",
+        "author": "Sarigiannidis",
+        "year": "2020",
+        "journal-title": "Comput. Netw."
+      },
+      {
+        "key": "ref_4",
+        "doi-asserted-by": "crossref",
+        "first-page": "44",
+        "DOI": "10.1016/j.comcom.2023.05.013",
+        "article-title": "A survey on UAV-assisted wireless communications: Recent advances and future trends",
+        "volume": "208",
+        "author": "Gu",
+        "year": "2023",
+        "journal-title": "Comput. Commun."
+      },
+      {
+        "key": "ref_5",
+        "doi-asserted-by": "crossref",
+        "first-page": "68",
+        "DOI": "10.1109/MCOM.2018.1700430",
+        "article-title": "Anti-drone system with multiple surveillance technologies: Architecture, implementation, and challenges",
+        "volume": "56",
+        "author": "Shi",
+        "year": "2018",
+        "journal-title": "IEEE Commun. Mag."
+      },
+      {
+        "key": "ref_6",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Samaras, S., Diamantidou, E., Ataloglou, D., Sakellariou, N., Vafeiadis, A., Magoulianitis, V., Lalas, A., Dimou, A., Zarpalas, D., and Votis, K. (2019). Deep learning on multi sensor data for counter UAV applications—A systematic review. Sensors, 19.",
+        "DOI": "10.3390/s19224837"
+      },
+      {
+        "key": "ref_7",
+        "unstructured": "Zhang, W., Cong, M., and Wang, L. (2003, January 14–17). Algorithms for optical weak small targets detection and tracking. Proceedings of the International Conference on Neural Networks and Signal Processing, Nanjing, China."
+      },
+      {
+        "key": "ref_8",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R., Donahue, J., Darrell, T., and Malik, J. (2014, January 23–28). Rich feature hierarchies for accurate object detection and semantic segmentation. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, Columbus, OH, USA.",
+        "DOI": "10.1109/CVPR.2014.81"
+      },
+      {
+        "key": "ref_9",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Girshick, R. (2015). Fast r-cnn. arXiv.",
+        "DOI": "10.1109/ICCV.2015.169"
+      },
+      {
+        "key": "ref_10",
+        "unstructured": "Ren, S. (2015). Faster r-cnn: Towards real-time object detection with region proposal networks. arXiv."
+      },
+      {
+        "key": "ref_11",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Redmon, J. (2016, January 27–30). You only look once: Unified, real-time object detection. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, Las Vegas, NV, USA.",
+        "DOI": "10.1109/CVPR.2016.91"
+      },
+      {
+        "key": "ref_12",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.Y., and Berg, A.C. (2016, January 11–14). Ssd: Single shot multibox detector. Proceedings of the Computer Vision–ECCV 2016: 14th European Conference, Amsterdam, The Netherlands. Proceedings, Part I 14.",
+        "DOI": "10.1007/978-3-319-46448-0_2"
+      },
+      {
+        "key": "ref_13",
+        "unstructured": "Wang, A., Chen, H., Liu, L., Chen, K., Lin, Z., Han, J., and Ding, G. (2024). Yolov10: Real-time end-to-end object detection. arXiv."
+      },
+      {
+        "key": "ref_14",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Mei, J., and Zhu, W. (2024). BGF-YOLOv10: Small Object Detection Algorithm from Unmanned Aerial Vehicle Perspective Based on Improved YOLOv10. Sensors, 24.",
+        "DOI": "10.3390/s24216911"
+      },
+      {
+        "key": "ref_15",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Bakirci, M., Dmytrovych, P., Bayraktar, I., and Anatoliyovych, O. (2024, January 22–24). Multi-Class Vehicle Detection and Classification with YOLO11 on UAV-Captured Aerial Imagery. Proceedings of the 2024 IEEE 7th International Conference on Actual Problems of Unmanned Aerial Vehicles Development (APUAVD), Kyiv, Ukraine.",
+        "DOI": "10.1109/APUAVD64488.2024.10765862"
+      },
+      {
+        "key": "ref_16",
+        "unstructured": "Khanam, R., and Hussain, M. (2024). What is YOLOv5: A deep look into the internal features of the popular object detector. arXiv."
+      },
+      {
+        "key": "ref_17",
+        "unstructured": "Li, C., Li, L., Geng, Y., Jiang, H., Cheng, M., Zhang, B., Ke, Z., Xu, X., and Chu, X. (2023). Yolov6 v3. 0: A full-scale reloading. arXiv."
+      },
+      {
+        "key": "ref_18",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.Y., Bochkovskiy, A., and Liao, H.Y.M. (2023, January 17–24). YOLOv7: Trainable bag-of-freebies sets new state-of-the-art for real-time object detectors. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, Vancouver, BC, Canada.",
+        "DOI": "10.1109/CVPR52729.2023.00721"
+      },
+      {
+        "key": "ref_19",
+        "unstructured": "Wang, C.Y., Liao, H.Y.M., and Yeh, I.H. (2022). Designing network design strategies through gradient path analysis. arXiv."
+      },
+      {
+        "key": "ref_20",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Varghese, R., and Sambath, M. (2024, January 18–19). YOLOv8: A Novel Object Detection Algorithm with Enhanced Performance and Robustness. Proceedings of the 2024 International Conference on Advances in Data Engineering and Intelligent Computing Systems (ADICS), Chennai, India.",
+        "DOI": "10.1109/ADICS58448.2024.10533619"
+      },
+      {
+        "key": "ref_21",
+        "unstructured": "Khanam, R., and Hussain, M. (2024). YOLOv11: An overview of the key architectural enhancements. arXiv."
+      },
+      {
+        "key": "ref_22",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Hu, J., Shen, L., and Sun, G. (2018, January 18–23). Squeeze-and-excitation networks. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, USA.",
+        "DOI": "10.1109/CVPR.2018.00745"
+      },
+      {
+        "key": "ref_23",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Hou, Q., Zhou, D., and Feng, J. (2021, January 20–25). Coordinate attention for efficient mobile network design. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, Nashville, TN, USA.",
+        "DOI": "10.1109/CVPR46437.2021.01350"
+      },
+      {
+        "key": "ref_24",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, Q., Wu, B., Zhu, P., Li, P., Zuo, W., and Hu, Q. (2020, January 13–19). ECA-Net: Efficient channel attention for deep convolutional neural networks. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, Seattle, WA, USA.",
+        "DOI": "10.1109/CVPR42600.2020.01155"
+      },
+      {
+        "key": "ref_25",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Woo, S., Park, J., Lee, J.Y., and Kweon, I.S. (2018, January 8–14). Cbam: Convolutional block attention module. Proceedings of the European Conference on Computer Vision (ECCV), Munich, Germany.",
+        "DOI": "10.1007/978-3-030-01234-2_1"
+      },
+      {
+        "key": "ref_26",
+        "unstructured": "Liu, Y., Shao, Z., and Hoffmann, N. (2021). Global attention mechanism: Retain information to enhance channel-spatial interactions. arXiv."
+      },
+      {
+        "key": "ref_27",
+        "unstructured": "Yang, L., Zhang, R.Y., Li, L., and Xie, X. (2021, January 18–24). Simam: A simple, parameter-free attention module for convolutional neural networks. Proceedings of the International Conference on Machine Learning, Virtual."
+      },
+      {
+        "key": "ref_28",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C., Meng, L., Gao, Q., Wang, J., Wang, T., Liu, X., Du, F., Wang, L., and Wang, E. (2022). A lightweight UAV swarm detection method integrated attention mechanism. Drones, 7.",
+        "DOI": "10.3390/drones7010013"
+      },
+      {
+        "key": "ref_29",
+        "doi-asserted-by": "crossref",
+        "first-page": "50",
+        "DOI": "10.1007/s10044-024-01276-x",
+        "article-title": "Remote sensing image location based on improved Yolov7 target detection",
+        "volume": "27",
+        "author": "Li",
+        "year": "2024",
+        "journal-title": "Pattern Anal. Appl."
+      },
+      {
+        "key": "ref_30",
+        "doi-asserted-by": "crossref",
+        "first-page": "8085",
+        "DOI": "10.1109/JSTARS.2022.3206399",
+        "article-title": "YOLOv5-Tassel: Detecting tassels in RGB UAV imagery with improved YOLOv5 based on transfer learning",
+        "volume": "15",
+        "author": "Liu",
+        "year": "2022",
+        "journal-title": "IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens."
+      },
+      {
+        "key": "ref_31",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, G., Chen, Y., An, P., Hong, H., Hu, J., and Huang, T. (2023). UAV-YOLOv8: A small-object-detection model based on improved YOLOv8 for UAV aerial photography scenarios. Sensors, 23.",
+        "DOI": "10.3390/s23167190"
+      },
+      {
+        "key": "ref_32",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Zhu, L., Wang, X., Ke, Z., Zhang, W., and Lau, R.W. (2023, January 17–24). Biformer: Vision transformer with bi-level routing attention. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, Vancouver, BC, Canada.",
+        "DOI": "10.1109/CVPR52729.2023.00995"
+      },
+      {
+        "key": "ref_33",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Yuan, S., Sun, B., Zuo, Z., Huang, H., Wu, P., Li, C., Dang, Z., and Zhao, Z. (2023). IRSDD-YOLOv5: Focusing on the infrared detection of small drones. Drones, 7.",
+        "DOI": "10.3390/drones7060393"
+      },
+      {
+        "key": "ref_34",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Ni, J., Zhu, S., Tang, G., Ke, C., and Wang, T. (2024). A small-object detection model based on improved YOLOv8s for UAV image scenarios. Remote Sens., 16.",
+        "DOI": "10.3390/rs16132465"
+      },
+      {
+        "key": "ref_35",
+        "doi-asserted-by": "crossref",
+        "first-page": "127685",
+        "DOI": "10.1016/j.neucom.2024.127685",
+        "article-title": "Multi-YOLOv8: An infrared moving small object detection model based on YOLOv8 for air vehicle",
+        "volume": "588",
+        "author": "Sun",
+        "year": "2024",
+        "journal-title": "Neurocomputing"
+      },
+      {
+        "key": "ref_36",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Liu, B., and Luo, H. (2022). An improved Yolov5 for multi-rotor UAV detection. Electronics, 11.",
+        "DOI": "10.3390/electronics11152330"
+      },
+      {
+        "key": "ref_37",
+        "unstructured": "Bochkovskiy, A., Wang, C.Y., and Liao, H.Y.M. (2020). Yolov4: Optimal speed and accuracy of object detection. arXiv."
+      },
+      {
+        "key": "ref_38",
+        "doi-asserted-by": "crossref",
+        "first-page": "1904",
+        "DOI": "10.1109/TPAMI.2015.2389824",
+        "article-title": "Spatial pyramid pooling in deep convolutional networks for visual recognition",
+        "volume": "37",
+        "author": "He",
+        "year": "2015",
+        "journal-title": "IEEE Trans. Pattern Anal. Mach. Intell."
+      },
+      {
+        "key": "ref_39",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Wang, C.Y., Liao, H.Y.M., Wu, Y.H., Chen, P.Y., Hsieh, J.W., and Yeh, I.H. (2020, January 13–19). CSPNet: A new backbone that can enhance learning capability of CNN. Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops, Seattle, WA, USA.",
+        "DOI": "10.1109/CVPRW50498.2020.00203"
+      },
+      {
+        "key": "ref_40",
+        "unstructured": "Ge, Z. (2021). Yolox: Exceeding yolo series in 2021. arXiv."
+      },
+      {
+        "key": "ref_41",
+        "doi-asserted-by": "crossref",
+        "first-page": "130697",
+        "DOI": "10.1109/ACCESS.2020.3009518",
+        "article-title": "TIB-Net: Drone detection network with tiny iterative backbone",
+        "volume": "8",
+        "author": "Sun",
+        "year": "2020",
+        "journal-title": "IEEE Access"
+      },
+      {
+        "key": "ref_42",
+        "doi-asserted-by": "crossref",
+        "first-page": "1020",
+        "DOI": "10.1109/LRA.2021.3056059",
+        "article-title": "Air-to-air visual detection of micro-uavs: An experimental evaluation of deep learning",
+        "volume": "6",
+        "author": "Zheng",
+        "year": "2021",
+        "journal-title": "IEEE Robot. Autom. Lett."
+      },
+      {
+        "key": "ref_43",
+        "doi-asserted-by": "crossref",
+        "unstructured": "Cheng, Q., Wang, Y., He, W., and Bai, Y. (2024). Lightweight air-to-air unmanned aerial vehicle target detection model. Sci. Rep., 14.",
+        "DOI": "10.1038/s41598-024-53181-2"
+      }
+    ],
+    "container-title": [
+      "Drones"
+    ],
+    "original-title": [],
+    "language": "en",
+    "link": [
+      {
+        "URL": "https://www.mdpi.com/2504-446X/9/3/159/pdf",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ],
+    "deposited": {
+      "date-parts": [
+        [
+          2025,
+          10,
+          9
+        ]
+      ],
+      "date-time": "2025-10-09T16:39:41Z",
+      "timestamp": 1760027981000
+    },
+    "score": 1,
+    "resource": {
+      "primary": {
+        "URL": "https://www.mdpi.com/2504-446X/9/3/159"
+      }
+    },
+    "subtitle": [],
+    "short-title": [],
+    "issued": {
+      "date-parts": [
+        [
+          2025,
+          2,
+          21
+        ]
+      ]
+    },
+    "references-count": 43,
+    "journal-issue": {
+      "issue": "3",
+      "published-online": {
+        "date-parts": [
+          [
+            2025,
+            3
+          ]
+        ]
+      }
+    },
+    "alternative-id": [
+      "drones9030159"
+    ],
+    "URL": "https://doi.org/10.3390/drones9030159",
+    "relation": {},
+    "ISSN": [
+      "2504-446X"
+    ],
+    "issn-type": [
+      {
+        "value": "2504-446X",
+        "type": "electronic"
+      }
+    ],
+    "subject": [],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          2,
+          21
+        ]
+      ]
+    }
+  },
+  {
+    "DOI": "10.1109/cvpr52688.2022.01330",
+    "title": [
+      "QueryDet: Cascaded Sparse Query for Accelerating High-Resolution Small Object Detection"
+    ],
+    "author": [
+      {
+        "given": "Chenhongyi",
+        "family": "Yang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "University of Edinburgh"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zehao",
+        "family": "Huang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "TuSimple"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Naiyan",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "TuSimple"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2022,
+          6
+        ]
+      ]
+    },
+    "container-title": [
+      "2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)"
+    ],
+    "type": "proceedings-article",
+    "URL": "https://doi.org/10.1109/cvpr52688.2022.01330",
+    "link": [
+      {
+        "URL": "http://xplorestaging.ieee.org/ielx7/9878378/9878366/09879411.pdf?arnumber=9879411",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ]
+  },
+  {
+    "DOI": "10.1109/iscait69154.2026.11477258",
+    "title": [
+      "LSF-YOLOv11: A Lightweight Feature Fusion Method for Small Object Detection on VisDrone"
+    ],
+    "author": [
+      {
+        "given": "Buyun",
+        "family": "Wang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Shandong University,Jinan,China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2026,
+          1,
+          23
+        ]
+      ]
+    },
+    "container-title": [
+      "2026 5th International Symposium on Computer Applications and Information Technology (ISCAIT)"
+    ],
+    "type": "proceedings-article",
+    "URL": "https://doi.org/10.1109/iscait69154.2026.11477258",
+    "link": [
+      {
+        "URL": "http://xplorestaging.ieee.org/ielx8/11477131/11477178/11477258.pdf?arnumber=11477258",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ]
+  },
+  {
+    "DOI": "10.1109/dlcv69906.2026.11635709",
+    "title": [
+      "Application of YOLOv11N with HWD Downsampling and Shallow Feature Enhancement in Small Object Detection on Visdrone Dataset"
+    ],
+    "author": [
+      {
+        "given": "Jian",
+        "family": "Sun",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Iowa State University",
+            "place": [
+              "Ames, United States"
+            ]
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yizheng",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Malaya",
+            "place": [
+              "Kuala Lumpur, Malaysia"
+            ]
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2026,
+          6
+        ]
+      ]
+    },
+    "container-title": [
+      "2026 IEEE 3rd International Conference on Computer Vision and Deep Learning (DLCV)"
+    ],
+    "type": "proceedings-article",
+    "URL": "https://doi.org/10.1109/dlcv69906.2026.11635709",
+    "link": [
+      {
+        "URL": "http://xplorestaging.ieee.org/ielx8/11635063/11635100/11635709.pdf?arnumber=11635709",
+        "content-type": "unspecified",
+        "content-version": "vor",
+        "intended-application": "similarity-checking"
+      }
+    ]
+  },
+  {
+    "DOI": "10.2139/ssrn.7106441",
+    "title": [
+      "PSF-YOLO11: An enhanced YOLO11 Framework for Small Object Detection in UAV Imagery"
+    ],
+    "author": [
+      {
+        "given": "Dan",
+        "family": "Shan",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xiangdong",
+        "family": "Meng",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-4078-7018",
+        "authenticated-orcid": true,
+        "given": "Carlos",
+        "family": "Ferran",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xuan",
+        "family": "Tong",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xifeng",
+        "family": "Guo",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "type": "posted-content",
+    "URL": "https://doi.org/10.2139/ssrn.7106441"
+  }
+]
