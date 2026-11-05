@@ -1,6 +1,11 @@
 """Train the C2PSA-centered YOLO11n VisDrone ablation."""
 
 import argparse
+import sys
+from pathlib import Path
+
+# Ensure this worktree's modified C2PSA implementation is imported before any installed package.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ultralytics import YOLO
 
