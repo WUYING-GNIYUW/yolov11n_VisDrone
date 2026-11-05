@@ -1,0 +1,93 @@
+# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+
+# VisDrone2019-DET dataset https://github.com/VisDrone/VisDrone-Dataset by Tianjin University
+# Documentation: https://docs.ultralytics.com/datasets/detect/visdrone
+# Example usage: yolo detect train model=yolo11n.pt data=VisDrone.yaml
+# parent
+# ├── ultralytics
+# └── datasets
+#     └── VisDrone ← downloads here (~2 GB)
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: /root/home/2112406148/datasets/VisDrone # Fixed existing converted dataset
+train: images/train # train images (relative to 'path') 6471 images
+val: images/val # val images (relative to 'path') 548 images
+test: images/test # test-dev images (optional) 1610 images
+
+# Classes
+names:
+  0: pedestrian
+  1: people
+  2: bicycle
+  3: car
+  4: van
+  5: truck
+  6: tricycle
+  7: awning-tricycle
+  8: bus
+  9: motor
+
+# Download script/URL (optional) ---------------------------------------------------------------------------------------
+download: |
+  import shutil
+  from pathlib import Path
+
+  from ultralytics.utils.downloads import download
+  from ultralytics.utils import ASSETS_URL, TQDM
+
+
+  def visdrone2yolo(dir, split, source_name=None):
+      """Convert VisDrone annotations to YOLO format with images/{split} and labels/{split} structure."""
+      from PIL import Image
+
+      source_dir = dir / (source_name or f"VisDrone2019-DET-{split}")
+      images_dir = dir / "images" / split
+      labels_dir = dir / "labels" / split
+      labels_dir.mkdir(parents=True, exist_ok=True)
+
+      # Move images to the layout expected by the YOLO dataloader.
+      source_images_dir = source_dir / "images"
+      images_dir.mkdir(parents=True, exist_ok=True)
+      for img in source_images_dir.glob("*.jpg"):
+          img.rename(images_dir / img.name)
+
+      for f in TQDM((source_dir / "annotations").glob("*.txt"), desc=f"Converting {split}"):
+          image_path = images_dir / f.with_suffix(".jpg").name
+          with Image.open(image_path) as image:
+              img_width, img_height = image.size
+
+          lines = []
+
+          with open(f, encoding="utf-8") as file:
+              for row in file.read().strip().splitlines():
+                  fields = row.split(",")
+                  if len(fields) < 6:
+                      continue
+
+                  x, y, w, h, score, category = map(int, fields[:6])
+                  if score == 0 or not 1 <= category <= 10 or w <= 0 or h <= 0:
+                      continue  # Ignore regions, the unused "others" category, and invalid boxes
+
+                  # Convert VisDrone xywh pixels to normalized YOLO xywh.
+                  x_center, y_center = (x + w / 2) / img_width, (y + h / 2) / img_height
+                  w_norm, h_norm = w / img_width, h / img_height
+                  lines.append(f"{category - 1} {x_center:.6f} {y_center:.6f} {w_norm:.6f} {h_norm:.6f}\n")
+
+          (labels_dir / f.name).write_text("".join(lines), encoding="utf-8")
+
+
+  # Download (ignores test-challenge split)
+  dir = Path(yaml["path"])  # dataset root dir
+  urls = [
+      f"{ASSETS_URL}/VisDrone2019-DET-train.zip",
+      f"{ASSETS_URL}/VisDrone2019-DET-val.zip",
+      f"{ASSETS_URL}/VisDrone2019-DET-test-dev.zip",
+      # f"{ASSETS_URL}/VisDrone2019-DET-test-challenge.zip",
+  ]
+  download(urls, dir=dir, curl=True, threads=4)
+
+  # Convert
+  splits = {"VisDrone2019-DET-train": "train", "VisDrone2019-DET-val": "val", "VisDrone2019-DET-test-dev": "test"}
+  for folder, split in splits.items():
+      visdrone2yolo(dir, split, folder)  # convert VisDrone annotations to YOLO labels
+      shutil.rmtree(dir / folder)  # cleanup original directory

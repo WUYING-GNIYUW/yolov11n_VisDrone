@@ -1462,7 +1462,7 @@ class C2PSA(nn.Module):
         This module essentially is the same as PSA module, but refactored to allow stacking more PSABlock modules.
     """
 
-    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5):
+    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5, local_center: bool = False):
         """Initialize C2PSA module.
 
         Args:
@@ -1470,6 +1470,7 @@ class C2PSA(nn.Module):
             c2 (int): Output channels.
             n (int): Number of PSABlock modules.
             e (float): Expansion ratio.
+            local_center (bool): If True, apply a zero-initialized local-contrast residual to the PSA branch.
         """
         super().__init__()
         assert c1 == c2
@@ -1478,6 +1479,11 @@ class C2PSA(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)
 
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5, num_heads=max(self.c // 64, 1)) for _ in range(n)))
+        # [VisDrone ablation] Keep C2PSA's topology and global PSA interaction, while optionally
+        # exposing a local contrast residual before PSA. Zero initialization preserves the
+        # pretrained function at construction and makes the change easy to ablate.
+        self.local_center = local_center
+        self.local_center_gain = nn.Parameter(torch.zeros(1)) if local_center else None
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Process the input tensor through a series of PSA blocks.
@@ -1489,6 +1495,9 @@ class C2PSA(nn.Module):
             (torch.Tensor): Output tensor after processing.
         """
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
+        if getattr(self, "local_center", False):
+            local_mean = F.avg_pool2d(b, kernel_size=3, stride=1, padding=1, count_include_pad=False)
+            b = b + self.local_center_gain.tanh() * (b - local_mean)
         b = self.m(b)
         return self.cv2(torch.cat((a, b), 1))
 
