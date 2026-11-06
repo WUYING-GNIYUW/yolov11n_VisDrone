@@ -152,6 +152,10 @@ keywords: Ultralytics, YOLO, neural networks, block modules, DFL, Proto, HGStem,
 
 <br><br><hr><br>
 
+## ::: ultralytics.nn.modules.block.C3k2CRP
+
+<br><br><hr><br>
+
 ## ::: ultralytics.nn.modules.block.C3k
 
 <br><br><hr><br>
@@ -181,6 +185,10 @@ keywords: Ultralytics, YOLO, neural networks, block modules, DFL, Proto, HGStem,
 <br><br><hr><br>
 
 ## ::: ultralytics.nn.modules.block.C2PSA
+
+<br><br><hr><br>
+
+## ::: ultralytics.nn.modules.block.C2PSALocalGlobal
 
 <br><br><hr><br>
 
