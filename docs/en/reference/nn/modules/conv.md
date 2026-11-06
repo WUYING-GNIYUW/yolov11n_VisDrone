@@ -64,6 +64,10 @@ keywords: Ultralytics, convolution modules, Conv, LightConv, GhostConv, YOLO, de
 
 <br><br><hr><br>
 
+## ::: ultralytics.nn.modules.conv.DiffGuidedConcat
+
+<br><br><hr><br>
+
 ## ::: ultralytics.nn.modules.conv.Index
 
 <br><br><hr><br>
