@@ -1519,7 +1519,6 @@ class C2PSA(nn.Module):
         self.c = int(c1 * e)
         self.cv1 = Conv(c1, 2 * self.c, 1, 1)
         self.cv2 = Conv(2 * self.c, c1, 1)
-
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5, num_heads=max(self.c // 64, 1)) for _ in range(n)))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -1534,6 +1533,31 @@ class C2PSA(nn.Module):
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
         b = self.m(b)
         return self.cv2(torch.cat((a, b), 1))
+
+
+class C2PSALocalGlobal(C2PSA):
+    """C2PSA with gated fusion of local spatial and original PSA context features."""
+
+    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5):
+        """Initialize the local-global C2PSA variant.
+
+        Args:
+            c1 (int): Number of input channels.
+            c2 (int): Number of output channels.
+            n (int): Number of PSABlock modules.
+            e (float): Channel expansion ratio.
+        """
+        super().__init__(c1, c2, n, e)
+        self.local = DWConv(self.c, self.c, 3, 1)
+        self.gate = nn.Sequential(nn.AdaptiveAvgPool2d(1), nn.Conv2d(2 * self.c, self.c, 1), nn.Sigmoid())
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Fuse local and global features while preserving the original C2PSA projection path."""
+        a, b = self.cv1(x).split((self.c, self.c), dim=1)
+        global_context = self.m(b)
+        local_context = self.local(b)
+        gate = self.gate(torch.cat((global_context, local_context), 1))
+        return self.cv2(torch.cat((a, gate * global_context + (1 - gate) * local_context), 1))
 
 
 class C2fPSA(C2f):
