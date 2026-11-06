@@ -39,6 +39,7 @@ __all__ = (
     "C2fPSA",
     "C3Ghost",
     "C3k2",
+    "C3k2CRP",
     "C3x",
     "CBFuse",
     "CBLinear",
@@ -1103,6 +1104,48 @@ class C3k2(C2f):
             else Bottleneck(self.c, self.c, shortcut, g)
             for _ in range(n)
         )
+
+
+class C3k2CRP(C3k2):
+    """C3k2 with learnable projection of redundant intermediate features."""
+
+    def __init__(
+        self,
+        c1: int,
+        c2: int,
+        n: int = 1,
+        c3k: bool = False,
+        e: float = 0.5,
+        attn: bool = False,
+        g: int = 1,
+        shortcut: bool = True,
+    ):
+        """Initialize C3k2CRP with one learnable suppression strength per intermediate block.
+
+        Args:
+            c1 (int): Number of input channels.
+            c2 (int): Number of output channels.
+            n (int): Number of intermediate blocks.
+            c3k (bool): Whether to use C3k blocks.
+            e (float): Expansion ratio.
+            attn (bool): Whether to use attention blocks.
+            g (int): Groups for convolutions.
+            shortcut (bool): Whether to use shortcut connections.
+        """
+        super().__init__(c1, c2, n, c3k, e, attn, g, shortcut)
+        self.crp_gain = nn.Parameter(torch.zeros(len(self.m)))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Suppress each intermediate branch's channel-wise projection onto the first branch."""
+        y = list(self.cv1(x).chunk(2, 1))
+        reference = y[0]
+        reference_fp32 = reference.float()
+        denominator = reference_fp32.square().sum((2, 3), keepdim=True).clamp_min(1e-6)
+        for i, module in enumerate(self.m):
+            branch = module(y[-1])
+            coefficient = (branch.float() * reference_fp32).sum((2, 3), keepdim=True) / denominator
+            y.append(branch - self.crp_gain[i].to(branch.dtype) * coefficient.to(branch.dtype) * reference)
+        return self.cv2(torch.cat(y, 1))
 
 
 class C3k(C3):
