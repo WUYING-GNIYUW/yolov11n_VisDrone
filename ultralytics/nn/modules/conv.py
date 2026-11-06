@@ -18,6 +18,7 @@ __all__ = (
     "ConvTranspose",
     "DWConv",
     "DWConvTranspose2d",
+    "DiffGuidedConcat",
     "Focus",
     "GhostConv",
     "Index",
@@ -641,6 +642,27 @@ class Concat(nn.Module):
             (torch.Tensor): Concatenated tensor.
         """
         return torch.cat(x, self.d)
+
+
+class DiffGuidedConcat(nn.Module):
+    """Difference-guided cross-scale compensation followed by concatenation."""
+
+    def __init__(self, c1: int):
+        """Initialize a spatial gate for two equal-channel feature maps.
+
+        Args:
+            c1 (int): Number of channels in each feature map.
+        """
+        super().__init__()
+        self.gate = nn.Conv2d(c1, 1, 1)
+
+    def forward(self, x: list[torch.Tensor]) -> torch.Tensor:
+        """Use feature differences to gate mutual cross-scale compensation."""
+        if len(x) != 2 or x[0].shape != x[1].shape:
+            raise ValueError("DiffGuidedConcat expects exactly two feature maps with matching shapes")
+        x0, x1 = x
+        gate = self.gate((x0 - x1).abs()).sigmoid()
+        return torch.cat((x0 + gate * x1, x1 + (1 - gate) * x0), 1)
 
 
 class Index(nn.Module):
