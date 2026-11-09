@@ -7,6 +7,7 @@ import math
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 __all__ = (
@@ -57,7 +58,19 @@ class Conv(nn.Module):
 
     default_act = nn.SiLU()  # default activation
 
-    def __init__(self, c1, c2, k=1, s=1, p=None, g=1, d=1, act=True):
+    def __init__(
+        self,
+        c1,
+        c2,
+        k=1,
+        s=1,
+        p=None,
+        g=1,
+        d=1,
+        act=True,
+        edge=False,
+        edge_init=0.0,
+    ):
         """Initialize Conv layer with given parameters.
 
         Args:
@@ -69,11 +82,29 @@ class Conv(nn.Module):
             g (int): Groups.
             d (int): Dilation.
             act (bool | nn.Module): Activation function.
+            edge (bool): Whether to use the optional local-edge modulation path.
+            edge_init (float): Initial value of the bounded edge-residual gain.
         """
         super().__init__()
         self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p, d), groups=g, dilation=d, bias=False)
         self.bn = nn.BatchNorm2d(c2)
         self.act = self.default_act if act is True else act if isinstance(act, nn.Module) else nn.Identity()
+        self.use_edge = bool(edge)
+        if self.use_edge:
+            # Zero gain preserves the pretrained Conv function at initialization.
+            self.edge_gain = nn.Parameter(torch.full((1,), float(edge_init)))
+
+    def _apply_edge(self, x):
+        """Apply zero-initialized directional-gradient modulation before the main convolution."""
+        if not self.use_edge:
+            return x
+        magnitude = x.abs().mean(1, keepdim=True)
+        grad_x = F.pad(magnitude[..., 1:] - magnitude[..., :-1], (0, 1, 0, 0))
+        grad_y = F.pad(magnitude[..., 1:, :] - magnitude[..., :-1, :], (0, 0, 0, 1))
+        edge_energy = grad_x.abs() + grad_y.abs()
+        edge_energy = edge_energy / (edge_energy.mean((2, 3), keepdim=True) + 1e-6)
+        gate = torch.sigmoid(2.0 * (edge_energy - 1.0))
+        return x * (1.0 + self.edge_gain.tanh() * (2.0 * gate - 1.0))
 
     def forward(self, x):
         """Apply convolution, batch normalization and activation to input tensor.
@@ -84,7 +115,7 @@ class Conv(nn.Module):
         Returns:
             (torch.Tensor): Output tensor.
         """
-        return self.act(self.bn(self.conv(x)))
+        return self.act(self.bn(self.conv(self._apply_edge(x))))
 
     def forward_fuse(self, x):
         """Apply convolution and activation without batch normalization.
@@ -95,7 +126,7 @@ class Conv(nn.Module):
         Returns:
             (torch.Tensor): Output tensor.
         """
-        return self.act(self.conv(x))
+        return self.act(self.conv(self._apply_edge(x)))
 
 
 class Conv2(Conv):
