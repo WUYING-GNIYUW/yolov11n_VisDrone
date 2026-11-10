@@ -1306,6 +1306,8 @@ class Attention(nn.Module):
         self.qkv = Conv(dim, h, 1, act=False)
         self.proj = Conv(dim, dim, 1, act=False)
         self.pe = Conv(dim, dim, 3, 1, g=dim, act=False)
+        self.entropy_gate = False
+        self.entropy_gain = None
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the Attention module.
@@ -1323,12 +1325,20 @@ class Attention(nn.Module):
             [self.key_dim, self.key_dim, self.head_dim], dim=2
         )
 
-        if self.format == "coreml" and hasattr(F, "scaled_dot_product_attention"):
+        if self.format == "coreml" and hasattr(F, "scaled_dot_product_attention") and not self.entropy_gate:
             x = F.scaled_dot_product_attention(q.transpose(-2, -1), k.transpose(-2, -1), v.transpose(-2, -1))
             x = x.transpose(-2, -1).reshape(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
         else:
             attn = ((q * self.scale).transpose(-2, -1) @ k).softmax(dim=-1)
-            x = (v @ attn.transpose(-2, -1)).view(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
+            context = v @ attn.transpose(-2, -1)
+            if self.entropy_gate and N > 1:
+                probabilities = attn.float().clamp_min(1e-9)
+                entropy = -(probabilities * probabilities.log()).sum(dim=-1)
+                concentration = (1 - entropy / math.log(N)).mean(dim=1).clamp(0, 1)
+                gain = self.entropy_gain.tanh() if self.entropy_gain is not None else 1.0
+                scale = 1 + gain * (2 * concentration - 1)
+                context = context * scale[:, None, None, :].to(context.dtype)
+            x = context.view(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
         x = self.proj(x)
         return x
 
@@ -1462,7 +1472,7 @@ class C2PSA(nn.Module):
         This module essentially is the same as PSA module, but refactored to allow stacking more PSABlock modules.
     """
 
-    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5):
+    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5, entropy_gate: bool = False):
         """Initialize C2PSA module.
 
         Args:
@@ -1470,6 +1480,7 @@ class C2PSA(nn.Module):
             c2 (int): Output channels.
             n (int): Number of PSABlock modules.
             e (float): Expansion ratio.
+            entropy_gate (bool): Modulate global context by normalized attention entropy.
         """
         super().__init__()
         assert c1 == c2
@@ -1478,6 +1489,10 @@ class C2PSA(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)
 
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5, num_heads=max(self.c // 64, 1)) for _ in range(n)))
+        if entropy_gate:
+            for block in self.m:
+                block.attn.entropy_gate = True
+                block.attn.entropy_gain = nn.Parameter(torch.zeros(1))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Process the input tensor through a series of PSA blocks.
