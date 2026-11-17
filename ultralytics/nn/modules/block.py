@@ -211,7 +211,9 @@ class SPP(nn.Module):
 class SPPF(nn.Module):
     """Spatial Pyramid Pooling - Fast (SPPF) layer for YOLOv5 by Glenn Jocher."""
 
-    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False):
+    distinct_pool = False
+
+    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False, distinct_pool: bool = False):
         """Initialize the SPPF layer with given input/output channels and kernel size.
 
         Args:
@@ -220,9 +222,10 @@ class SPPF(nn.Module):
             k (int): Kernel size.
             n (int): Number of pooling iterations.
             shortcut (bool): Whether to use shortcut connection.
+            distinct_pool (bool): Exclude previously selected spatial sources across nested pooling scales.
 
         Notes:
-            With the default k=5 and n=3, this module is equivalent to SPP(k=(5, 9, 13)).
+            With k=5, n=3, and distinct_pool=False, this module is equivalent to SPP(k=(5, 9, 13)).
         """
         super().__init__()
         c_ = c1 // 2  # hidden channels
@@ -231,11 +234,34 @@ class SPPF(nn.Module):
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.n = n
         self.add = shortcut and c1 == c2
+        self.distinct_pool = distinct_pool
+        if distinct_pool and (k < 1 or k % 2 == 0 or n < 1):
+            raise ValueError("Distinct pooling requires an odd positive kernel and at least one pooling scale")
+
+    def _pool_distinct(self, x: torch.Tensor) -> list[torch.Tensor]:
+        """Select one unused source per nested window, falling back to the center when sources are exhausted."""
+        b, c, h, w = x.shape
+        radius = self.n * (self.m.kernel_size // 2)
+        kernel = 2 * radius + 1
+        windows = F.unfold(F.pad(x, (radius,) * 4, value=-float("inf")), kernel)
+        windows = windows.reshape(b, c, kernel * kernel, h * w)
+        offsets = torch.arange(-radius, radius + 1, device=x.device).abs()
+        distance = torch.maximum(offsets[:, None], offsets[None, :]).reshape(1, 1, -1, 1)
+        y = [x]
+        for scale in range(1, self.n + 1):
+            pooled, index = windows.masked_fill(distance > scale * (self.m.kernel_size // 2), -float("inf")).max(2)
+            y.append(torch.where(pooled == -float("inf"), x.flatten(2), pooled).reshape(b, c, h, w))
+            if scale < self.n:
+                windows = windows.scatter(2, index.unsqueeze(2), -float("inf"))
+        return y
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Apply sequential pooling operations to input and return concatenated feature maps."""
-        y = [self.cv1(x)]
-        y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
+        if self.distinct_pool:
+            y = self._pool_distinct(self.cv1(x))
+        else:
+            y = [self.cv1(x)]
+            y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
         y = self.cv2(torch.cat(y, 1))
         return y + x if getattr(self, "add", False) else y
 
@@ -1307,11 +1333,29 @@ class Attention(nn.Module):
         self.proj = Conv(dim, dim, 1, act=False)
         self.pe = Conv(dim, dim, 3, 1, g=dim, act=False)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    @staticmethod
+    def _limit_attention(attn: torch.Tensor, capacity: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        """Cap each key's incoming mass and return the mass retained by each query.
+
+        Args:
+            attn (torch.Tensor): Row-stochastic weights with shape (B, heads, N, N).
+            capacity (torch.Tensor): Positive key budgets with shape (B, 1, 1, N).
+
+        Returns:
+            bounded (torch.Tensor): FP32 weights whose column sums do not exceed the budgets.
+            retained (torch.Tensor): FP32 self-value weights with shape (B, heads, N).
+        """
+        weights = attn.float()
+        scale = (capacity / weights.sum(-2, keepdim=True).clamp_min(1e-6)).clamp(max=1.0)
+        bounded = weights * scale
+        return bounded, (1.0 - bounded.sum(-1)).clamp_min(0.0)
+
+    def forward(self, x: torch.Tensor, capacity: torch.Tensor | None = None) -> torch.Tensor:
         """Forward pass of the Attention module.
 
         Args:
             x (torch.Tensor): The input tensor.
+            capacity (torch.Tensor, optional): Per-key incoming attention budgets from the C2PSA bypass.
 
         Returns:
             (torch.Tensor): The output tensor after self-attention.
@@ -1323,12 +1367,18 @@ class Attention(nn.Module):
             [self.key_dim, self.key_dim, self.head_dim], dim=2
         )
 
-        if self.format == "coreml" and hasattr(F, "scaled_dot_product_attention"):
+        if capacity is None and self.format == "coreml" and hasattr(F, "scaled_dot_product_attention"):
             x = F.scaled_dot_product_attention(q.transpose(-2, -1), k.transpose(-2, -1), v.transpose(-2, -1))
             x = x.transpose(-2, -1).reshape(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
         else:
-            attn = ((q * self.scale).transpose(-2, -1) @ k).softmax(dim=-1)
-            x = (v @ attn.transpose(-2, -1)).view(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
+            logits = (q * self.scale).transpose(-2, -1) @ k
+            attn = (logits.float() if capacity is not None else logits).softmax(dim=-1)
+            if capacity is not None:
+                bounded, retained = self._limit_attention(attn, capacity)
+                context = v @ bounded.to(v.dtype).transpose(-2, -1) + v * retained.unsqueeze(-2).to(v.dtype)
+            else:
+                context = v @ attn.transpose(-2, -1)
+            x = context.view(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
         x = self.proj(x)
         return x
 
@@ -1369,16 +1419,17 @@ class PSABlock(nn.Module):
         self.ffn = nn.Sequential(Conv(c, c * 2, 1), Conv(c * 2, c, 1, act=False))
         self.add = shortcut
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, capacity: torch.Tensor | None = None) -> torch.Tensor:
         """Execute a forward pass through PSABlock.
 
         Args:
             x (torch.Tensor): Input tensor.
+            capacity (torch.Tensor, optional): Per-key incoming attention budgets.
 
         Returns:
             (torch.Tensor): Output tensor after attention and feed-forward processing.
         """
-        x = x + self.attn(x) if self.add else self.attn(x)
+        x = x + self.attn(x, capacity) if self.add else self.attn(x, capacity)
         x = x + self.ffn(x) if self.add else self.ffn(x)
         return x
 
@@ -1462,7 +1513,9 @@ class C2PSA(nn.Module):
         This module essentially is the same as PSA module, but refactored to allow stacking more PSABlock modules.
     """
 
-    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5):
+    capacity_attention = False  # Also the default for original pickled C2PSA modules.
+
+    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5, capacity_attention: bool = False):
         """Initialize C2PSA module.
 
         Args:
@@ -1470,6 +1523,7 @@ class C2PSA(nn.Module):
             c2 (int): Output channels.
             n (int): Number of PSABlock modules.
             e (float): Expansion ratio.
+            capacity_attention (bool): Limit attention using bypass-derived key budgets and retain unused mass.
         """
         super().__init__()
         assert c1 == c2
@@ -1478,6 +1532,7 @@ class C2PSA(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)
 
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5, num_heads=max(self.c // 64, 1)) for _ in range(n)))
+        self.capacity_attention = capacity_attention
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Process the input tensor through a series of PSA blocks.
@@ -1489,7 +1544,16 @@ class C2PSA(nn.Module):
             (torch.Tensor): Output tensor after processing.
         """
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
-        b = self.m(b)
+        if self.capacity_attention:
+            guide = a.float()
+            local_mean = F.avg_pool2d(guide, 3, 1, 1, count_include_pad=False)
+            contrast = (guide - local_mean).abs().mean(1, keepdim=True).flatten(2)
+            capacity = 0.5 + contrast / (contrast + contrast.mean(-1, keepdim=True) + 1e-6)
+            capacity = (capacity / capacity.mean(-1, keepdim=True)).unsqueeze(2)
+            for block in self.m:
+                b = block(b, capacity)
+        else:
+            b = self.m(b)
         return self.cv2(torch.cat((a, b), 1))
 
 

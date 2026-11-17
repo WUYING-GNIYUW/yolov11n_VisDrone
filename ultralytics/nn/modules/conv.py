@@ -7,6 +7,7 @@ import math
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 __all__ = (
@@ -622,14 +623,22 @@ class Concat(nn.Module):
         d (int): Dimension along which to concatenate tensors.
     """
 
-    def __init__(self, dimension=1):
+    conservative = False  # Also the default for original pickled Concat modules.
+
+    def __init__(self, dimension=1, conservative=False):
         """Initialize Concat module.
 
         Args:
             dimension (int): Dimension along which to concatenate tensors.
+            conservative (bool): Reassemble the first source with guidance from the second, preserving 2x2 means.
         """
         super().__init__()
         self.d = dimension
+        self.conservative = conservative
+        if conservative:
+            if dimension != 1:
+                raise ValueError("Conservative Concat requires channel concatenation (dimension=1)")
+            self.transport_gain = nn.Parameter(torch.zeros(1))
 
     def forward(self, x: list[torch.Tensor]):
         """Concatenate input tensors along specified dimension.
@@ -640,6 +649,29 @@ class Concat(nn.Module):
         Returns:
             (torch.Tensor): Concatenated tensor.
         """
+        if self.conservative:
+            if len(x) != 2:
+                raise ValueError("Conservative Concat requires [upsampled semantic, lateral] inputs")
+            semantic, lateral = x
+            b, c, h, w = lateral.shape
+            if semantic.shape[0] != b or semantic.shape[-2:] != (h, w) or h % 2 or w % 2:
+                raise ValueError("Conservative Concat requires matching batches and even, matching spatial dimensions")
+            # FP32 normalization and softmax; values keep their input dtype for mixed precision.
+            query = F.pixel_unshuffle(F.normalize(lateral.float(), dim=1, eps=1e-6), 2)
+            query = query.reshape(b, c, 4, -1).permute(0, 3, 2, 1).reshape(-1, 4, c).contiguous()
+            key = F.normalize(F.avg_pool2d(lateral.float(), 2), dim=1, eps=1e-6)
+            key = F.unfold(F.pad(key, (1, 1, 1, 1), mode="replicate"), 3)
+            key = key.transpose(1, 2).reshape(-1, c, 9).contiguous()
+            weights = (4.0 * torch.bmm(query, key)).float().softmax(-1)
+            coarse = F.avg_pool2d(semantic, 2)
+            values = F.unfold(F.pad(coarse, (1, 1, 1, 1), mode="replicate"), 3)
+            values = values.transpose(1, 2).reshape(-1, semantic.shape[1], 9).transpose(1, 2).contiguous()
+            reassembled = torch.bmm(weights.to(values.dtype), values)
+            update = reassembled - reassembled.mean(1, keepdim=True)
+            update = update.reshape(b, h // 2, w // 2, 4, semantic.shape[1]).permute(0, 4, 3, 1, 2)
+            update = F.pixel_shuffle(update.flatten(1, 2), 2)
+            semantic = semantic + self.transport_gain.tanh().to(semantic.dtype) * update
+            x = [semantic, lateral]
         return torch.cat(x, self.d)
 
 
