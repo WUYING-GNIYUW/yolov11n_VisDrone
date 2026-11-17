@@ -211,7 +211,9 @@ class SPP(nn.Module):
 class SPPF(nn.Module):
     """Spatial Pyramid Pooling - Fast (SPPF) layer for YOLOv5 by Glenn Jocher."""
 
-    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False):
+    distinct_pool = False
+
+    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False, distinct_pool: bool = False):
         """Initialize the SPPF layer with given input/output channels and kernel size.
 
         Args:
@@ -220,9 +222,10 @@ class SPPF(nn.Module):
             k (int): Kernel size.
             n (int): Number of pooling iterations.
             shortcut (bool): Whether to use shortcut connection.
+            distinct_pool (bool): Exclude previously selected spatial sources across nested pooling scales.
 
         Notes:
-            With the default k=5 and n=3, this module is equivalent to SPP(k=(5, 9, 13)).
+            With k=5, n=3, and distinct_pool=False, this module is equivalent to SPP(k=(5, 9, 13)).
         """
         super().__init__()
         c_ = c1 // 2  # hidden channels
@@ -231,11 +234,34 @@ class SPPF(nn.Module):
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.n = n
         self.add = shortcut and c1 == c2
+        self.distinct_pool = distinct_pool
+        if distinct_pool and (k < 1 or k % 2 == 0 or n < 1):
+            raise ValueError("Distinct pooling requires an odd positive kernel and at least one pooling scale")
+
+    def _pool_distinct(self, x: torch.Tensor) -> list[torch.Tensor]:
+        """Select one unused source per nested window, falling back to the center when sources are exhausted."""
+        b, c, h, w = x.shape
+        radius = self.n * (self.m.kernel_size // 2)
+        kernel = 2 * radius + 1
+        windows = F.unfold(F.pad(x, (radius,) * 4, value=-float("inf")), kernel)
+        windows = windows.reshape(b, c, kernel * kernel, h * w)
+        offsets = torch.arange(-radius, radius + 1, device=x.device).abs()
+        distance = torch.maximum(offsets[:, None], offsets[None, :]).reshape(1, 1, -1, 1)
+        y = [x]
+        for scale in range(1, self.n + 1):
+            pooled, index = windows.masked_fill(distance > scale * (self.m.kernel_size // 2), -float("inf")).max(2)
+            y.append(torch.where(pooled == -float("inf"), x.flatten(2), pooled).reshape(b, c, h, w))
+            if scale < self.n:
+                windows = windows.scatter(2, index.unsqueeze(2), -float("inf"))
+        return y
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Apply sequential pooling operations to input and return concatenated feature maps."""
-        y = [self.cv1(x)]
-        y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
+        if self.distinct_pool:
+            y = self._pool_distinct(self.cv1(x))
+        else:
+            y = [self.cv1(x)]
+            y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
         y = self.cv2(torch.cat(y, 1))
         return y + x if getattr(self, "add", False) else y
 
