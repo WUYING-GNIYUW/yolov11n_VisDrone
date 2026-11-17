@@ -106,6 +106,10 @@ Concat 在 P3 进行相似度重组也有开销；参数量几乎不变不能说
 另增加一个明确启用三项机制的模型 YAML 和本说明；不新增注册类、模型解析器分支、依赖或训练循环。
 三项原有机制合计超过 50 行，但本次没有复制为平行模块或增加新的组合逻辑，组合由原网络连接和三个开关完成。
 
+草稿 PR #6 的自动格式化提交 `97a230deb` 另改动了 `ultralytics/cfg/__init__.py` 的等价条件写法，以及
+`ultralytics/engine/model.py`、`ultralytics/optim/muon.py`、`ultralytics/utils/ops.py` 的 docstring 换行。
+已拉取并复核这些机器人改动；三个模块及模型 YAML 没有被改变。
+
 数值检查使用 Python 3.14.3 / PyTorch 2.15.0+cpu；官方权重和导出使用 Python 3.12.2 / 同版 PyTorch。
 CPU 为 Intel Xeon E3-1270 v6，固定 4 线程。当前检查环境 `torch.cuda.is_available()` 为 False。
 
