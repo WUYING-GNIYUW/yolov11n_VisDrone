@@ -1284,9 +1284,11 @@ class Attention(nn.Module):
         proj (Conv): Convolutional layer for projecting the attended values.
         pe (Conv): Convolutional layer for positional encoding.
         format (str | None): Export format set at export time; "coreml" uses `F.scaled_dot_product_attention`.
+        range_limit (bool): Bound each head's value update by local channel ranges before positional encoding.
     """
 
     format = None
+    range_limit = False
 
     def __init__(self, dim: int, num_heads: int = 8, attn_ratio: float = 0.5):
         """Initialize multi-head attention module.
@@ -1307,11 +1309,41 @@ class Attention(nn.Module):
         self.proj = Conv(dim, dim, 1, act=False)
         self.pe = Conv(dim, dim, 3, 1, g=dim, act=False)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    @staticmethod
+    def _limit_attention(attn: torch.Tensor, capacity: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        """Cap each key's incoming mass and return the mass retained by each query.
+
+        Args:
+            attn (torch.Tensor): Row-stochastic weights with shape (B, heads, N, N).
+            capacity (torch.Tensor): Positive key budgets with shape (B, 1, 1, N).
+
+        Returns:
+            bounded (torch.Tensor): FP32 weights whose column sums do not exceed the budgets.
+            retained (torch.Tensor): FP32 self-value weights with shape (B, heads, N).
+        """
+        weights = attn.float()
+        scale = (capacity / weights.sum(-2, keepdim=True).clamp_min(1e-6)).clamp(max=1.0)
+        bounded = weights * scale
+        return bounded, (1.0 - bounded.sum(-1)).clamp_min(0.0)
+
+    def _limit_value_update(self, context: torch.Tensor, value: torch.Tensor) -> torch.Tensor:
+        """Bound each head's update along its original direction by all channels' local value ranges."""
+        value_fp32 = value.float()
+        radius = F.max_pool2d(value_fp32, 3, 1, 1) + F.max_pool2d(-value_fp32, 3, 1, 1)
+        delta = context.float() - value_fp32
+        ratio = radius / delta.abs().clamp_min(1e-6)
+        ratio = torch.where(delta == 0, torch.ones_like(ratio), ratio)
+        b, c, h, w = value.shape
+        step = ratio.reshape(b, self.num_heads, self.head_dim, h, w).amin(2, keepdim=True).clamp(max=1.0)
+        update = delta.reshape(b, self.num_heads, self.head_dim, h, w) * step
+        return (value_fp32 + update.reshape(b, c, h, w)).to(context.dtype)
+
+    def forward(self, x: torch.Tensor, capacity: torch.Tensor | None = None) -> torch.Tensor:
         """Forward pass of the Attention module.
 
         Args:
             x (torch.Tensor): The input tensor.
+            capacity (torch.Tensor, optional): Per-key incoming attention budgets from the C2PSA bypass.
 
         Returns:
             (torch.Tensor): The output tensor after self-attention.
@@ -1323,12 +1355,21 @@ class Attention(nn.Module):
             [self.key_dim, self.key_dim, self.head_dim], dim=2
         )
 
-        if self.format == "coreml" and hasattr(F, "scaled_dot_product_attention"):
+        if capacity is None and self.format == "coreml" and hasattr(F, "scaled_dot_product_attention"):
             x = F.scaled_dot_product_attention(q.transpose(-2, -1), k.transpose(-2, -1), v.transpose(-2, -1))
-            x = x.transpose(-2, -1).reshape(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
+            x = x.transpose(-2, -1).reshape(B, C, H, W)
         else:
-            attn = ((q * self.scale).transpose(-2, -1) @ k).softmax(dim=-1)
-            x = (v @ attn.transpose(-2, -1)).view(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
+            logits = (q * self.scale).transpose(-2, -1) @ k
+            attn = (logits.float() if capacity is not None else logits).softmax(dim=-1)
+            if capacity is not None:
+                bounded, retained = self._limit_attention(attn, capacity)
+                context = v @ bounded.to(v.dtype).transpose(-2, -1) + v * retained.unsqueeze(-2).to(v.dtype)
+            else:
+                context = v @ attn.transpose(-2, -1)
+            x = context.view(B, C, H, W)
+        if self.range_limit:
+            x = self._limit_value_update(x, v.reshape(B, C, H, W))
+        x = x + self.pe(v.reshape(B, C, H, W))
         x = self.proj(x)
         return x
 
@@ -1369,16 +1410,17 @@ class PSABlock(nn.Module):
         self.ffn = nn.Sequential(Conv(c, c * 2, 1), Conv(c * 2, c, 1, act=False))
         self.add = shortcut
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, capacity: torch.Tensor | None = None) -> torch.Tensor:
         """Execute a forward pass through PSABlock.
 
         Args:
             x (torch.Tensor): Input tensor.
+            capacity (torch.Tensor, optional): Per-key incoming attention budgets.
 
         Returns:
             (torch.Tensor): Output tensor after attention and feed-forward processing.
         """
-        x = x + self.attn(x) if self.add else self.attn(x)
+        x = x + self.attn(x, capacity) if self.add else self.attn(x, capacity)
         x = x + self.ffn(x) if self.add else self.ffn(x)
         return x
 
@@ -1462,7 +1504,11 @@ class C2PSA(nn.Module):
         This module essentially is the same as PSA module, but refactored to allow stacking more PSABlock modules.
     """
 
-    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5):
+    capacity_attention = False
+
+    def __init__(
+        self, c1: int, c2: int, n: int = 1, e: float = 0.5, capacity_attention: bool = False, range_limit: bool = False
+    ):
         """Initialize C2PSA module.
 
         Args:
@@ -1470,6 +1516,8 @@ class C2PSA(nn.Module):
             c2 (int): Output channels.
             n (int): Number of PSABlock modules.
             e (float): Expansion ratio.
+            capacity_attention (bool): Limit attention using bypass-derived key budgets and retain unused mass.
+            range_limit (bool): Bound each attention head's value update after any capacity constraint.
         """
         super().__init__()
         assert c1 == c2
@@ -1478,6 +1526,9 @@ class C2PSA(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)
 
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5, num_heads=max(self.c // 64, 1)) for _ in range(n)))
+        self.capacity_attention = capacity_attention
+        for block in self.m:
+            block.attn.range_limit = range_limit
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Process the input tensor through a series of PSA blocks.
@@ -1489,7 +1540,16 @@ class C2PSA(nn.Module):
             (torch.Tensor): Output tensor after processing.
         """
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
-        b = self.m(b)
+        if self.capacity_attention:
+            guide = a.float()
+            local_mean = F.avg_pool2d(guide, 3, 1, 1, count_include_pad=False)
+            contrast = (guide - local_mean).abs().mean(1, keepdim=True).flatten(2)
+            capacity = 0.5 + contrast / (contrast + contrast.mean(-1, keepdim=True) + 1e-6)
+            capacity = (capacity / capacity.mean(-1, keepdim=True)).unsqueeze(2)
+            for block in self.m:
+                b = block(b, capacity)
+        else:
+            b = self.m(b)
         return self.cv2(torch.cat((a, b), 1))
 
 
