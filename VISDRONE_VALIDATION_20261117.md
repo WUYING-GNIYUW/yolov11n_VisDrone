@@ -29,12 +29,15 @@ SPPF 分支将模型路径改为 `yolo11n-visdrone-sppf-distinct.yaml`；基线�
 
 ## 实际修改文件
 
-每个分支仅修改一个已有 Python 文件：`ultralytics/nn/modules/block.py`。
+模块机制的修改集中在一个已有 Python 文件：`ultralytics/nn/modules/block.py`。
 
 - SPPF：在原类内部增加可选嵌套窗口选峰路径，后一个尺度排除前面已经使用的空间来源；输出通道和原卷积不变。
 - C2PSA：原 C2PSA 启用其 Attention 的值更新预算；统计局部 value 极差，以一个 head 共享步长收缩 O-V。
 
 每个分支另外增加基线 YAML、单模块 YAML、本验证报告和 `VISDRONE_RESEARCH_20261117.md`。
+PR 创建后，Ultralytics Actions 还修改了 `ultralytics/cfg/__init__.py` 的等价条件写法，
+以及 `ultralytics/engine/model.py`、`ultralytics/optim/muon.py`、`ultralytics/utils/ops.py` 的 docstring 换行。
+这些机器人提交已拉取并逐项复核；没有覆盖或回退它们，也没有改变本次两个模块的实现。
 不增加模块注册、解析器分支、依赖或训练循环。接口文档放在已有 docstrings；没有新增公开类，参考页桩不变。
 原生模型 YAML 没有继承语法，因此两份完整 YAML 用于可复现实验，不为减少配置行数添加新的解析抽象。
 验证脚本复用此前实验的真实模型/损失验证方式，作为本地检查材料保存在忽略的 `.worktrees/_validation_20261117/`，
@@ -112,3 +115,15 @@ TorchScript 在当前 PyTorch 有弃用提示，测试仍成功；ONNX/TensorRT/
 
 格式要求为 Ruff 0.14.1 的 `--extend-select F,I,D,UP,RUF,FA`、同版本 format、Prettier 3.9.9
 以及 `git diff --check`。最终变更保持每个分支一个模块消融；本报告的结论限于接口、数值和实测 CPU 开销。
+
+## PR 与格式化复核
+
+SPPF 对应草稿 PR #3，C2PSA 对应草稿 PR #4。已复核机器人更新后的完整差异，
+SPPF 机器人提交为 `46a0d4fa1`，C2PSA 为 `9374b859e`；两项模块实现均未被机器人改动。
+上述五个 Python 文件按 `.github/workflows/docs.yml` 的完整 Ruff 规则检查通过，包括 `--target-version py38`
+及工作流原有的 ignore 列表。仅用 extend-select 而不带该列表时，`model.py` 和 `ops.py`
+会报告主分支已有的 D100；工作流明确忽略该规则，本次未为此修改无关代码。
+
+2026-11-17 首次检查这两个机器人提交时，GitHub 工作流为 `action_required`，没有启动检查任务；
+CI 页面明确显示等待维护者批准运行。此时没有自动审查意见，不能把“无意见”视为自动审查通过，
+也不能把本地验证写成远端 CI 全绿。后续状态应以 PR 的当前提交和检查页面为准。
