@@ -19,7 +19,11 @@ results.csv、完整训练参数或 best.pt 可供复算增益。
 C2PSA 使用 20261117 的 **value 范围约束版**；20261116 容量约束版和已有三模块组合不是本次来源。
 
 交付分支为 `C2PSA-SPPF-20261118`、`C2PSA-Concat-20261118`、`SPPF-Concat-20261118`。
-每个分支仅包含对应两个模块和一个显式启用的 YAML，不引入第三项。
+每个分支仅启用对应两个实验，并提供显式启用的 YAML，不引入第三项。
+
+草稿 PR #10 的自动格式化提交另调整了 `ultralytics/cfg/__init__.py` 的等价 export 条件写法，
+以及 `engine/model.py`、`optim/muon.py`、`utils/ops.py`（均在 `ultralytics/` 下）的 docstring 换行。
+已拉取并复核；两个实验模块及模型 YAML 没有被机器人修改。
 
 ## 冲突判断
 
