@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## 当前 VisDrone 实验
+
+本分支为 `S-C-20261118`，实验是「SPPF + Concat」。用户要求训练本分支时，先读取
+[实验说明](VISDRONE_COMBINED_20261118.md)，使用固定入口
+`ultralytics/cfg/models/11/yolo11n-visdrone.yaml`。预期开关 S/P/C 为
+`True/False/True`，`SPPF.cv1.act` 为 `SiLU`。
+按 YAML 构建后加载统一初始权重；直接从旧 `.pt` 构建模型不会启用本分支配置。
+
 This file provides guidance to AI coding agents (Claude Code, etc.) when working with code in this repository. CLAUDE.md is a symlink to this file. `docs/AGENTS.md` covers the documentation tree; read it whenever a change touches a public Python API, because docs reference pages are generated from docstrings.
 
 Ultralytics (`ultralytics` on PyPI, AGPL-3.0) is the official Python package for YOLO-family vision models — detection, instance and semantic segmentation, depth, classification, pose, oriented boxes, and tracking — plus training, validation, benchmarking, export to 20+ deployment formats, and the `yolo` CLI. Supported floors are Python>=3.8 with PyTorch>=1.8. The version lives in `ultralytics/__init__.py` (`__version__`).
