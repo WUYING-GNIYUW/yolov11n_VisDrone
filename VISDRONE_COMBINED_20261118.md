@@ -104,8 +104,14 @@ if __name__ == "__main__":
     for key in ("model", "pretrained", "resume", "cfg", "project", "name", "save_dir", "exist_ok", "seed"):
         train_args.pop(key, None)
     variants = (
-        "baseline", "sppf-distinct", "capacity", "conservative",
-        "sppf-capacity", "capacity-conservative", "sppf-conservative", "combined",
+        "baseline",
+        "sppf-distinct",
+        "capacity",
+        "conservative",
+        "sppf-capacity",
+        "capacity-conservative",
+        "sppf-conservative",
+        "combined",
     )
     for seed in (0, 1, 2):
         for variant in variants:
