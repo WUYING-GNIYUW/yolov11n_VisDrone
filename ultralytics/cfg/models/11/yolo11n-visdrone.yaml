@@ -1,4 +1,4 @@
-# VisDrone sppf-distinct ablation; see VISDRONE_COMBINED_20261118.md.
+# S-P-20261118; fixed experiment entry, see VISDRONE_COMBINED_20261118.md.
 nc: 10
 scale: n
 scales:
@@ -14,8 +14,8 @@ backbone:
   - [-1, 2, C3k2, [512, True]]
   - [-1, 1, Conv, [1024, 3, 2]]
   - [-1, 2, C3k2, [1024, True]]
-  - [-1, 1, SPPF, [1024, 5, 3, False, True, True]] # 9: distinct_pool, YOLO11 activation
-  - [-1, 2, C2PSA, [1024, 0.5, False]] # 10: capacity_attention (20261116)
+  - [-1, 1, SPPF, [1024, 5, 3, False, True, True]] # 9: distinct_pool, cv1 activation
+  - [-1, 2, C2PSA, [1024, 0.5, True]] # 10: capacity_attention (20261116)
 
 head:
   - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
