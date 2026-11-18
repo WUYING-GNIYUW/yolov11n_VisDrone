@@ -211,7 +211,9 @@ class SPP(nn.Module):
 class SPPF(nn.Module):
     """Spatial Pyramid Pooling - Fast (SPPF) layer for YOLOv5 by Glenn Jocher."""
 
-    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False):
+    distinct_pool = False
+
+    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False, distinct_pool: bool = False):
         """Initialize the SPPF layer with given input/output channels and kernel size.
 
         Args:
@@ -220,9 +222,10 @@ class SPPF(nn.Module):
             k (int): Kernel size.
             n (int): Number of pooling iterations.
             shortcut (bool): Whether to use shortcut connection.
+            distinct_pool (bool): Exclude previously selected spatial sources across nested pooling scales.
 
         Notes:
-            With the default k=5 and n=3, this module is equivalent to SPP(k=(5, 9, 13)).
+            With k=5, n=3, and distinct_pool=False, this module is equivalent to SPP(k=(5, 9, 13)).
         """
         super().__init__()
         c_ = c1 // 2  # hidden channels
@@ -231,11 +234,34 @@ class SPPF(nn.Module):
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.n = n
         self.add = shortcut and c1 == c2
+        self.distinct_pool = distinct_pool
+        if distinct_pool and (k < 1 or k % 2 == 0 or n < 1):
+            raise ValueError("Distinct pooling requires an odd positive kernel and at least one pooling scale")
+
+    def _pool_distinct(self, x: torch.Tensor) -> list[torch.Tensor]:
+        """Select one unused source per nested window, falling back to the center when sources are exhausted."""
+        b, c, h, w = x.shape
+        radius = self.n * (self.m.kernel_size // 2)
+        kernel = 2 * radius + 1
+        windows = F.unfold(F.pad(x, (radius,) * 4, value=-float("inf")), kernel)
+        windows = windows.reshape(b, c, kernel * kernel, h * w)
+        offsets = torch.arange(-radius, radius + 1, device=x.device).abs()
+        distance = torch.maximum(offsets[:, None], offsets[None, :]).reshape(1, 1, -1, 1)
+        y = [x]
+        for scale in range(1, self.n + 1):
+            pooled, index = windows.masked_fill(distance > scale * (self.m.kernel_size // 2), -float("inf")).max(2)
+            y.append(torch.where(pooled == -float("inf"), x.flatten(2), pooled).reshape(b, c, h, w))
+            if scale < self.n:
+                windows = windows.scatter(2, index.unsqueeze(2), -float("inf"))
+        return y
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Apply sequential pooling operations to input and return concatenated feature maps."""
-        y = [self.cv1(x)]
-        y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
+        if self.distinct_pool:
+            y = self._pool_distinct(self.cv1(x))
+        else:
+            y = [self.cv1(x)]
+            y.extend(self.m(y[-1]) for _ in range(getattr(self, "n", 3)))
         y = self.cv2(torch.cat(y, 1))
         return y + x if getattr(self, "add", False) else y
 
@@ -1284,9 +1310,11 @@ class Attention(nn.Module):
         proj (Conv): Convolutional layer for projecting the attended values.
         pe (Conv): Convolutional layer for positional encoding.
         format (str | None): Export format set at export time; "coreml" uses `F.scaled_dot_product_attention`.
+        range_limit (bool): Bound each head's value update by local channel ranges before positional encoding.
     """
 
     format = None
+    range_limit = False
 
     def __init__(self, dim: int, num_heads: int = 8, attn_ratio: float = 0.5):
         """Initialize multi-head attention module.
@@ -1307,6 +1335,18 @@ class Attention(nn.Module):
         self.proj = Conv(dim, dim, 1, act=False)
         self.pe = Conv(dim, dim, 3, 1, g=dim, act=False)
 
+    def _limit_value_update(self, context: torch.Tensor, value: torch.Tensor) -> torch.Tensor:
+        """Bound each head's update along its original direction by all channels' local value ranges."""
+        value_fp32 = value.float()
+        radius = F.max_pool2d(value_fp32, 3, 1, 1) + F.max_pool2d(-value_fp32, 3, 1, 1)
+        delta = context.float() - value_fp32
+        ratio = radius / delta.abs().clamp_min(1e-6)
+        ratio = torch.where(delta == 0, torch.ones_like(ratio), ratio)
+        b, c, h, w = value.shape
+        step = ratio.reshape(b, self.num_heads, self.head_dim, h, w).amin(2, keepdim=True).clamp(max=1.0)
+        update = delta.reshape(b, self.num_heads, self.head_dim, h, w) * step
+        return (value_fp32 + update.reshape(b, c, h, w)).to(context.dtype)
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass of the Attention module.
 
@@ -1325,10 +1365,13 @@ class Attention(nn.Module):
 
         if self.format == "coreml" and hasattr(F, "scaled_dot_product_attention"):
             x = F.scaled_dot_product_attention(q.transpose(-2, -1), k.transpose(-2, -1), v.transpose(-2, -1))
-            x = x.transpose(-2, -1).reshape(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
+            x = x.transpose(-2, -1).reshape(B, C, H, W)
         else:
             attn = ((q * self.scale).transpose(-2, -1) @ k).softmax(dim=-1)
-            x = (v @ attn.transpose(-2, -1)).view(B, C, H, W) + self.pe(v.reshape(B, C, H, W))
+            x = (v @ attn.transpose(-2, -1)).view(B, C, H, W)
+        if self.range_limit:
+            x = self._limit_value_update(x, v.reshape(B, C, H, W))
+        x = x + self.pe(v.reshape(B, C, H, W))
         x = self.proj(x)
         return x
 
@@ -1462,7 +1505,7 @@ class C2PSA(nn.Module):
         This module essentially is the same as PSA module, but refactored to allow stacking more PSABlock modules.
     """
 
-    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5):
+    def __init__(self, c1: int, c2: int, n: int = 1, e: float = 0.5, range_limit: bool = False):
         """Initialize C2PSA module.
 
         Args:
@@ -1470,6 +1513,7 @@ class C2PSA(nn.Module):
             c2 (int): Output channels.
             n (int): Number of PSABlock modules.
             e (float): Expansion ratio.
+            range_limit (bool): Bound each attention head's value update using local channel ranges.
         """
         super().__init__()
         assert c1 == c2
@@ -1478,6 +1522,8 @@ class C2PSA(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)
 
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5, num_heads=max(self.c // 64, 1)) for _ in range(n)))
+        for block in self.m:
+            block.attn.range_limit = range_limit
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Process the input tensor through a series of PSA blocks.
