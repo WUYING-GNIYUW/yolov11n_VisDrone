@@ -14,7 +14,7 @@ backbone:
   - [-1, 2, C3k2, [512, True]]
   - [-1, 1, Conv, [1024, 3, 2]]
   - [-1, 2, C3k2, [1024, True]]
-  - [-1, 1, SPPF, [1024, 5, 3, False, True]] # 9: distinct_pool
+  - [-1, 1, SPPF, [1024, 5, 3, False, True, True]] # 9: distinct_pool, YOLO11 activation
   - [-1, 2, C2PSA, [1024, 0.5, True]] # 10: capacity_attention
 
 head:

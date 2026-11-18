@@ -1,14 +1,17 @@
-# YOLO11n / VisDrone 三模块组合（2026-11-18）
+# YOLO11n / VisDrone 容量版 C2PSA 消融（2026-11-18）
 
-分支：`SPPF-C2PSA-Concat-20261118`。
-工作目录：`C:/Users/Administrator/yolov11n_VisDrone/.worktrees/SPPF-C2PSA-Concat-20261118`。
-训练入口：`ultralytics/cfg/models/11/yolo11n-visdrone-combined.yaml`，10 类、n 规模。
+分支：`VisDrone-capacity-ablation-20261118`。
+工作目录：`C:/Users/Administrator/yolov11n_VisDrone/.worktrees/VisDrone-capacity-ablation-20261118`。
+训练入口：下表八个独立 YAML，均为 10 类、n 规模，顺序固定为 SPPF→C2PSA。
 
 ## 组合来源与边界
 
 从 `origin/main` 的 `55989f76c1e85c192ba12cb3e533e3de842a2301` 建立独立 worktree，逐项复用以下分支的模块实现。
-本次是已有机制的可消融组合，不提出新算子或新颖性主张。用户此前反馈 C2PSA、Concat 单项各约有 0.5% mAP50
-提升；该反馈没有在本次重新测量，不能相加为组合收益。
+再快进复用 `SPPF-C2PSA-Concat-20261118` 的 `c8ac0f3404844a536cadb70b50662caeb9daf820`。
+本次增加七个明确开关的 YAML，并让八组配置显式保留 YOLO11 的 SPPF 输入激活。
+三个优化的池化选择、容量分配和语义重组公式不变；SPPF 新增一个末尾的可选 `act` 参数。
+用户本次反馈三个单项各有约 0.3%–0.5% mAP50 提升，两个三项组合均未超过基线；没有在本机重新测量。
+本分支用于定位交互，不保证组合增益。
 
 | 模块来源          | 核对的源提交                               | 原位置与用途                                           |
 | ----------------- | ------------------------------------------ | ------------------------------------------------------ |
@@ -18,6 +21,20 @@
 
 实施前的文献与全部历史分支审查保留在对应来源分支的 `VISDRONE_RESEARCH_20261116.md` 和
 `VISDRONE_RESEARCH_20261117.md`。本组合使用容量版 C2PSA；`C2PSA-20261117` 的 value 范围约束不在本次范围内。
+
+## 对照中必须固定的 SPPF 激活
+
+本次完整模型验证发现：现有解析器只对短 SPPF 参数列表恢复 YOLO11 的输入 SiLU；旧实验为了传入
+`distinct_pool` 而扩展参数列表，会让 `cv1.act` 保持为 Identity。即使把三个优化开关全部关闭，
+这种长参数配置也不等于原始 YOLO11。激活没有 state_dict 张量，权重迁移数量无法检出这个差异。
+
+本分支在 SPPF 所属构造函数中增加末尾参数 `act=False`，八组 YAML 均显式传入 True：
+`[1024, 5, 3, False, distinct_pool, True]`。旧短参数 YOLO11、默认 YOLO26 和旧 checkpoint 的行为不变；
+新消融的八组都使用 SiLU，只改变三个优化开关，不另改解析器或训练循环。
+
+因此，新三项配置与旧 `SPPF-C2PSA-Concat-20261118` 的激活行为有意不同；旧 SPPF 单项也包含这个混杂变量。
+首次运行应在本分支统一复核基线和三个单项，再与两两、三项结果比较，不能直接把旧指标填进新消融表。
+若要复现旧 SPPF/三项配置，可将末尾 act 改为 False，但必须单独标记初始化结构，不能混入本表的 SiLU 对照。
 
 ## 数据流与互补关系
 
@@ -51,114 +68,122 @@ SPPF 也可能引入背景峰，容量也可能限制有用上下文；叠加是
 
 ## 训练与消融
 
-在新 worktree 根目录、现有 CUDA 训练环境中运行。沿用之前有效实验的完整训练参数，仅替换模型 YAML，
-并从同一份官方预训练权重初始化。下面是调用示例；数据路径、epochs、batch、优化器及增强需要与已有实验一致。
+所有配置位于 `ultralytics/cfg/models/11/`，文件名均为 `yolo11n-visdrone-<后缀>.yaml`。
+三个布尔值依次控制第 9 层 SPPF 的 `distinct_pool`、第 10 层 C2PSA 的 `capacity_attention`、
+第 15 层 Concat 的 `conservative`，不交换层号。
+
+| 方案                | 文件名后缀              | distinct_pool | capacity_attention | conservative |
+| ------------------- | ----------------------- | ------------- | ------------------ | ------------ |
+| 基线                | `baseline`              | False         | False              | False        |
+| 仅 SPPF             | `sppf-distinct`         | True          | False              | False        |
+| 仅容量 C2PSA        | `capacity`              | False         | True               | False        |
+| 仅 Concat           | `conservative`          | False         | False              | True         |
+| SPPF + 容量 C2PSA   | `sppf-capacity`         | True          | True               | False        |
+| 容量 C2PSA + Concat | `capacity-conservative` | False         | True               | True         |
+| SPPF + Concat       | `sppf-conservative`     | True          | False              | True         |
+| 三项全开            | `combined`              | True          | True               | True         |
+
+已有的 `C2PSA-SPPF-20261118` 和 `C2PSA-Concat-20261118` 分支使用 20261117 的 value 范围约束版本，
+不能替代本表的容量版两两消融。普通 SPPF/C2PSA 在开关为 False 时仍保留在网络中。
+
+在本 worktree 根目录、原 CUDA 环境中运行，先确认 `ultralytics.__file__` 指向本 worktree。
+将下例保存为训练脚本后执行；Windows 的多进程数据加载需要保留 main 保护。
+把旧基线的 `args.yaml` 和统一预训练权重改为实际绝对路径。数据路径也应能从本 worktree 正确解析。
+样例复用已有训练参数，不另外指定 epochs、优化器或增强；首次运行包含完整八组。
 
 ```python
-from ultralytics import YOLO
+from pathlib import Path
 
-model = YOLO("ultralytics/cfg/models/11/yolo11n-visdrone-combined.yaml").load("yolo11n.pt")
-model.train(
-    data="your_local_VisDrone.yaml",
-    imgsz=640,
-    epochs=100,
-    batch=16,
-    seed=0,
-    device=0,
-    project="runs/visdrone_combined_20261118",
-    name="sppf_capacity_conservative_seed0",
-)
+from ultralytics import YOLO
+from ultralytics.utils import YAML
+from ultralytics.utils.torch_utils import init_seeds
+
+if __name__ == "__main__":
+    train_args = YAML.load("C:/your_runs/baseline/args.yaml")
+    weights = "C:/your_weights/yolo11n.pt"
+    for key in ("model", "pretrained", "resume", "cfg", "project", "name", "save_dir", "exist_ok", "seed"):
+        train_args.pop(key, None)
+    variants = (
+        "baseline", "sppf-distinct", "capacity", "conservative",
+        "sppf-capacity", "capacity-conservative", "sppf-conservative", "combined",
+    )
+    for seed in (0, 1, 2):
+        for variant in variants:
+            init_seeds(seed, deterministic=train_args.get("deterministic", True))
+            cfg = Path("ultralytics/cfg/models/11") / f"yolo11n-visdrone-{variant}.yaml"
+            model = YOLO(cfg).load(weights)
+            layers = model.model.model
+            print(variant, seed, layers[9].distinct_pool, layers[10].capacity_attention, layers[15].conservative)
+            model.train(
+                **train_args,
+                seed=seed,
+                resume=False,
+                project="runs/visdrone_capacity_ablation",
+                name=f"{variant}_seed{seed}",
+                exist_ok=False,
+            )
 ```
+
+已有本分支同协议的基线、单项和三项结果后，可把 `variants` 缩成三个两两组合，避免重复训练。
+每次循环重新构建并加载同一权重，不接着上一组训练。
+在模型构建之前设种子，是为了让 80 类预训练权重转 10 类时随机初始化的检测头也配对一致。
+本分支保持原层序，无须执行换序分支的第 9/10 层权重交换。
 
 使用目标 YAML 先构建再 `.load(...)`，保证组合结构真正启用。直接 `YOLO("旧分支/best.pt")` 会沿用旧模型结构。
 如从某个已有实验权重继续微调，也用目标 YAML 加载该权重，并将该初始化条件单独报告；不混合三个独立训练的
 完整 state_dict。新组合训练不使用旧实验的 `resume=True`。
 
-三个开关均为原类的可选参数，默认关闭；上述组合 YAML 显式全部启用。
-在该 YAML 的副本中只修改以下三个布尔值，即可在同一个分支复现各消融：
+固定数据划分、预训练来源、分辨率、实际 batch、训练步数、增强、优化器和评估配置，至少复核相同的 0/1/2 种子。
+检查旧参数的 `batch` 为固定正整数，`time` 未限制训练时长，并记录实际停止轮数；不要让自动 batch、
+提前停止或时间上限悄悄改变比较条件。确需改 batch 时，所有对照组一起调整并重新训练。
 
-- SPPF：Backbone 第 9 层的 `[1024, 5, 3, False, distinct_pool]` 最后一项。
-- C2PSA：Backbone 第 10 层的 `[1024, 0.5, capacity_attention]` 最后一项。
-- Concat：整体第 15 层（`head[4]`）的 `[1, conservative]` 最后一项。
+每组保留 `args.yaml`、`results.csv`、`weights/best.pt` 和 `weights/last.pt`。
+本仓库 `best.pt` 按 mAP50:95 选取，比较时统一选用 best.pt 指标、末轮指标或逐轮最高 mAP50。
+对相同 seed 计算相对基线的差值，再报告均值和各次结果。若单项提升、SPPF+容量 C2PSA 不提升，
+优先检查 P5 两项交互；若该组合提升而三项不提升，再检查 Concat 与上游语义的交互。
 
-| 方案                   | distinct_pool | capacity_attention | conservative |
-| ---------------------- | ------------- | ------------------ | ------------ |
-| 基线                   | False         | False              | False        |
-| 仅 SPPF                | True          | False              | False        |
-| 仅 C2PSA               | False         | True               | False        |
-| 仅 Concat              | False         | False              | True         |
-| C2PSA + Concat         | False         | True               | True         |
-| SPPF + C2PSA           | True          | True               | False        |
-| SPPF + Concat          | True          | False              | True         |
-| 三模块组合（交付配置） | True          | True               | True         |
+训练后可直接核对 checkpoint 中保存的开关和 Concat 增益：
 
-优先比较基线、两个已反馈有效的单项、C2PSA+Concat、三模块组合；其余组合用于定位交互来源。
-固定数据划分、预训练来源、分辨率、有效 batch、训练步数、增强、优化器和评估配置，至少复核相同的 0/1/2 种子。
-同时记录 mAP50、mAP50:95、P/R、时延和峰值显存。如果显存要求减小 batch，各对照组使用相同的有效 batch。
-这些是消融条件，尚未在本机运行完整 VisDrone 训练。
+```python
+from ultralytics import YOLO
+
+layers = YOLO("runs/visdrone_capacity_ablation/capacity-conservative_seed0/weights/best.pt").model.model
+print("SPPF / capacity / Concat:", layers[9].distinct_pool, layers[10].capacity_attention, layers[15].conservative)
+if layers[15].conservative:
+    print("Concat tanh(g):", layers[15].transport_gain.detach().tanh().item())
+```
+
+开关和增益只能确认结构及参数状态，不能单独证明涨点原因。C2PSA 限流强度、SPPF 次峰是否对应目标，
+以及 Concat 实际更新幅度，仍需结合真实验证图像和逐类误检/漏检分析。
 
 SPPF 的 13×13 unfold 在 640 输入、FP32 时仅展开张量就约 33 MiB/样本，反向与其他中间张量还需额外空间。
 Concat 在 P3 进行相似度重组也有开销；参数量几乎不变不能说明推理或训练成本不变。
 
-## 实现与验证记录
+## 实现与工程验证
 
-模型代码只扩展已有 `ultralytics/nn/modules/block.py` 和 `ultralytics/nn/modules/conv.py`，复用源分支的实现。
-另增加一个明确启用三项机制的模型 YAML 和本说明；不新增注册类、模型解析器分支、依赖或训练循环。
-三项原有机制合计超过 50 行，但本次没有复制为平行模块或增加新的组合逻辑，组合由原网络连接和三个开关完成。
+复用源分支的三个优化实现；新增七个 YAML 采用现有配置解析器，标准训练入口和 checkpoint 会记录完整结构。
+没有增加模型注册类、训练参数、依赖或训练循环。SPPF 的末尾 `act` 参数用于消除已复现的激活混杂，
+比修改通用解析器的长度判断或在训练脚本中临时替换激活更明确，并能在 Trainer 重建模型时保留。
 
-草稿 PR #6 的自动格式化提交 `97a230deb` 另改动了 `ultralytics/cfg/__init__.py` 的等价条件写法，以及
-`ultralytics/engine/model.py`、`ultralytics/optim/muon.py`、`ultralytics/utils/ops.py` 的 docstring 换行。
-已拉取并复核这些机器人改动；三个模块及模型 YAML 没有被改变。
+本次使用 Python 3.12.2 / PyTorch 2.15.0+cpu，固定 4 个 CPU 线程和种子。
+工程验证使用本地官方 yolo11n.pt 和合成输入，不代表 VisDrone 精度。
 
-数值检查使用 Python 3.14.3 / PyTorch 2.15.0+cpu；官方权重和导出使用 Python 3.12.2 / 同版 PyTorch。
-CPU 为 Intel Xeon E3-1270 v6，固定 4 线程。当前检查环境 `torch.cuda.is_available()` 为 False。
+| 检查                                             | 结果                                                          |
+| ------------------------------------------------ | ------------------------------------------------------------- |
+| 八组 YAML 归一化三个优化开关后比较               | 完全相同，SPPF 的 act 始终为 True                             |
+| 全关闭基线对标准 YOLO11n，同权重、640 输入       | 输出逐元素一致                                                |
+| 八组同种子初始化                                 | 499 个公共状态张量逐值一致，启用 Concat 时仅新增零初始化 gain |
+| 官方预训练 Backbone/Neck 迁移                    | 每组 378/378 张量逐值一致，无需换层映射                       |
+| 按 Trainer 路径重建八组模型                      | 三个开关、SiLU 和所有状态张量保持一致                         |
+| 八组 640×640 / 384×640 前向                      | 输出有限，形状分别为 1×14×8400 / 1×14×5040                    |
+| 三个两两组合的检测损失反向                       | 255 / 256 / 256 个有限梯度张量，关键模块梯度均非零            |
+| 两个含 Concat 的两两组合                         | gain=0 能更新，gain=0.25 确实改变输出                         |
+| 三个两两组合的 checkpoint 保存重载               | 输出逐元素一致，包括非零 Concat 增益                          |
+| 四组零增益 Concat 与对应无 Concat 优化组         | 输出逐元素一致                                                |
+| 原默认 SPPF 与显式 act=True                      | 分别为 Identity / SiLU                                        |
+| act=False 重建旧 SPPF 单项并加载源分支记录       | 两种输入尺寸的输出均逐元素一致                                |
+| 容量注意力、Concat、SPPF 池化与 forward 算子 AST | 与来源实现一致；SPPF 只增加构造时的激活选择                   |
 
-| 实际检查                                                         | 结果                                                              |
-| ---------------------------------------------------------------- | ----------------------------------------------------------------- |
-| SPPF、Attention、PSABlock、C2PSA、Concat 的 AST 与指定源分支比较 | 一致                                                              |
-| 全部开关关闭，与原 main 模型及其旧 pickle 前向比较               | 逐元素一致                                                        |
-| 单独启用 SPPF / C2PSA，与真实源分支的 128×192、384×640 输出比较  | 逐元素一致                                                        |
-| 单独启用非零增益 Concat，与源分支输出比较                        | 最大绝对差 1.53e-5 / 7.63e-6，满足 rtol=atol=1e-6；不宣称逐位一致 |
-| 三个源分支的 pickle 在组合代码下重载                             | 与各自保存的源输出逐元素一致                                      |
-| 三模块初始输出与同权重 SPPF+C2PSA 对比                           | 逐元素一致                                                        |
-| 640×640、384×640 完整前向                                        | 有限输出，分别为 1×14×8400、1×14×5040                             |
-| 同 10 类基线状态迁移                                             | 499 个已有张量全部加载，仅多出 Concat gain                        |
-| 官方 yolo11n.pt 经公共 YOLO.load 加载                            | 493/500；378 个 Backbone/Neck 张量全部逐值一致                    |
-| 从已加载模型的 YAML 重建并迁移权重                               | 三项开关和参数量保持                                              |
-| 真实 v8DetectionLoss + SGD，gain=0 / 0.25                        | 两次均有 256 个有限梯度张量，三个模块的关键梯度非零               |
-| 检测损失对零初始化 gain 的梯度绝对值                             | 约 4.12e-4，SGD 后 gain 确实更新                                  |
-| BN 融合对比 / 保存重载                                           | 融合最大差 1.53e-5；重载逐元素一致                                |
-| CPU bfloat16 autocast                                            | 有限输出                                                          |
-| 非零 gain=0.25 的 TorchScript 实际导出、重载与推理（128）        | 通过 rtol=atol=1e-4；最大绝对差 1.83e-4，输出 1×14×336            |
-| 两个模块文件的 docstring 渲染                                    | 无缺失类型                                                        |
-
-SPPF 用独立坐标枚举核对来源排除，并覆盖常量、边界和来源耗尽情形。C2PSA 验证有界聚合列容量与行总质量。
-Concat 复用原分支的算子检查：非零增益下 2×2 均值误差不超过 2.39e-7，横向分支保持不变，零增益能收到梯度。
-在整个三模块模型中也用 hook 观察实际输入输出，确认非零增益确实改变了语义分布，同时保持传入的粗格均值。
-
-直接由 10 类 YAML 构建时，基线 **2,591,790** 参数，组合 **2,591,791** 参数。
-公共加载器恢复官方分类塔隐藏宽度后，二者分别为 **2,607,070** 和 **2,607,071**；比较口径保持一致。
-
-下面为同一进程中串行测量的 FP32、batch=1、640 前向：每个模型预热 2 次，再取 7 次的中位数。
-Concat 增益设为 0.25，未通过跳过零增益路径隐去其开销；包含解码，不包含图像处理或 NMS。
-
-| 模型                  | CPU 前向中位数 |
-| --------------------- | -------------- |
-| 原始基线              | 89.81 ms       |
-| C2PSA + Concat        | 118.77 ms      |
-| SPPF + C2PSA + Concat | 179.09 ms      |
-
-这是本机短测，不能推导 GPU FPS、训练时长或 VisDrone 精度。完整 VisDrone 训练、CUDA AMP/DDP、
-ONNX/TensorRT/CoreML 转换和 GPU 峰值显存没有验证，也没有生成组合模型的 mAP 指标。
-
-本地复核材料位于忽略目录 `.worktrees/_validation_20261118/`：`verify.py`、`pretrained.py`、三个源分支输出、
-`combined.json`、`pretrained.json` 和实际导出的 `combined.torchscript`。沿用原实验的验证逻辑，不增加跟踪的测试脚手架。
-在组合 worktree 运行：
-
-```powershell
-python ../_validation_20261118/verify.py combined
-& 'F:/DE/Python/Python312/python.exe' ../_validation_20261118/pretrained.py
-```
-
-格式检查使用仓库工作流的 Ruff 0.14.1 完整规则及 ignore 列表、Prettier 3.9.9 与 `git diff --check`。
-本地检查和远端自动审查分开报告；本文的工程验证不代表远端 CI 已通过。
+公共加载后，不含 Concat 优化的四组为 2,607,070 参数，含 Concat 优化的四组为 2,607,071 参数。
+本地结果保存于忽略目录 `.worktrees/_validation_capacity_ablation_20261118/validation.json`。
+工作区没有用户实验的数据集或训练日志；本机 PyTorch 为 CPU 构建，没有运行完整 VisDrone 训练。

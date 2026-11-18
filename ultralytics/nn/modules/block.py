@@ -213,7 +213,16 @@ class SPPF(nn.Module):
 
     distinct_pool = False
 
-    def __init__(self, c1: int, c2: int, k: int = 5, n: int = 3, shortcut: bool = False, distinct_pool: bool = False):
+    def __init__(
+        self,
+        c1: int,
+        c2: int,
+        k: int = 5,
+        n: int = 3,
+        shortcut: bool = False,
+        distinct_pool: bool = False,
+        act: bool = False,
+    ):
         """Initialize the SPPF layer with given input/output channels and kernel size.
 
         Args:
@@ -223,13 +232,14 @@ class SPPF(nn.Module):
             n (int): Number of pooling iterations.
             shortcut (bool): Whether to use shortcut connection.
             distinct_pool (bool): Exclude previously selected spatial sources across nested pooling scales.
+            act (bool): Apply the default activation before pooling, as in the original YOLO11 SPPF.
 
         Notes:
-            With k=5, n=3, and distinct_pool=False, this module is equivalent to SPP(k=(5, 9, 13)).
+            With k=5, n=3, and distinct_pool=False, pooling uses the same effective windows as SPP(k=(5, 9, 13)).
         """
         super().__init__()
         c_ = c1 // 2  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1, act=False)
+        self.cv1 = Conv(c1, c_, 1, 1, act=act)
         self.cv2 = Conv(c_ * (n + 1), c2, 1, 1)
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.n = n
