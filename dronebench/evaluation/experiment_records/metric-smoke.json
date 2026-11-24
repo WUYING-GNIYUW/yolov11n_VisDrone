@@ -1,0 +1,146 @@
+{
+  "scope": "engineering_smoke_only",
+  "not_formal_results": true,
+  "baseline_commit": "55989f76c1e85c192ba12cb3e533e3de842a2301",
+  "dataset": {
+    "source": "VisDrone2019-DET-val.zip",
+    "archive_sha256": "abeea063037e5d20398837deb11084e652402a34ddf4f207bdf541a6f2a35ef9",
+    "seed": 17,
+    "splits": {
+      "train": {
+        "images": 4,
+        "gt": 295
+      },
+      "val": {
+        "images": 2,
+        "gt": 124
+      }
+    }
+  },
+  "training": {
+    "initialization": "YOLO11n random weights",
+    "seed": 17,
+    "optimizer": "SGD",
+    "epochs": 1,
+    "imgsz": 128,
+    "batch": 2,
+    "device": "cpu",
+    "weights_sha256": "da3dcdf789450d772e45272ca33ee94949800f638a732a37cdd98eadf80d2378"
+  },
+  "label_only_archive_check": {
+    "model_inference": false,
+    "images": 548,
+    "valid_gt": 38759,
+    "input_sizes_checked": [
+      640,
+      960
+    ],
+    "reference_640_gt": {
+      "lt8": 17003,
+      "8to16": 13641,
+      "ge16": 8115
+    }
+  },
+  "validation": {
+    "split": "two smoke-val images, not full official val",
+    "protocol": {
+      "reference_long_side": 640,
+      "iou": 0.5,
+      "confidence_gte": 0.25,
+      "top_per_image": 300,
+      "integer_gt_pixels": true,
+      "matching": "confidence descending, maximum IoU among unused GT of same class",
+      "nms_conf": 0.001,
+      "nms_iou": 0.7,
+      "nms_max_det": 500,
+      "agnostic_nms": false,
+      "single_cls": false,
+      "end2end_head": false
+    },
+    "by_imgsz": [
+      {
+        "imgsz": 640,
+        "mAP50-95": 0.0,
+        "fixed_bins": {
+          "lt8": {
+            "gt": 39,
+            "tp": 0,
+            "recall": 0.0
+          },
+          "8to16": {
+            "gt": 52,
+            "tp": 0,
+            "recall": 0.0
+          },
+          "ge16": {
+            "gt": 33,
+            "tp": 0,
+            "recall": 0.0
+          }
+        },
+        "native_mAP50-95": 0.0
+      },
+      {
+        "imgsz": 960,
+        "mAP50-95": 0.0,
+        "fixed_bins": {
+          "lt8": {
+            "gt": 39,
+            "tp": 0,
+            "recall": 0.0
+          },
+          "8to16": {
+            "gt": 52,
+            "tp": 0,
+            "recall": 0.0
+          },
+          "ge16": {
+            "gt": 33,
+            "tp": 0,
+            "recall": 0.0
+          }
+        }
+      }
+    ]
+  },
+  "latency": {
+    "images_sha256": "38516643199a9364d1443f29093eeeaf95537737aea527191feeccfebc05154a",
+    "weights_sha256": "da3dcdf789450d772e45272ca33ee94949800f638a732a37cdd98eadf80d2378",
+    "device": "cpu",
+    "hardware": "Intel Core i5-8250U 1.60GHz",
+    "torch": "2.9.1+cpu",
+    "ultralytics": "8.4.198",
+    "opencv": "5.0.0",
+    "cpu_threads": 7,
+    "opencv_threads": 1,
+    "batch": 1,
+    "precision": "fp32",
+    "input_hw": [
+      640,
+      640
+    ],
+    "rect": false,
+    "conf": 0.25,
+    "iou": 0.7,
+    "max_det": 300,
+    "postprocess": "class-aware YOLO detection NMS",
+    "boundary": "local file read/decode -> preprocessing, transfer, predict/postprocess -> original boxes on CPU",
+    "warmup": 3,
+    "runs": 10,
+    "p50_ms": 124.3965075,
+    "p95_ms": 186.72441804999994
+  },
+  "latency_detections_returned": 0,
+  "tests": {
+    "command": "python -m pytest -q -o addopts='' -p no:cacheprovider dronebench/evaluation/tests",
+    "passed": 10
+  },
+  "local_evidence_root": "/home/user/work/yolo11n-smoke-data/engineering/eval",
+  "local_evidence_files": [
+    "smoke-validation-640.json",
+    "smoke-validation-960.json",
+    "smoke-latency-640-hashed.json",
+    "smoke-train/args.yaml",
+    "smoke-train/weights/last.pt"
+  ]
+}

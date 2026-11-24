@@ -1,0 +1,202 @@
+{
+  "kind": "synthetic all-off regression against independently seeded pinned DetectionModel",
+  "status": "passed",
+  "base_commit": "55989f76c1e85c192ba12cb3e533e3de842a2301",
+  "experiment_source_sha256": "116bad77f5e2194c80155f650620e6c7dd49652106ac8eba393c0a02a0b8280b",
+  "device": "cpu",
+  "dtype": "float32",
+  "python": "3.13.5",
+  "python_executable": "/home/user/work/yolo11n-env/bin/python",
+  "torch": "2.9.1+cpu",
+  "torchvision": "0.24.1+cpu",
+  "ultralytics": "8.4.198",
+  "torch_threads": 1,
+  "seed": 17,
+  "optimizer": {
+    "name": "SGD",
+    "lr": 0.0001,
+    "steps": 1
+  },
+  "batch": {
+    "source": "synthetic uniform [0,1); CPU image generator seeded with seed + 1",
+    "shape": [
+      2,
+      3,
+      96,
+      96
+    ],
+    "image_sha256": "b365662a45f49c199e985c7151992a18ea0cce697dcca1400e0caf80b4b67ef2",
+    "labels_batch_class_xywhn": [
+      [
+        0.0,
+        1.0,
+        0.18000000715255737,
+        0.20999999344348907,
+        0.03999999910593033,
+        0.07999999821186066
+      ],
+      [
+        0.0,
+        4.0,
+        0.7099999785423279,
+        0.6800000071525574,
+        0.36000001430511475,
+        0.3199999928474426
+      ],
+      [
+        0.0,
+        7.0,
+        0.47999998927116394,
+        0.5199999809265137,
+        0.11999999731779099,
+        0.20999999344348907
+      ],
+      [
+        1.0,
+        2.0,
+        0.7699999809265137,
+        0.1899999976158142,
+        0.05999999865889549,
+        0.03999999910593033
+      ],
+      [
+        1.0,
+        6.0,
+        0.36000001430511475,
+        0.5799999833106995,
+        0.4300000071525574,
+        0.46000000834465027
+      ]
+    ]
+  },
+  "nms": {
+    "conf_thres": 1e-05,
+    "iou_thres": 0.7,
+    "max_det": 32,
+    "max_time_img": 60.0
+  },
+  "env": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "YOLO_OFFLINE": "true"
+  },
+  "command": "python -m dronebench.checks.test_regression --imgsz 96 --seed 17 --output experiment_records/baseline-regression.json",
+  "reference": "DetectionModel('yolo11n.yaml', nc=10, verbose=False); model.args = get_cfg()",
+  "strides_px": [
+    8.0,
+    16.0,
+    32.0
+  ],
+  "tal_min_px": 16.0,
+  "trainable_parameter_tensors": 255,
+  "updated_parameter_tensors": 238,
+  "train_loss_items": {
+    "box_loss": 6.634669780731201,
+    "cls_loss": 4.813382148742676,
+    "dfl_loss": 4.194887161254883
+  },
+  "eval_loss_items": {
+    "box_loss": 6.669309139251709,
+    "cls_loss": 4.971287250518799,
+    "dfl_loss": 4.159121513366699
+  },
+  "eval_decoded_shape": [
+    2,
+    14,
+    189
+  ],
+  "nms_counts": [
+    32,
+    32
+  ],
+  "first_nms_xyxy_conf_class": [
+    [
+      -223.94569396972656,
+      -191.9964599609375,
+      255.9579315185547,
+      288.00762939453125,
+      0.0012510617962107062,
+      6.0
+    ],
+    [
+      -223.94569396972656,
+      -191.9964599609375,
+      255.9579315185547,
+      288.00762939453125,
+      0.0012510617962107062,
+      6.0
+    ]
+  ],
+  "exact_comparisons": {
+    "initial_state": {
+      "equal_bytes": true,
+      "tensor_count": 499,
+      "none_count": 0,
+      "elements": 2607247,
+      "common_sha256": "abdab0670bcd360edc64fb28909a9427b49d3256359838bfd6fa0f74fd9fe096"
+    },
+    "batch": {
+      "equal_bytes": true,
+      "tensor_count": 4,
+      "none_count": 0,
+      "elements": 55326,
+      "common_sha256": "944fa9b107d6959cf780665004f6313a5a10c754d440ab5d409251e9eff2f8d6"
+    },
+    "train_raw": {
+      "equal_bytes": true,
+      "tensor_count": 5,
+      "none_count": 0,
+      "elements": 60228,
+      "common_sha256": "742ef45f1004866edf3bb0cd5bcc58235e29f37d75cf7eb7a54b726f2ffe3991"
+    },
+    "train_loss_and_items": {
+      "equal_bytes": true,
+      "tensor_count": 4,
+      "none_count": 0,
+      "elements": 6,
+      "common_sha256": "000d51191b621b60b7ba226078c2a4f2b7dee84657e8552d497ae5027905b093"
+    },
+    "parameter_grads": {
+      "equal_bytes": true,
+      "tensor_count": 255,
+      "none_count": 1,
+      "elements": 2591774,
+      "common_sha256": "75984e63fb9a867f56bcd3c79352093379461eb76c205e75bc76c30ac871790c"
+    },
+    "post_sgd_state": {
+      "equal_bytes": true,
+      "tensor_count": 499,
+      "none_count": 0,
+      "elements": 2607247,
+      "common_sha256": "c97ceb4d5f6094679e244edc784970e22485662fe40d68d20a0477cf7ccba9cd"
+    },
+    "eval_raw": {
+      "equal_bytes": true,
+      "tensor_count": 5,
+      "none_count": 0,
+      "elements": 60228,
+      "common_sha256": "2e64390f260e4209a7b13afc036335095db2286e0aeb77f44c55686696d7aaa1"
+    },
+    "eval_decoded": {
+      "equal_bytes": true,
+      "tensor_count": 1,
+      "none_count": 0,
+      "elements": 5292,
+      "common_sha256": "d939c1bd50959c6b10ab0bd718878029be4d84630888a62b3c16061b742ae1c5"
+    },
+    "eval_loss_and_items": {
+      "equal_bytes": true,
+      "tensor_count": 4,
+      "none_count": 0,
+      "elements": 6,
+      "common_sha256": "c1385139e67f9d78d5239f58f232c5814dd2daea0ac9b7d9bd989fe12ac96219"
+    },
+    "eval_nms": {
+      "equal_bytes": true,
+      "tensor_count": 2,
+      "none_count": 0,
+      "elements": 384,
+      "common_sha256": "49b3fb95125f7ac32d8803d2933f10a7062f25f8fd51688c360d6de648758b42"
+    }
+  }
+}
