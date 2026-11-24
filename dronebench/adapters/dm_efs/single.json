@@ -1,0 +1,15 @@
+{
+  "dm_efs": true,
+  "options": {
+    "dm_efs": {
+      "efs": true,
+      "dfm": true,
+      "max_size": 640,
+      "iou_threshold": 0.5,
+      "loss_weight": 0.04,
+      "gamma": 2.0,
+      "projection_channels": 16,
+      "hidden_channels": 64
+    }
+  }
+}
